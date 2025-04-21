@@ -1,0 +1,168 @@
+/*
+ * ControladorListarCategorias
+ * Este controlador servira para que el admin pueda listar las categorias
+ * crear nuevas, editar las que tiene o eliminarla
+ */
+package Controladores.Admin;
+
+import java.io.IOException;
+import javax.persistence.EntityManagerFactory;
+import javax.persistence.Persistence;
+import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+import modelo.entidades.CategoriaProducto;
+import modelo.entidades.Usuario;
+import modelo.servicio.ServicioCategoriaProducto;
+import modelo.servicio.exceptions.NonexistentEntityException;
+import java.util.List;
+import modelo.entidades.Producto;
+
+/**
+ *
+ * @author juan-antonio
+ */
+@WebServlet(name = "ControladorListarCategorias", urlPatterns = {"/Controladores.Admin/ControladorListarCategorias"})
+public class ControladorListarCategorias extends HttpServlet {
+
+    // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
+    /**
+     * Handles the HTTP <code>GET</code> method.
+     *
+     * @param request servlet request
+     * @param response servlet response
+     * @throws ServletException if a servlet-specific error occurs
+     * @throws IOException if an I/O error occurs
+     */
+    @Override
+    protected void doGet(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        EntityManagerFactory emf = Persistence.createEntityManagerFactory("TiendaPanchonPU");
+        ServicioCategoriaProducto scp = new ServicioCategoriaProducto(emf);
+        String vista = "/admin/crearCategoria.jsp"; // Establece la vista por defecto como la de creación de categoría
+
+        HttpSession sesion = request.getSession();
+        Usuario usuario = (Usuario) sesion.getAttribute("usuario");
+
+        if (usuario != null) {
+            // Listar todas las categorías
+            if (request.getParameter("id") == null && request.getParameter("crear") == null) {
+                List<CategoriaProducto> categorias = scp.findCategoriaProductoEntities();
+                request.setAttribute("categorias", categorias);
+
+                if (!categorias.isEmpty()) {
+                    CategoriaProducto primeraCategoria = categorias.get(0);
+                    List<Producto> productos = scp.cargarProductosDeCategoria(primeraCategoria.getId());
+                    request.setAttribute("productos", productos);
+                    request.setAttribute("nombreCategoria", primeraCategoria.getNombre());
+                }
+
+                vista = "/admin/listarCategorias.jsp"; // Vista de listar categorías si no estamos creando una nueva
+            } // Crear una nueva categoría
+            else if (request.getParameter("crear") != null) {
+                vista = "/admin/crearCategoria.jsp"; // Redirige a la vista de creación de categoría.
+                
+            } // Editar una categoría
+            else if (request.getParameter("id") != null) {
+                try {
+                    long id = Long.parseLong(request.getParameter("id"));
+                    CategoriaProducto categoria = scp.findCategoriaProducto(id);
+                    request.setAttribute("id", categoria.getId());
+                    request.setAttribute("nombre", categoria.getNombre());
+                    vista = "/admin/crearCategoria.jsp"; // Mantenemos la vista de creación para editar
+                } catch (Exception e) {
+                    request.setAttribute("error", "Error al obtener la categoría.");
+                    vista = "/admin/crearCategoria.jsp"; // En caso de error, se mantiene en la vista de creación
+                }
+            } // Eliminar una categoría
+            else if (request.getParameter("eliminar") != null) {
+                try {
+                    long id = Long.parseLong(request.getParameter("eliminar"));
+                    scp.destroy(id);
+                } catch (NonexistentEntityException e) {
+                    request.setAttribute("error", "La categoría con ID " + request.getParameter("eliminar") + " no existe.");
+                }
+            }
+
+            // Limpiar el error de la sesión después de pasarlo a la vista
+            String error = (String) sesion.getAttribute("error");
+            if (error != null) {
+                request.setAttribute("error", error); // Pasar el error a la vista
+                sesion.removeAttribute("error"); // Limpiar el error después de pasarlo
+            }
+        }
+
+        emf.close();
+        getServletContext().getRequestDispatcher(vista).forward(request, response);
+    }
+
+    /**
+     * Handles the HTTP <code>POST</code> method.
+     *
+     * @param request servlet request
+     * @param response servlet response
+     * @throws ServletException if a servlet-specific error occurs
+     * @throws IOException if an I/O error occurs
+     */
+    @Override
+    protected void doPost(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        String idStr = request.getParameter("id");
+        String nombre = request.getParameter("nombre");
+
+        String vista = "";
+        String error = "";
+        EntityManagerFactory emf = Persistence.createEntityManagerFactory("TiendaPanchonPU");
+        ServicioCategoriaProducto scp = new ServicioCategoriaProducto(emf);
+        HttpSession sesion = request.getSession();
+        Usuario usuario = (Usuario) sesion.getAttribute("usuario");
+
+        if (usuario != null) {
+            try {
+                // Comprobar si la categoría ya existe
+                if (request.getParameter("crear") != null) {
+                    if (scp.findCategoriaProductoByName(nombre) != null) {
+                        // La categoría ya existe
+                        error = "La categoría ya existe.";
+                    } else {
+                        // Crear una nueva categoría
+                        CategoriaProducto categoria = new CategoriaProducto();
+                        categoria.setNombre(nombre);
+                        scp.create(categoria);
+                    }
+                } // Editar una categoría existente
+                else if (request.getParameter("editar") != null) {
+                    long id = Long.parseLong(idStr);
+                    CategoriaProducto categoria = scp.findCategoriaProducto(id);
+                    categoria.setNombre(nombre);
+                    scp.edit(categoria);
+                } // Eliminar una categoría
+                else if (request.getParameter("eliminar") != null) {
+                    long id = Long.parseLong(request.getParameter("id"));
+                    try {
+                        scp.destroy(id);
+                    } catch (NonexistentEntityException e) {
+                        error = "La categoría con ID " + idStr + " no existe.";
+                    }
+                }
+            } catch (Exception e) {
+                // Error genérico al crear la categoría
+                error = "Error al crear la categoría.";
+            }
+        } else {
+            error = "Usuario no autenticado.";
+        }
+
+        emf.close();
+        if (!error.isEmpty()) {
+            sesion.setAttribute("error", error);
+            // Mantén la vista en la página de creación
+            request.getRequestDispatcher("/admin/crearCategoria.jsp").forward(request, response);
+        }
+        response.sendRedirect("ControladorListarCategorias");
+    }
+
+}

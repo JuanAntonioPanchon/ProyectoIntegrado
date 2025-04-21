@@ -1,0 +1,24 @@
+.form-container {
+    max-width: 450px;
+}
+.logo {
+
+    width: 100px;
+}
+.btn-custom {
+    width: 100px;
+}
+
+.logoTienda{
+    width: 60px; 
+    height: 60px; 
+    object-fit: cover;
+}
+
+.contenedorAceptar{
+    width: 270px;
+}
+
+.botones{
+    width: 90px;
+}

@@ -1,0 +1,12 @@
+.colorVerde{
+    background-color: #8a9a5b !important;
+    border: none !important;
+}
+
+body, .colorFondo {
+    background-color: #C19469 !important;
+}
+
+.form-container, .tarjeta{
+    background-color: #eac6a5 !important;
+}
