@@ -23,7 +23,7 @@
                 <span class="navbar-toggler-icon"></span>
             </button>
 
-            <!-- Menú colapsable -->
+            <!-- Menu -->
             <div class="collapse navbar-collapse" id="menuNav">
                 <ul class="navbar-nav ms-auto ">
                     <li class="nav-item mx-1">

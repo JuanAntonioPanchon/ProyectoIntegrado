@@ -57,7 +57,7 @@ public class ControladorReceta extends HttpServlet {
                 request.setAttribute("recetas", recetas);
             } // crear una nueva receta
             else if (request.getParameter("crear") != null) {
-                vista = "/recetas/crearReceta.jsp"; // Redirige a la vista de creación.
+                vista = "/recetas/crearReceta.jsp";
             } //editar una receta
             else if (request.getParameter("id") != null) {
                 try {

@@ -144,7 +144,7 @@ public class ServicioPedido implements Serializable {
     public List<PedidoProducto> findProductosPorPedido(Long idPedido) {
         EntityManager em = emf.createEntityManager();
         try {
-            // Modificamos la consulta para acceder al campo id del pedido relacionado
+            
             String query = "SELECT pp FROM PedidoProducto pp WHERE pp.pedido.id = :idPedido";
             return em.createQuery(query, PedidoProducto.class)
                     .setParameter("idPedido", idPedido)

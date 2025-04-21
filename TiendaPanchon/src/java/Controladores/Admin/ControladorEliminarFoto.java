@@ -22,7 +22,7 @@ public class ControladorEliminarFoto extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        // Obtener los parámetros
+    
         String productoIdStr = request.getParameter("productoId");
         String imagen = request.getParameter("imagen");
 
@@ -59,10 +59,10 @@ public class ControladorEliminarFoto extends HttpServlet {
                 }
             }
 
-            // Redirigir a la lista de productos
+            
             response.sendRedirect(request.getContextPath() + "/Controladores.Admin/ControladorProducto");
         } else {
-            // Si no hay parámetros válidos
+            
             response.sendRedirect(request.getContextPath() + "/Controladores.Admin/ControladorProducto");
         }
     }

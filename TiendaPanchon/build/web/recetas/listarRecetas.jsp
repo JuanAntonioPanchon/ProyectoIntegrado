@@ -87,7 +87,7 @@
                         </div>
                     </div>
 
-                    <!-- Modal de receta -->
+                    <!-- Ventana Modal -->
                     <div class="modal fade" id="modalReceta${receta.id}" tabindex="-1" aria-labelledby="modalLabel${receta.id}" aria-hidden="true">
                         <div class="modal-dialog modal-lg">
                             <div class="modal-content tarjeta">
@@ -134,7 +134,7 @@
 
         <jsp:include page="/includes/footer.jsp" />
 
-        <!-- Bootstrap JS -->
+        
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 
         <script src="../js/eliminarImagenReceta.js"></script>

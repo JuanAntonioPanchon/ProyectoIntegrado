@@ -7,10 +7,10 @@
         <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
         <title>Gráfica de Productos Más Vendidos</title>
 
-        <!-- Bootstrap -->
+        
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
 
-        <!-- Estilos personalizados -->
+        
         <link rel="stylesheet" type="text/css" href="/TiendaPanchon/estilos/grafica.css">
         <link rel="stylesheet" type="text/css" href="../estilos/coloresPersonalizados.css">
 
@@ -25,7 +25,7 @@
         <jsp:include page="/includes/header.jsp"/>
 
         <div class="container text-center py-4">
-            <h1 class="fw-bold mb-4" style="font-family: 'Comic Sans MS', cursive;">Gráfica Productos más vendidos entre 2 fechas</h1>
+            <h1 class="fw-bold mb-4">Gráfica Productos más vendidos entre 2 fechas</h1>
 
             <form method="get" action="${pageContext.request.contextPath}/Controladores.Admin/ControladorGrafica" class="row align-items-end gx-5 gy-3 mb-4">
 

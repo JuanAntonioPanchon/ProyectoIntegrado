@@ -139,10 +139,10 @@ public class ServicioCategoriaProducto implements Serializable {
     public CategoriaProducto findCategoriaProductoByName(String nombre) {
         EntityManager em = getEntityManager();
         try {
-            // Query para buscar una categoría por su nombre
+            // Buscar categoria por nombre
             return em.createQuery("SELECT c FROM CategoriaProducto c WHERE c.nombre = :nombre", CategoriaProducto.class)
                     .setParameter("nombre", nombre)
-                    .getSingleResult(); // Retorna la única categoría encontrada
+                    .getSingleResult();
         } catch (NoResultException e) {
             return null;
         } finally {
@@ -154,7 +154,7 @@ public class ServicioCategoriaProducto implements Serializable {
     public List<Producto> cargarProductosDeCategoria(Long categoriaId) {
         EntityManager em = emf.createEntityManager();
         try {
-            // Suponiendo que tienes una entidad Producto con una relación ManyToOne a CategoriaProducto
+            
             String query = "SELECT p FROM Producto p WHERE p.categoria.id = :categoriaId";
             return em.createQuery(query, Producto.class)
                     .setParameter("categoriaId", categoriaId)

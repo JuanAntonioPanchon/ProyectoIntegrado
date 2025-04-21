@@ -5,7 +5,6 @@
     <head>
         <meta charset="UTF-8">
         <title>Gestionar Usuarios</title>
-        <!-- Bootstrap CDN -->
 
         <link rel="stylesheet" href="../estilos/coloresPersonalizados.css">
         <link rel="stylesheet" href="../estilos/tablas.css">
@@ -66,7 +65,7 @@
 
         <jsp:include page="/includes/footer.jsp" />
 
-        <!-- Bootstrap Bundle JS -->
+        
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
     </body>
 </html>

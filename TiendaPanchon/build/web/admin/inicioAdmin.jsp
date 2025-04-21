@@ -47,7 +47,7 @@
                     </div>
                 </div>
 
-                <!-- Tarjetas a la derecha -->
+                <!-- Tarjetas -->
                 <div class="col-lg-5">
                     <h3 class="text-center text-primary fw-bold mb-3">ADMINISTRACIÓN</h3>
                     <div class="row row-cols-1 row-cols-md-2 g-3">

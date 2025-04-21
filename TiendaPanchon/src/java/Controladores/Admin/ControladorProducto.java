@@ -25,9 +25,9 @@ public class ControladorProducto extends HttpServlet {
             throws ServletException, IOException {
         HttpSession sesion = request.getSession();
 
-        String vista = "/admin/listarCategorias.jsp"; // Vista por defecto
+        String vista = "/admin/listarCategorias.jsp";
 
-        // Obtener todas las categorías y pasarlas al JSP
+        
         request.setAttribute("categorias", sc.findCategoriaProductoEntities());
 
         // Si se pasa un id de categoría, listar los productos de esa categoría
@@ -57,7 +57,7 @@ public class ControladorProducto extends HttpServlet {
                     request.setAttribute("id_categoria", producto.getCategoria().getId());
                 }
 
-                vista = "/admin/crearProducto.jsp"; // Redirige a la vista de edición
+                vista = "/admin/crearProducto.jsp";
             } catch (Exception e) {
                 request.setAttribute("error", "Error al obtener el producto.");
             }
@@ -65,10 +65,10 @@ public class ControladorProducto extends HttpServlet {
 
         // Crear
         if (request.getParameter("crear") != null) {
-            vista = "/admin/crearProducto.jsp"; // Vista para crear un nuevo producto
+            vista = "/admin/crearProducto.jsp";
         }
 
-        // Si el usuario desea eliminar un producto
+        // Eliminar
         String eliminarProductoStr = request.getParameter("eliminarProducto");
         if (eliminarProductoStr != null) {
             try {
@@ -82,7 +82,7 @@ public class ControladorProducto extends HttpServlet {
             }
         }
 
-        // Redirige a la vista correspondiente
+        
         getServletContext().getRequestDispatcher(vista).forward(request, response);
     }
 
@@ -92,7 +92,7 @@ public class ControladorProducto extends HttpServlet {
         HttpSession sesion = request.getSession();
 
         try {
-            // Eliminar producto
+            // Eliminar
             String eliminarProductoStr = request.getParameter("eliminar");
             if (eliminarProductoStr != null && eliminarProductoStr.equals("Eliminar")) {
                 String idProductoStr = request.getParameter("id");
@@ -112,7 +112,7 @@ public class ControladorProducto extends HttpServlet {
             }
 
             if (request.getParameter("crear") != null) {
-                // Crear nuevo producto
+                // Crear
                 Producto producto = new Producto();
                 producto.setNombre(request.getParameter("nombre"));
                 producto.setDescripcion(request.getParameter("descripcion"));
@@ -131,7 +131,7 @@ public class ControladorProducto extends HttpServlet {
                     producto.setStock(Integer.valueOf(stockStr));
                 }
 
-                // Obtener y asignar el valor de novedad (se puede ajustar según sea necesario)
+                // Obtener y asignar el valor de novedad
                 producto.setNovedad(Boolean.valueOf(request.getParameter("novedad")));
 
                 producto.setFechaProducto(java.time.LocalDate.now());
@@ -161,7 +161,7 @@ public class ControladorProducto extends HttpServlet {
                     System.out.println("precioVenta " + precioVentaStr);
                 }
 
-                // Asignar el precioVenta a la petición para que esté disponible en el JSP
+                
                 request.setAttribute("precioVenta", precioVentaStr);
 
                 // Si hay más de 10 productos novedosos, desmarcar el más antiguo
@@ -170,8 +170,6 @@ public class ControladorProducto extends HttpServlet {
                     Producto productoMasAntiguo = sp.findProductosNovedades().get(0); // Obtener el primero (más antiguo)
                     productoMasAntiguo.setNovedad(false);
                     sp.edit(productoMasAntiguo); // Actualizar el producto más antiguo
-
-                    // Marcar el nuevo producto como novedad
                     producto.setNovedad(true);
                 } else {
                     producto.setNovedad(true);
@@ -181,7 +179,7 @@ public class ControladorProducto extends HttpServlet {
 
                 sp.create(producto);
             } else if (request.getParameter("editar") != null) {
-                // Editar producto existente
+                // Editar 
                 Long id = Long.valueOf(request.getParameter("id"));
                 Producto producto = sp.findProducto(id);
 

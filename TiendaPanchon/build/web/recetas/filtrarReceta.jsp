@@ -17,7 +17,7 @@
                     <h5 class="card-title">${receta.titulo}</h5>
                     <p class="card-text"><strong>Publicado por:</strong> ${receta.usuario.nombre}</p>
                     <p class="card-text"><strong>Ingredientes:</strong> ${receta.ingredientes}</p>
-                    <!-- Aquí termina el contenido del cuerpo de la tarjeta -->
+                   
                     <div class="mt-auto">
                         <div class="d-flex">
                             <c:if test="${sessionScope.usuario.rol == 'admin'}">
@@ -26,7 +26,7 @@
                                     <input type="submit" name="eliminar" value="Eliminar" class="btn btn-eliminar">
                                 </form>
                             </c:if>
-                            <!-- Asegurar que el botón "Ver" se alinee a la derecha incluso si no hay botón de eliminar -->
+                            
                             <button type="button" class="btn btn-ver ms-auto" data-bs-toggle="modal" data-bs-target="#modalReceta${receta.id}">
                                 Ver
                             </button>

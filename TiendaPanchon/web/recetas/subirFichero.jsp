@@ -10,7 +10,7 @@
     </head>
     <body>
 
-        <!-- Condicional para cabecera según el rol -->
+        <!-- Cabecera segun rol -->
     <c:choose>
         <c:when test="${sessionScope.usuario.rol == 'admin'}">
             <jsp:include page="/includes/header.jsp" />
@@ -29,15 +29,14 @@
                 <div style="color: red;">${error}</div>
             </c:if>
 
-            <!-- Formulario para subir imagen -->
+            <!-- Formulario imagen-->
             <form method="post" enctype="multipart/form-data">
                 <input type="file" name="fichero" required multiple="">
                 <input type="hidden" name="recetaId" value="${recetaId}">
                 <input type="submit" value="Subir Foto" class="boton">
             </form>
 
-            <!-- Botón de volver -->
-            <br>
+            
             <a href="/TiendaPanchon/Controladores/ControladorReceta">
                 <button class="boton">Volver a Recetas</button>
             </a>
@@ -46,7 +45,7 @@
 
     <jsp:include page="/includes/footer.jsp" />
 
-    <!-- Incluir Bootstrap JS -->
+   
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

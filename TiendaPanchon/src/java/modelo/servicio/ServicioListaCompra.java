@@ -182,7 +182,7 @@ public class ServicioListaCompra implements Serializable {
         try {
             em.getTransaction().begin();
 
-            // Buscar usuario y producto en la base de datos
+            // Buscar usuario y producto
             Usuario usuario = em.find(Usuario.class, idUsuario);
             Producto producto = em.find(Producto.class, idProducto);
 

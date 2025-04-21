@@ -56,7 +56,7 @@ public class ControladorSubirFoto extends HttpServlet {
         Part fichero = request.getPart("fichero");
         String nombreOriginal = fichero.getSubmittedFileName();
 
-        // Obtener el id del producto
+        
         String productoIdStr = request.getParameter("productoId");
         Long productoId = Long.parseLong(productoIdStr);
 
@@ -97,7 +97,7 @@ public class ControladorSubirFoto extends HttpServlet {
             }
         }
 
-        // Redirigir a la lista de productos
+        
         response.sendRedirect(request.getContextPath() + "/Controladores.Admin/ControladorProducto");
     }
 

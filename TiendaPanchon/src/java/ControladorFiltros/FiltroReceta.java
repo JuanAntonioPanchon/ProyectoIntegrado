@@ -45,7 +45,7 @@ public class FiltroReceta implements Filter {
 
         
         if (usuario == null || (!usuario.getRol().equals(RolEnum.normal) && !usuario.getRol().equals(RolEnum.admin))) {
-            // Si no hay usuario registrado o no tiene el rol adecuado, redirige al login
+            // Si no hay usuario registrado o no tiene el rol adecuado
             res.sendRedirect(req.getServletContext().getContextPath() + "/Controladores/ControladorLogin");
             return;
         }

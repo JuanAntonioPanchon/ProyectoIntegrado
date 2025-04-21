@@ -33,7 +33,7 @@ public class ControladorGrafica extends HttpServlet {
         ServicioProducto sp = new ServicioProducto(emf);
         ServicioCategoriaProducto sc = new ServicioCategoriaProducto(emf);
 
-        // Obtener parámetros de la solicitud
+        
         String fechaInicioStr = request.getParameter("fechaInicio");
         String fechaFinStr = request.getParameter("fechaFin");
         String categoriaIdStr = request.getParameter("categoriaId");
@@ -61,9 +61,9 @@ public class ControladorGrafica extends HttpServlet {
             e.printStackTrace();
         }
 
-        // Obtener todas las categorías
+        
         List<CategoriaProducto> categorias = sc.findCategoriaProductoEntities();
-        request.setAttribute("categorias", categorias);  // Pasar las categorías a la vista
+        request.setAttribute("categorias", categorias);
 
         emf.close();
         getServletContext().getRequestDispatcher(vista).forward(request, response);

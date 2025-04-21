@@ -15,6 +15,7 @@
         <script src="../js/filtrarRecetas.js"></script>
     </head>
     <body>
+        <!-- Cabecera segun rol -->
         <c:choose>
             <c:when test="${sessionScope.usuario.rol == 'admin'}">
                 <jsp:include page="/includes/header.jsp" />
@@ -29,14 +30,12 @@
             <!-- Botones Mis Recetas y Ver Recetas de Otros Usuarios -->
             <div class="d-flex justify-content-between align-items-center mb-4">
                 <div>
-                    <!-- Botón Mis Recetas -->
                     <a href="/TiendaPanchon/Controladores/ControladorReceta" 
                        class="btn btn btn-ver ${pageContext.request.requestURI.contains('listarRecetas') ? 'active' : ''}">
                         Mis Recetas
                     </a>
                 </div>
                 <div>
-                    <!-- Botón Ver Recetas de Otros Usuarios -->
                     <a href="/TiendaPanchon/Controladores/ControladorListadoReceta" 
                        class="btn btn btn-ver ${pageContext.request.requestURI.contains('listarTodasLasRecetas') ? 'active' : ''}">
                         Ver Recetas de Otros Usuarios

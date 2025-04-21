@@ -60,10 +60,10 @@ public class ControladorListarCategorias extends HttpServlet {
                     request.setAttribute("nombreCategoria", primeraCategoria.getNombre());
                 }
 
-                vista = "/admin/listarCategorias.jsp"; // Vista de listar categorías si no estamos creando una nueva
+                vista = "/admin/listarCategorias.jsp"; 
             } // Crear una nueva categoría
             else if (request.getParameter("crear") != null) {
-                vista = "/admin/crearCategoria.jsp"; // Redirige a la vista de creación de categoría.
+                vista = "/admin/crearCategoria.jsp"; 
                 
             } // Editar una categoría
             else if (request.getParameter("id") != null) {
@@ -72,10 +72,10 @@ public class ControladorListarCategorias extends HttpServlet {
                     CategoriaProducto categoria = scp.findCategoriaProducto(id);
                     request.setAttribute("id", categoria.getId());
                     request.setAttribute("nombre", categoria.getNombre());
-                    vista = "/admin/crearCategoria.jsp"; // Mantenemos la vista de creación para editar
+                    vista = "/admin/crearCategoria.jsp"; 
                 } catch (Exception e) {
                     request.setAttribute("error", "Error al obtener la categoría.");
-                    vista = "/admin/crearCategoria.jsp"; // En caso de error, se mantiene en la vista de creación
+                    vista = "/admin/crearCategoria.jsp"; 
                 }
             } // Eliminar una categoría
             else if (request.getParameter("eliminar") != null) {
@@ -125,7 +125,7 @@ public class ControladorListarCategorias extends HttpServlet {
                 // Comprobar si la categoría ya existe
                 if (request.getParameter("crear") != null) {
                     if (scp.findCategoriaProductoByName(nombre) != null) {
-                        // La categoría ya existe
+                        
                         error = "La categoría ya existe.";
                     } else {
                         // Crear una nueva categoría
@@ -133,7 +133,7 @@ public class ControladorListarCategorias extends HttpServlet {
                         categoria.setNombre(nombre);
                         scp.create(categoria);
                     }
-                } // Editar una categoría existente
+                } // Editar una categoría
                 else if (request.getParameter("editar") != null) {
                     long id = Long.parseLong(idStr);
                     CategoriaProducto categoria = scp.findCategoriaProducto(id);
@@ -159,7 +159,7 @@ public class ControladorListarCategorias extends HttpServlet {
         emf.close();
         if (!error.isEmpty()) {
             sesion.setAttribute("error", error);
-            // Mantén la vista en la página de creación
+            
             request.getRequestDispatcher("/admin/crearCategoria.jsp").forward(request, response);
         }
         response.sendRedirect("ControladorListarCategorias");

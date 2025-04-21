@@ -97,7 +97,7 @@ public class ControladorSubirFichero extends HttpServlet {
             }
         }
 
-        // Redirigir a la lista de recetas
+        
         response.sendRedirect(request.getContextPath() + "/Controladores/ControladorReceta");
     }
 

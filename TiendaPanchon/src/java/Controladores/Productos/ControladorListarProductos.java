@@ -44,7 +44,7 @@ public class ControladorListarProductos extends HttpServlet {
                 String ofertaStr = request.getParameter("oferta");
                 String novedadesStr = request.getParameter("novedades");
 
-                Map<Long, Double> preciosOriginales = new HashMap<>();  // Creación del Map
+                Map<Long, Double> preciosOriginales = new HashMap<>();
 
                 if (ofertaStr != null && ofertaStr.equals("true")) { // productos de oferta
                     List<Producto> productosConOferta = sp.findProductosConOferta();
@@ -115,7 +115,7 @@ public class ControladorListarProductos extends HttpServlet {
                     }
                 }
 
-                // Pasamos el Map con los precios originales a la vista
+                
                 request.setAttribute("preciosOriginales", preciosOriginales);
 
             } catch (NumberFormatException e) {

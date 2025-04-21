@@ -28,23 +28,23 @@ public class ControladorGestionarUsuarios extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        String vista = "/admin/listarUsuarios.jsp"; // Página por defecto para listar usuarios
+        String vista = "/admin/listarUsuarios.jsp";
         String accion = request.getParameter("accion");
         String error = "";
 
         if ("crear".equals(accion)) {
             request.setAttribute("usuario", new Usuario());
-            vista = "/admin/crearUsuario.jsp"; // Página para crear un nuevo usuario
+            vista = "/admin/crearUsuario.jsp";
         } else if ("editar".equals(accion)) {
             Long idUsuario = Long.parseLong(request.getParameter("idUsuario"));
             Usuario usuario = servicioUsuario.findUsuario(idUsuario);
             if (usuario != null) {
-                request.setAttribute("usuario", usuario); // Pasar los datos del usuario a la vista
-                vista = "/admin/crearUsuario.jsp"; // Página para editar un usuario
+                request.setAttribute("usuario", usuario); 
+                vista = "/admin/crearUsuario.jsp"; 
             } else {
                 error = "Usuario no encontrado.";
                 request.setAttribute("error", error);
-                vista = "/admin/listarUsuarios.jsp"; // Volver a la lista si no se encuentra el usuario
+                vista = "/admin/listarUsuarios.jsp"; 
             }
         } else if ("Eliminar".equals(accion)) {
             Long idUsuario = Long.parseLong(request.getParameter("idUsuario"));
@@ -58,7 +58,7 @@ public class ControladorGestionarUsuarios extends HttpServlet {
             }
         }
 
-        // Listar todos los usuarios
+        
         List<Usuario> usuarios = servicioUsuario.findUsuarioEntities();
         request.setAttribute("usuarios", usuarios);
         getServletContext().getRequestDispatcher(vista).forward(request, response);
@@ -67,12 +67,12 @@ public class ControladorGestionarUsuarios extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        String vista = "/admin/crearUsuario.jsp"; // Página de registro para crear o editar
+        String vista = "/admin/crearUsuario.jsp"; 
         String error = "";
-        String accion = request.getParameter("accion"); // Obtener la acción de la petición
+        String accion = request.getParameter("accion");
         Long idUsuario = null;
 
-        // Si la acción es eliminar, procedemos a eliminar al usuario
+        // Eliminar Usuario
         if ("Eliminar".equals(accion)) {
             idUsuario = Long.parseLong(request.getParameter("idUsuario"));
             try {
@@ -85,7 +85,7 @@ public class ControladorGestionarUsuarios extends HttpServlet {
             }
         }
 
-        // Si no es la acción de eliminar, entonces es crear o editar
+        // Crear / Editar
         String nombre = request.getParameter("nombre");
         String apellidos = request.getParameter("apellidos");
         String direccion = request.getParameter("direccion");
@@ -95,12 +95,12 @@ public class ControladorGestionarUsuarios extends HttpServlet {
         String password2 = request.getParameter("password2");
         String rolStr = request.getParameter("rol");
 
-        // Recuperar idUsuario si existe para editar
+        // Editar
         if (request.getParameter("idUsuario") != null && !request.getParameter("idUsuario").isEmpty()) {
             idUsuario = Long.parseLong(request.getParameter("idUsuario"));
         }
 
-        // Si el id existe, recuperar el usuario, si no, crear uno nuevo
+        // Crear si no existe
         Usuario usuario = idUsuario != null ? servicioUsuario.findUsuario(idUsuario) : new Usuario();
 
         // Comprobación del email solo si estamos creando un nuevo usuario
@@ -114,7 +114,7 @@ public class ControladorGestionarUsuarios extends HttpServlet {
             if (rolStr != null && !rolStr.isEmpty()) {
                 usuario.setRol(modelo.entidades.RolEnum.valueOf(rolStr));
             } else {
-                usuario.setRol(modelo.entidades.RolEnum.normal); // Rol por defecto
+                usuario.setRol(modelo.entidades.RolEnum.normal); // Rol por defecto sera normal
             }
         } catch (IllegalArgumentException e) {
             error = "Rol no válido.";
@@ -129,7 +129,7 @@ public class ControladorGestionarUsuarios extends HttpServlet {
             request.setAttribute("error", error);
         }
 
-        // Establecer otros atributos del usuario
+        
         usuario.setNombre(nombre);
         usuario.setApellidos(apellidos);
         usuario.setDireccion(direccion);
@@ -152,7 +152,7 @@ public class ControladorGestionarUsuarios extends HttpServlet {
         }
 
         request.setAttribute("error", error);
-        // Pasar el usuario a la vista para editar
+        
         request.setAttribute("usuario", usuario);
         getServletContext().getRequestDispatcher(vista).forward(request, response);
     }

@@ -1,12 +1,12 @@
 
 .active {
-    background-color: #f5e8d0 !important; /* Beige claro */
-    color: #000 !important; /* Texto oscuro para mejor contraste */
-    border-color: #f5e8d0 !important; /* Borde beige claro */
+    background-color: #f5e8d0 !important;
+    color: #000 !important; 
+    border-color: #f5e8d0 !important; 
 }
 
 .active:hover {
-    background-color: #e4d1a1 !important; /* Beige oscuro */
-    color: #000 !important; /* Mantener texto oscuro */
-    border-color: #e4d1a1 !important; /* Borde beige oscuro */
+    background-color: #e4d1a1 !important;
+    color: #000 !important; 
+    border-color: #e4d1a1 !important;
 }

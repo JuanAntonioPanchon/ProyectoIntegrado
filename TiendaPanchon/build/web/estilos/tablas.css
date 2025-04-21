@@ -1,21 +1,21 @@
 /* Encabezado de tabla */
 th {
-    background-color: #9dad6f !important; /* Verde oliva apagado */
+    background-color: #9dad6f !important;
     color: #000;
 }
 
 /* Alternancia de colores por fila */
 .table.tabla-personalizada tbody > tr:nth-child(odd) td {
-    background-color: #fffaf3 !important;  /* Blanco crema */
+    background-color: #fffaf3 !important;
 }
 
 .table.tabla-personalizada tbody > tr:nth-child(even) td {
-    background-color: #f5e8d0 !important;  /* Beige claro */
+    background-color: #f5e8d0 !important;
 }
 
 /* Hover fila */
 .table.tabla-personalizada tbody > tr:hover td {
-    background-color: #f0d9a0 !important;  /* Arena claro */
+    background-color: #f0d9a0 !important;
 }
 
 
@@ -24,13 +24,13 @@ th {
 }
 
 .fila-clicable:hover td {
-    background-color: #f0d9a0 !important; /* O usa otro color de tu paleta */
+    background-color: #f0d9a0 !important;
 }
 
 
-/* ----------------------------- */
+
 /* Botones personalizados */
-/* ----------------------------- */
+
 
 .btn-editar {
     background-color: #6c8c4c !important;
@@ -43,7 +43,7 @@ th {
     background-color: #5b743f !important;
 }
 
-/* Igual para eliminar */
+
 .btn-eliminar {
     background-color: #c1443c !important;
     color: white !important;
@@ -55,7 +55,7 @@ th {
     background-color: #a83a34 !important;
 }
 
-/* Crear */
+
 .btn-crear {
     background-color: #3e7d3a !important;
     color: white !important;
@@ -67,7 +67,7 @@ th {
     background-color: #336b30 !important;
 }
 
-/* Volver */
+
 .btn-volver {
     background-color: #7c6f63 !important;
     color: white !important;
@@ -80,7 +80,7 @@ th {
 }
 
 .btn-ver {
-    background-color: #5c87a3 !important; /* Azul grisáceo suave */
+    background-color: #5c87a3 !important;
     color: white !important;
     border: none !important;
     transition: background-color 0.3s ease;
@@ -93,9 +93,9 @@ th {
 
 
 
-/* ----------------------------- */
+
 /* Asegura el responsive de la tabla sin scroll lateral */
-/* ----------------------------- */
+
 /*
 .table-responsive {
     overflow-x: auto;

@@ -65,10 +65,10 @@ public class ControladorEliminarImagen extends HttpServlet {
                 }
             }
 
-            // Redirigir a la lista de recetas
+            
             response.sendRedirect(request.getContextPath() + "/Controladores/ControladorReceta");
         } else {
-            // Si no hay parámetros válidos
+            
             response.sendRedirect(request.getContextPath() + "/Controladores/ControladorReceta");
         }
     }

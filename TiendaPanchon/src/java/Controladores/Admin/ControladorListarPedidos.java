@@ -30,7 +30,7 @@ public class ControladorListarPedidos extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
-        String vista = "/admin/listarPedidos.jsp"; // Página por defecto para listar pedidos
+        String vista = "/admin/listarPedidos.jsp";
         String accion = request.getParameter("accion");
 
         if ("editar".equals(accion)) {
@@ -38,15 +38,15 @@ public class ControladorListarPedidos extends HttpServlet {
             Pedido pedido = servicioPedido.findPedido(idPedido);
 
             if (pedido != null) {
-                // Obtener los productos asociados a este pedido
-                List<PedidoProducto> productosPedidos = servicioPedido.findProductosPorPedido(idPedido); // Aquí debes tener un método que devuelva los productos del pedido
+                
+                List<PedidoProducto> productosPedidos = servicioPedido.findProductosPorPedido(idPedido);
                 request.setAttribute("pedido", pedido);
-                request.setAttribute("productos", productosPedidos); // Pasar los productos a la vista
-                vista = "/admin/verPedidos.jsp"; // Redirigir a la vista de detalle del pedido
+                request.setAttribute("productos", productosPedidos);
+                vista = "/admin/verPedidos.jsp";
             }
         }
 
-        // Listar todos los pedidos
+        
         List<Pedido> pedidos = servicioPedido.findPedidoEntities();
         for (Pedido pedido : pedidos) {
             Usuario usuario = pedido.getUsuario();
@@ -78,17 +78,17 @@ public class ControladorListarPedidos extends HttpServlet {
             Pedido pedido = servicioPedido.findPedido(idPedido);
 
             if (pedido != null) {
-                // Obtener el nuevo estado
+                
                 String estado = request.getParameter("estado");
                 if (estado != null && !estado.trim().isEmpty()) {
                     try {
-                        pedido.setEstado(EstadoPedidoEnum.valueOf(estado.toUpperCase())); // Asegúrate de que el estado sea válido
+                        pedido.setEstado(EstadoPedidoEnum.valueOf(estado.toUpperCase())); 
                     } catch (IllegalArgumentException e) {
                         request.setAttribute("error", "Estado no válido.");
                     }
                 }
 
-                // Actualizar el precio si se proporciona
+                
                 String precioStr = request.getParameter("precio");
                 if (precioStr != null && !precioStr.trim().isEmpty()) {
                     try {
@@ -99,11 +99,11 @@ public class ControladorListarPedidos extends HttpServlet {
                     }
                 }
 
-                // Intentar guardar el pedido actualizado
+                
                 try {
-                    servicioPedido.edit(pedido); // Aquí se guardan los cambios en la base de datos
+                    servicioPedido.edit(pedido); 
 
-                    // Redirigir de nuevo a la página de la que provenía el usuario
+                    
                     String referer = request.getHeader("Referer");
                     response.sendRedirect(referer != null ? referer : request.getContextPath() + "/Controladores.Admin/ControladorActualizarEstado");
                     return;
@@ -113,7 +113,7 @@ public class ControladorListarPedidos extends HttpServlet {
             }
         }
 
-        // Si no se realiza ninguna acción válida, redirige a la lista de pedidos
+        
         doGet(request, response);
     }
 }
