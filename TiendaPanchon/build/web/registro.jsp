@@ -8,12 +8,16 @@
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
         <link rel="stylesheet" href="../estilos/coloresPersonalizados.css">
         <link rel="stylesheet" href="../estilos/registroUsuarios.css">
+        <link rel="stylesheet" href="../estilos/tablas.css">
 
     </head>
     <body>
+
+        <jsp:include page="/includes/headerUsuario.jsp" /> 
+
         <main>
             <section>
-                <div class="form-container mx-auto p-3 shadow rounded-4 mt-4">
+                <div class="form-container mx-auto p-3 shadow rounded-4 my-4">
 
                     <div class="d-flex align-items-center mb-3">
                         <img src="../imagenes/elRinconDeLaura.jpeg" alt="Laura" 
@@ -78,8 +82,8 @@
 
                         <div class="d-flex justify-content-between mt-3">
                             <div class="d-flex justify-content-between contenedorAceptar">
-                                <a href="/TiendaPanchon/Controladores/ControladorInicio" class="btn btn-secondary btn-sm botones">Cancelar</a>
-                                <input type="submit" name="${empty idUsuario ? 'crear' : 'editar'}" value="Aceptar" class="btn btn-primary btn-sm me-3 botones">
+                                <a href="/TiendaPanchon/Controladores/ControladorInicio" class="btn btn-volver btn-sm botones">Cancelar</a>
+                                <input type="submit" name="${empty idUsuario ? 'crear' : 'editar'}" value="Aceptar" class="btn btn-crear btn-sm me-3 botones">
                             </div>
                     </form>
 
@@ -87,7 +91,7 @@
                         <form method="post" action="ControladorUsuarios?eliminar=true" class="d-flex justify-content-center align-items-center">
                             <input type="hidden" name="idUsuario" value="${usuario.id != null ? usuario.id : ''}">
                             <input type="submit" name="eliminar" value="Eliminar" 
-                                   class="btn btn-danger btn-sm botones"
+                                   class="btn btn-eliminar btn-sm botones"
                                    onclick="return confirm('¿Estás seguro de que deseas darte de baja ${usuario.nombre} ${usuario.apellidos}? Tus datos se eliminarán.');">
                         </form>
                     </c:if>
@@ -100,5 +104,7 @@
                 </div>
             </section>
         </main>
+
+        <jsp:include page="/includes/footer.jsp" /> 
     </body>
 </html>

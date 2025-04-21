@@ -92,6 +92,8 @@
             </div>
         </header>
 
+        <jsp:include page="/includes/headerUsuario.jsp" />             
+
         <main>
             <h2>Categorías de Productos</h2>
             <ul>
