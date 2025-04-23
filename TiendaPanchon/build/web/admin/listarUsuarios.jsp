@@ -17,7 +17,8 @@
         <div class="container py-4">
             <h2 class="text-center fw-bold mb-4">Gestionar Usuarios</h2>
 
-            <div class="table-responsive">
+            <div class="table-responsive"> <!-- table-responsive hace que a la tabla le salga el scroll lateral -->
+                <!-- que es mejor asi con el scroll o hacer tarjetas por cada usuario -->
                 <table class="tabla-personalizada table table-bordered text-center">
 
                     <thead>
@@ -65,7 +66,6 @@
 
         <jsp:include page="/includes/footer.jsp" />
 
-        
-        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
     </body>
 </html>

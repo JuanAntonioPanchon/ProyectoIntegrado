@@ -22,7 +22,7 @@ import modelo.entidades.Usuario;
  *
  * @author Panchon
  */
-@WebFilter(filterName = "FiltroUsuario", urlPatterns = {"/usuarios/*", "/listaCompra/*"}, dispatcherTypes = {DispatcherType.REQUEST, DispatcherType.FORWARD, DispatcherType.ERROR, DispatcherType.INCLUDE})
+@WebFilter(filterName = "FiltroUsuario", urlPatterns = {"/carrito/*", "/listaCompra/*"}, dispatcherTypes = {DispatcherType.REQUEST, DispatcherType.FORWARD, DispatcherType.ERROR, DispatcherType.INCLUDE})
 public class FiltroUsuario implements Filter {
 
     public void doFilter(ServletRequest request, ServletResponse response,

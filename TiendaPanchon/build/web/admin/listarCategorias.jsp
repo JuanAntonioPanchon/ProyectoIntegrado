@@ -8,6 +8,7 @@
         <title>Listar Categorías</title>
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
         <link rel="stylesheet" type="text/css" href="../estilos/estilos.css">
+        <link rel="stylesheet" type="text/css" href="../estilos/coloresPersonalizados.css">
     </head>
     <body>
         <jsp:include page="/includes/header.jsp" />
@@ -132,7 +133,7 @@
 
         <jsp:include page="/includes/footer.jsp" />
 
-        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+       
         <script type="text/javascript" src="../js/gestionCategoria.js"></script>
     </body>
 </html>

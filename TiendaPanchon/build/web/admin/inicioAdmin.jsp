@@ -18,6 +18,30 @@
     </head>
     <body>
         <jsp:include page="/includes/header.jsp" />
+        
+        <header>
+    <nav class="navbar navbar-expand-md colorVerde text-black px-4">
+        <div class="container-fluid d-flex justify-content-between align-items-center">
+
+            <!-- Logo y título -->
+            <div class="d-flex align-items-center">
+                <img src="../imagenes/elRinconDeLaura.jpeg" alt="Logo El Rincón de Laura"
+                     class="rounded-circle me-3" style="width: 60px;">
+                <a class="navbar-brand fw-bold mb-0 text-black text-decoration-none"
+                   href="/TiendaPanchon/Controladores/ControladorInicio">
+                    EL RINCÓN DE LAURA
+                </a>
+            </div>
+
+            <!-- Botón Iniciar Sesión -->
+            <div>
+                <a class="btn btn-outline-dark fw-bold" href="/TiendaPanchon/Controladores/ControladorLogin">
+                    <i class="bi bi-box-arrow-in-right me-1"></i> Iniciar Sesión
+                </a>
+            </div>
+        </div>
+    </nav>
+</header>
 
         <main class="container my-4">
             <div class="row">
@@ -116,7 +140,7 @@
         </main>
 
         <jsp:include page="/includes/footer.jsp" />
-        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+       
         <script src="../js/inicioAdmin.js"></script>
 
     </body>

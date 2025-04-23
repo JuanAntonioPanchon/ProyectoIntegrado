@@ -6,6 +6,7 @@
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>Gestión de Recetas</title>
+        <link rel="stylesheet" href="../estilos/coloresPersonalizados.css">
         <script>
             function abrirModal(id, nombre, precio, maxCantidad) {
                 if (!id || !nombre || !precio || !maxCantidad) {
@@ -92,7 +93,41 @@
             </div>
         </header>
 
-        <jsp:include page="/includes/headerUsuario.jsp" />             
+        <jsp:include page="/includes/headerUsuario.jsp" />   
+
+        <header> <!-- ESTE MENU TIENE QUE APARECER SI NO SE HA INICIADO SESION, PONER AL FINAL CUANDO SE HAYA CREADO LO DE INICIAR O NO SESION -->
+            <nav class="navbar navbar-expand-md colorVerde text-black px-4">
+                <div class="container-fluid">
+
+                    <!-- Logo y Título -->
+                    <div class="d-flex align-items-center">
+                        <img src="../imagenes/elRinconDeLaura.jpeg" alt="Logo El Rincón de Laura"
+                             class="rounded-circle me-3" style="width: 60px;">
+                        <a class="navbar-brand fw-bold mb-0 text-black text-decoration-none"
+                           href="/TiendaPanchon/Controladores/ControladorInicio">
+                            EL RINCÓN DE LAURA
+                        </a>
+                    </div>
+
+                    <!-- Botón hamburguesa para consistencia visual aunque no tenga menú -->
+                    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#menuSinSesion"
+                            aria-controls="menuSinSesion" aria-expanded="false" aria-label="Toggle navigation">
+                        <span class="navbar-toggler-icon"></span>
+                    </button>
+
+                    <!-- Menú colapsable con solo una opción -->
+                    <div class="collapse navbar-collapse" id="menuSinSesion">
+                        <ul class="navbar-nav ms-auto">
+                            <li class="nav-item mx-1">
+                                <a class="nav-link text-black fw-bold" href="/TiendaPanchon/Controladores/ControladorLogin">
+                                    <i class="bi bi-box-arrow-in-right me-1"></i> Iniciar Sesión
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </nav>
+        </header>
 
         <main>
             <h2>Categorías de Productos</h2>
@@ -163,5 +198,7 @@
             <button onclick="cerrarModal()">Cancelar</button>
             <button onclick="agregarASesion()">Aceptar</button>
         </div>
+
+        <jsp:include page="/includes/footer.jsp" />
     </body>
 </html>

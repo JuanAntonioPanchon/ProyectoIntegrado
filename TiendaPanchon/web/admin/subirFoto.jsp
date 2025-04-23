@@ -6,6 +6,7 @@
         <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
         <title>Subir Foto Producto</title>
         <link rel="stylesheet" type="text/css" href="../estilos/subirFichero.css">
+        <link rel="stylesheet" type="text/css" href="../estilos/coloresPersonalizados.css">
         <link href="https://fonts.googleapis.com/css2?family=Switzer:wght@400;700&display=swap" rel="stylesheet">
     </head>
     <body>
@@ -37,6 +38,6 @@
         </main>
 
         <jsp:include page="/includes/footer.jsp" />
-        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+        
     </body>
 </html>

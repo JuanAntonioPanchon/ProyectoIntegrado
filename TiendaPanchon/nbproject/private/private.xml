@@ -3,10 +3,19 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/home/juan-antonio/Escritorio/ProyectoIntegrado/ProyectoIntegrado/TiendaPanchon/web/includes/header.jsp</file>
-            <file>file:/home/juan-antonio/Escritorio/ProyectoIntegrado/ProyectoIntegrado/TiendaPanchon/web/registro.jsp</file>
+            <file>file:/home/juan-antonio/Escritorio/ProyectoIntegrado/ProyectoIntegrado/TiendaPanchon/web/recetas/listarRecetas.jsp</file>
+            <file>file:/home/juan-antonio/Escritorio/ProyectoIntegrado/ProyectoIntegrado/TiendaPanchon/web/admin/subirFoto.jsp</file>
             <file>file:/home/juan-antonio/Escritorio/ProyectoIntegrado/ProyectoIntegrado/TiendaPanchon/web/includes/headerUsuario.jsp</file>
-            <file>file:/home/juan-antonio/Escritorio/ProyectoIntegrado/ProyectoIntegrado/TiendaPanchon/web/usuarios/inicio.jsp</file>
+            <file>file:/home/juan-antonio/Escritorio/ProyectoIntegrado/ProyectoIntegrado/TiendaPanchon/src/java/ControladorFiltros/FiltroUsuario.java</file>
+            <file>file:/home/juan-antonio/Escritorio/ProyectoIntegrado/ProyectoIntegrado/TiendaPanchon/src/java/Controladores/ControladorInicio.java</file>
+            <file>file:/home/juan-antonio/Escritorio/ProyectoIntegrado/ProyectoIntegrado/TiendaPanchon/web/index.html</file>
+            <file>file:/home/juan-antonio/Escritorio/ProyectoIntegrado/ProyectoIntegrado/TiendaPanchon/web/recetas/subirFichero.jsp</file>
+            <file>file:/home/juan-antonio/Escritorio/ProyectoIntegrado/ProyectoIntegrado/TiendaPanchon/web/recetas/crearReceta.jsp</file>
+            <file>file:/home/juan-antonio/Escritorio/ProyectoIntegrado/ProyectoIntegrado/TiendaPanchon/web/includes/footer.jsp</file>
+            <file>file:/home/juan-antonio/Escritorio/ProyectoIntegrado/ProyectoIntegrado/TiendaPanchon/src/java/ControladorFiltros/FiltroAdmin.java</file>
+            <file>file:/home/juan-antonio/Escritorio/ProyectoIntegrado/ProyectoIntegrado/TiendaPanchon/src/java/ControladorFiltros/FiltroReceta.java</file>
+            <file>file:/home/juan-antonio/Escritorio/ProyectoIntegrado/ProyectoIntegrado/TiendaPanchon/web/recetas/filtrarReceta.jsp</file>
+            <file>file:/home/juan-antonio/Escritorio/ProyectoIntegrado/ProyectoIntegrado/TiendaPanchon/web/recetas/listarTodasLasRecetas.jsp</file>
         </group>
     </open-files>
 </project-private>
