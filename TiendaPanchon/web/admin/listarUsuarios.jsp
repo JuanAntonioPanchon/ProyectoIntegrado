@@ -9,6 +9,7 @@
         <link rel="stylesheet" href="../estilos/coloresPersonalizados.css">
         <link rel="stylesheet" href="../estilos/tablas.css">
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+        <script src="https://cdn.jsdelivr.net/npm/fuse.js@6.6.2"></script>
     </head>
     <body>
 
@@ -17,10 +18,12 @@
         <div class="container py-4">
             <h2 class="text-center fw-bold mb-4">Gestionar Usuarios</h2>
 
-            <div class="table-responsive"> <!-- table-responsive hace que a la tabla le salga el scroll lateral -->
-                <!-- que es mejor asi con el scroll o hacer tarjetas por cada usuario -->
-                <table class="tabla-personalizada table table-bordered text-center">
+            <div class="mb-3 text-center">
+                <input type="text" id="buscadorUsuarios" class="form-control w-50 d-inline-block" placeholder="Buscar usuario...">
+            </div>
 
+            <div class="table-responsive">
+                <table class="tabla-personalizada table table-bordered text-center">
                     <thead>
                         <tr>
                             <th class="align-middle">NOMBRE</th>
@@ -32,7 +35,7 @@
                             <th class="align-middle">ACCIONES</th>
                         </tr>
                     </thead>
-                    <tbody>
+                    <tbody id="tablaUsuarios">
                         <c:forEach var="usuario" items="${usuarios}">
                             <tr>
                                 <td class="align-middle">${usuario.nombre}</td>
@@ -66,6 +69,7 @@
 
         <jsp:include page="/includes/footer.jsp" />
 
+        <script src="../js/filtroUsuarioFuse.js"></script>
 
     </body>
 </html>

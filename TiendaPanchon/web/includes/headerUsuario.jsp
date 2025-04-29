@@ -44,6 +44,13 @@
                             <i class="bi bi-person-circle me-1"></i> Perfil
                         </a>
                     </li>
+
+                    <li class="nav-item mx-3">
+                        <a class="nav-link text-black" href="/TiendaPanchon/Controladores.Pedidos/ControladorPedidosUsuario">
+                            <i class="bi bi-basket me-1"></i> Pedidos
+                        </a>
+                    </li>
+
                     <li class="nav-item mx-3">
                         <a class="nav-link text-black" href="/TiendaPanchon/Controladores.Carrito/ControladorCarrito">
                             <i class="bi bi-cart4 me-1"></i> Cesta

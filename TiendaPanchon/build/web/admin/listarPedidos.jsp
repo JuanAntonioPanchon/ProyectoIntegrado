@@ -28,6 +28,8 @@
                     <div class="col-12 col-sm-6 col-md-4 col-lg-3">
                         <div class="card tarjeta h-100 border-dark shadow">
                             <div class="card-body">
+                                <p><strong>Nombre:</strong> ${pedido.usuario.nombre} ${pedido.usuario.apellidos}</p>
+                                <p><strong>Email:</strong> ${pedido.usuario.email}</p>
                                 <p><strong>Fecha:</strong> ${pedido.fechaPedido}</p>
                                 <p><strong>Precio:</strong> <fmt:formatNumber value="${pedido.precio}" type="currency" currencySymbol="€"/></p>
                                 <p><strong>Estado:</strong> ${pedido.estado}</p>
@@ -52,6 +54,5 @@
 
         <jsp:include page="/includes/footer.jsp" />
 
-        
     </body>
 </html>
