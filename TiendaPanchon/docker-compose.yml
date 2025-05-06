@@ -1,0 +1,28 @@
+version: "3.8"
+
+services:
+  db:
+    image: mysql:5.7
+    container_name: mysql-tienda
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: tiendaPanchon
+      MYSQL_USER: tiendaPanchon
+      MYSQL_PASSWORD: tiendaPanchon
+    ports:
+      - "3306:3306"
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-utiendaPanchon", "-ptiendapanchon"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  web:
+    build: .
+    container_name: tomcat-tienda
+    depends_on:
+      db:
+        condition: service_healthy
+    ports:
+      - "8080:8080"
+
