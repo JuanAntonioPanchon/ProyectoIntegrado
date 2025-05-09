@@ -24,6 +24,17 @@
         <div class="container my-5">
             <h1 class="text-center fw-bold mb-4">Mis Pedidos</h1>
 
+            <c:if test="${not empty sessionScope.mensajeError}">
+                <div class="alert alert-danger text-center fw-bold">${sessionScope.mensajeError}</div>
+                <c:remove var="mensajeError" scope="session" />
+            </c:if>
+
+            <c:if test="${not empty sessionScope.mensajeExito}">
+                <div class="alert alert-success text-center fw-bold">${sessionScope.mensajeExito}</div>
+                <c:remove var="mensajeExito" scope="session" />
+            </c:if>
+
+
             <c:if test="${not empty sessionScope.mensajeExito}">
                 <div class="alert alert-success text-center fw-bold">${sessionScope.mensajeExito}</div>
                 <c:remove var="mensajeExito" scope="session" />
@@ -39,7 +50,7 @@
                                 <p><strong>Estado:</strong> ${pedido.estado}</p>
                             </div>
                             <div class="card-footer bg-transparent border-0 d-flex justify-content-between">
-                                <form action="/TiendaPanchon/usuario/pedidos" method="post" onsubmit="return confirm('¿Seguro que deseas cancelar este pedido de ${pedido.precio} €?')" class="me-2">
+                                <form action="/TiendaPanchon/Controladores.Pedidos/ControladorPedidosUsuario" method="post" onsubmit="return confirm('¿Seguro que deseas cancelar este pedido de ${pedido.precio} €?')" class="me-2">
                                     <input type="hidden" name="accion" value="eliminar">
                                     <input type="hidden" name="idPedido" value="${pedido.id}">
                                     <button type="submit" class="btn btn-eliminar btn-sm">Cancelar Pedido</button>

@@ -54,7 +54,20 @@
                         <div class="col-md-4 text-end">
                             <p><strong>Cantidad total:</strong> <span id="cantidadTotal">0</span> productos</p>
                             <p><strong>Total cesta:</strong> <span id="precioTotalCesta">0.00 €</span></p>
-                            <button class="btn btn-success">Tramitar Pedido</button>
+                            <button class="btn btn-success" onclick="
+                                    if (confirm(
+                                            '¿Deseas realizar el pedido con ' +
+                                            document.getElementById('cantidadTotal').textContent.trim() +
+                                            ' productos por un total de ' +
+                                            document.getElementById('precioTotalCesta').textContent.trim() +
+                                            '?'
+                                            )) {
+                                        tramitarPedido();
+                                    }
+                                    ">Tramitar Pedido</button>
+
+
+
                         </div>
                     </div>
                 </c:when>
@@ -141,8 +154,32 @@
                 document.getElementById("cantidadTotal").textContent = cantidadTotal;
                 document.getElementById("precioTotalCesta").textContent = precioTotal.toFixed(2) + " €";
             }
+            function tramitarPedido() {
+                fetch("/TiendaPanchon/Controladores.Pedidos/ControladorPedidosUsuario", {
+                    method: "POST",
+                    headers: {"Content-Type": "application/x-www-form-urlencoded"},
+                    body: "accion=tramitar"
+                })
+                        .then(res => {
+                            if (res.ok) {
+                                window.location.href = "/TiendaPanchon/Controladores.Pedidos/ControladorPedidosUsuario";
+                            } else {
+                                alert("Hubo un error al tramitar el pedido.");
+                            }
+                        })
+                        .catch(err => {
+                            console.error("Error de red:", err);
+                        });
+            }
 
-            document.addEventListener("DOMContentLoaded", actualizarResumen);
+
+
+
+
+            document.addEventListener("DOMContentLoaded", () => {
+                actualizarResumen();
+            });
+
         </script>
     </body>
 </html>
