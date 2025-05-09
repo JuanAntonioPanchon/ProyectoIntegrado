@@ -33,96 +33,76 @@ public class ControladorListarProductos extends HttpServlet {
         ServicioCategoriaProducto sc = new ServicioCategoriaProducto(emf);
         String vista = "/usuarios/inicio.jsp";
 
-        HttpSession sesion = request.getSession();
-        Usuario usuario = (Usuario) sesion.getAttribute("usuario");
+        try {
+            // Cargar categorías SIEMPRE
+            List<CategoriaProducto> categorias = sc.findCategoriaProductoEntities();
+            request.setAttribute("categorias", categorias);
 
-        if (usuario != null) {
-            try {
-                List<CategoriaProducto> categorias = sc.findCategoriaProductoEntities();
-                request.setAttribute("categorias", categorias);
+            String ofertaStr = request.getParameter("oferta");
+            String novedadesStr = request.getParameter("novedades");
+            Map<Long, Double> preciosOriginales = new HashMap<>();
 
-                String ofertaStr = request.getParameter("oferta");
-                String novedadesStr = request.getParameter("novedades");
-
-                Map<Long, Double> preciosOriginales = new HashMap<>();
-
-                if (ofertaStr != null && ofertaStr.equals("true")) { // productos de oferta
-                    List<Producto> productosConOferta = sp.findProductosConOferta();
-
-                    for (Producto producto : productosConOferta) {
-                        Double precioOriginal = producto.getPrecio();
-                        Double precioConDescuento = precioOriginal; // Inicializamos precio con descuento con el precio original
-                        Double precioInicial = null; // Para almacenar el precio original si tiene descuento
-
-                        if (producto.getOferta() != null && producto.getOferta()) {
-                            // Si tiene oferta, aplicamos el descuento
-                            precioConDescuento = precioOriginal * (1 - producto.getDescuento() / 100);
-                            precioConDescuento = Math.round(precioConDescuento * 100.0) / 100.0;
-                            precioInicial = precioOriginal; // Guardamos el precio original para la vista
-                        }
-
-                        producto.setPrecio(precioConDescuento); // Este es el precio con descuento
-
-                        // Guardamos el precio original en el Map
+            if ("true".equals(ofertaStr)) {
+                List<Producto> productosConOferta = sp.findProductosConOferta();
+                for (Producto producto : productosConOferta) {
+                    Double precioOriginal = producto.getPrecio();
+                    if (producto.getOferta() != null && producto.getOferta()) {
+                        Double precioConDescuento = precioOriginal * (1 - producto.getDescuento() / 100);
+                        producto.setPrecio(Math.round(precioConDescuento * 100.0) / 100.0);
                         preciosOriginales.put(producto.getId(), precioOriginal);
                     }
+                }
+                request.setAttribute("productos", productosConOferta);
+                request.setAttribute("nombreCategoria", "Ofertas");
+                request.setAttribute("precioInicial", true);
 
-                    request.setAttribute("productos", productosConOferta);
-                    request.setAttribute("nombreCategoria", "Ofertas");
-                    request.setAttribute("precioInicial", true);
-                } else if (novedadesStr != null && novedadesStr.equals("true")) {
-                    List<Producto> productosNovedades = sp.findProductosNovedades();
+            } else if ("true".equals(novedadesStr)) {
+                List<Producto> productosNovedades = sp.findProductosNovedades();
+                for (Producto producto : productosNovedades) {
+                    Double precioOriginal = producto.getPrecio();
+                    if (producto.getOferta() != null && producto.getOferta()) {
+                        Double precioConDescuento = precioOriginal * (1 - producto.getDescuento() / 100);
+                        producto.setPrecio(Math.round(precioConDescuento * 100.0) / 100.0);
+                        preciosOriginales.put(producto.getId(), precioOriginal);
+                    }
+                }
+                request.setAttribute("productos", productosNovedades);
+                request.setAttribute("nombreCategoria", "Novedades");
+                request.setAttribute("precioInicial", false);
 
-                    for (Producto producto : productosNovedades) {
+            } else {
+                String idCategoriaStr = request.getParameter("id_categoria");
+
+                // Si no se ha enviado ninguna categoría, muestro la primera
+                if (idCategoriaStr == null && ofertaStr == null && novedadesStr == null) {
+                    if (!categorias.isEmpty()) {
+                        CategoriaProducto primera = categorias.get(0);
+                        idCategoriaStr = String.valueOf(primera.getId());
+                    }
+                }
+
+                if (idCategoriaStr != null) {
+                    long idCategoria = Long.parseLong(idCategoriaStr);
+                    List<Producto> productos = sp.findProductosByCategoria(idCategoria);
+                    CategoriaProducto categoriaSeleccionada = sc.findCategoriaProducto(idCategoria);
+                    request.setAttribute("nombreCategoria", categoriaSeleccionada.getNombre());
+
+                    for (Producto producto : productos) {
                         Double precioOriginal = producto.getPrecio();
-
                         if (producto.getOferta() != null && producto.getOferta()) {
                             Double precioConDescuento = precioOriginal * (1 - producto.getDescuento() / 100);
-                            precioConDescuento = Math.round(precioConDescuento * 100.0) / 100.0;
-                            producto.setPrecio(precioConDescuento);
-
-                            // Guardamos el precio original en el Map
+                            producto.setPrecio(Math.round(precioConDescuento * 100.0) / 100.0);
                             preciosOriginales.put(producto.getId(), precioOriginal);
                         }
                     }
 
-                    request.setAttribute("productos", productosNovedades);
-                    request.setAttribute("nombreCategoria", "Novedades");
-                    request.setAttribute("precioInicial", false);
-                } else {
-                    String idCategoriaStr = request.getParameter("id_categoria");
-                    if (idCategoriaStr != null) {
-                        long idCategoria = Long.parseLong(idCategoriaStr);
-                        List<Producto> productos = sp.findProductosByCategoria(idCategoria);
-
-                        CategoriaProducto categoriaSeleccionada = sc.findCategoriaProducto(idCategoria);
-                        request.setAttribute("nombreCategoria", categoriaSeleccionada.getNombre());
-
-                        for (Producto producto : productos) {
-                            Double precioOriginal = producto.getPrecio();
-
-                            if (producto.getOferta() != null && producto.getOferta()) {
-                                Double precioConDescuento = precioOriginal * (1 - producto.getDescuento() / 100);
-                                precioConDescuento = Math.round(precioConDescuento * 100.0) / 100.0;
-                                producto.setPrecio(precioConDescuento);
-
-                                // Guardamos el precio original en el Map
-                                preciosOriginales.put(producto.getId(), precioOriginal);
-                            }
-                        }
-
-                        request.setAttribute("productos", productos);
-                    }
+                    request.setAttribute("productos", productos);
                 }
-
-                
-                request.setAttribute("preciosOriginales", preciosOriginales);
-
-            } catch (NumberFormatException e) {
-                request.setAttribute("error", "ID de categoría no válido.");
             }
-        } else {
-            request.setAttribute("error", "Usuario no autenticado.");
+            request.setAttribute("preciosOriginales", preciosOriginales);
+
+        } catch (NumberFormatException e) {
+            request.setAttribute("error", "ID de categoría no válido.");
         }
 
         emf.close();

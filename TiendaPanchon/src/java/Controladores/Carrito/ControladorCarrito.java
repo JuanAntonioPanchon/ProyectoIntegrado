@@ -1,19 +1,16 @@
-/*
- * ControladorCarrito
- */
+// ControladorCarrito.java
 package Controladores.Carrito;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
+import javax.persistence.EntityManagerFactory;
+import javax.persistence.Persistence;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
-import javax.servlet.http.HttpServlet;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
+import javax.servlet.http.*;
+import modelo.entidades.Producto;
+import modelo.entidades.CategoriaProducto;
+import modelo.servicio.ServicioProducto;
 
 @WebServlet(name = "ControladorCarrito", urlPatterns = {"/Controladores.Carrito/ControladorCarrito"})
 public class ControladorCarrito extends HttpServlet {
@@ -22,86 +19,146 @@ public class ControladorCarrito extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
-        // Obtener los parámetros enviados en la URL
         String idProducto = request.getParameter("idProducto");
-        String cantidad = request.getParameter("cantidad");
-        String totalPrecio = request.getParameter("totalPrecio");
+        String cantidadStr = request.getParameter("cantidad");
+        String totalPrecioStr = request.getParameter("totalPrecio");
 
-        System.out.println("idProducto: " + idProducto + ", cantidad: " + cantidad + ", totalPrecio: " + totalPrecio);
-
-        // Verificar si los parámetros están vacíos
-        if (idProducto == null || cantidad == null || totalPrecio == null || idProducto.isEmpty() || cantidad.isEmpty() || totalPrecio.isEmpty()) {
-            System.out.println("Error: Los parámetros no están correctamente definidos.");
-            response.setStatus(HttpServletResponse.SC_BAD_REQUEST);  // Devolver error
+        if (idProducto == null && cantidadStr == null && totalPrecioStr == null) {
+            HttpSession session = request.getSession();
+            List<Map<String, String>> carrito = (List<Map<String, String>>) session.getAttribute("carrito");
+            request.setAttribute("carrito", carrito);
+            request.getRequestDispatcher("/carrito/carrito.jsp").forward(request, response);
             return;
         }
 
-        // Obtener la sesión
-        HttpSession session = request.getSession();
-
-        // Obtener el carrito de la sesión (si no existe, crear uno nuevo)
-        List<Map<String, String>> carrito = (List<Map<String, String>>) session.getAttribute("carrito");
-        if (carrito == null) {
-            carrito = new ArrayList<>();
-            session.setAttribute("carrito", carrito);
+        if (idProducto.isEmpty() || cantidadStr.isEmpty() || totalPrecioStr.isEmpty()) {
+            response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+            return;
         }
 
-        // Crear un nuevo producto y añadirlo al carrito
-        Map<String, String> producto = new HashMap<>();
-        producto.put("idProducto", idProducto);
-        producto.put("cantidad", cantidad);
-        producto.put("totalPrecio", totalPrecio);
-
-        carrito.add(producto); // Añadir el producto al carrito
-
-        // Depuración: Mostrar el contenido del carrito
-        System.out.println("Carrito actualizado: " + carrito);
-
-        // Redirigir al carrito o devolver un mensaje de éxito
-        response.sendRedirect("/TiendaPanchon/Controladores.Carrito/ControladorCarrito");  // Esto recarga la página con el carrito actualizado
+        agregarOActualizarProductoEnCarrito(request, idProducto, cantidadStr, totalPrecioStr);
+        response.sendRedirect(request.getContextPath() + "/Controladores.Carrito/ControladorCarrito");
     }
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
-        String idProducto = request.getParameter("idProducto");
-        String cantidad = request.getParameter("cantidad");
-        String totalPrecio = request.getParameter("totalPrecio");
+        String accion = request.getParameter("accion");
+        HttpSession session = request.getSession();
 
-        System.out.println("idProducto: " + idProducto + ", cantidad: " + cantidad + ", totalPrecio: " + totalPrecio);
-
-// Verificar si los parámetros están vacíos
-        if (idProducto == null || cantidad == null || totalPrecio == null || idProducto.isEmpty() || cantidad.isEmpty() || totalPrecio.isEmpty()) {
-            System.out.println("Error: Los parámetros no están correctamente definidos.");
-            response.setStatus(HttpServletResponse.SC_BAD_REQUEST);  // Devolver error
+        if ("vaciar".equals(accion)) {
+            session.removeAttribute("carrito");
+            response.setStatus(HttpServletResponse.SC_OK);
             return;
         }
 
-        // Obtener la sesión
-        HttpSession session = request.getSession();
+        if ("eliminar".equals(accion)) {
+            String idProducto = request.getParameter("idProducto");
+            List<Map<String, String>> carrito = (List<Map<String, String>>) session.getAttribute("carrito");
+            if (carrito != null && idProducto != null) {
+                carrito.removeIf(p -> p.get("idProducto").equals(idProducto));
+            }
+            response.setStatus(HttpServletResponse.SC_OK);
+            return;
+        }
 
-        // Obtener el carrito de la sesión (si no existe, crear uno nuevo)
+        if ("modificar".equals(accion)) {
+            String idProducto = request.getParameter("idProducto");
+            String deltaStr = request.getParameter("delta");
+
+            if (idProducto == null || deltaStr == null || idProducto.isEmpty() || deltaStr.isEmpty()) {
+                response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+                return;
+            }
+
+            int delta;
+            try {
+                delta = Integer.parseInt(deltaStr);
+            } catch (NumberFormatException e) {
+                response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+                return;
+            }
+
+            List<Map<String, String>> carrito = (List<Map<String, String>>) session.getAttribute("carrito");
+
+            if (carrito != null) {
+                for (Iterator<Map<String, String>> it = carrito.iterator(); it.hasNext();) {
+                    Map<String, String> item = it.next();
+                    if (item.get("idProducto").equals(idProducto)) {
+                        int cantidad = Integer.parseInt(item.get("cantidad")) + delta;
+                        if (cantidad <= 0) {
+                            it.remove();
+                        } else {
+                            double precio = Double.parseDouble(item.get("totalPrecio")) / Integer.parseInt(item.get("cantidad"));
+                            item.put("cantidad", String.valueOf(cantidad));
+                            item.put("totalPrecio", String.format("%.2f", cantidad * precio).replace(",", "."));
+                        }
+                        break;
+                    }
+                }
+            }
+
+            response.setStatus(HttpServletResponse.SC_OK);
+            return;
+        }
+
+        // Añadir producto
+        String idProducto = request.getParameter("idProducto");
+        String cantidadStr = request.getParameter("cantidad");
+        String totalPrecioStr = request.getParameter("totalPrecio");
+
+        if (idProducto == null || cantidadStr == null || totalPrecioStr == null
+                || idProducto.isEmpty() || cantidadStr.isEmpty() || totalPrecioStr.isEmpty()) {
+            response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+            return;
+        }
+
+        agregarOActualizarProductoEnCarrito(request, idProducto, cantidadStr, totalPrecioStr);
+
+        response.setContentType("application/json");
+        response.getWriter().write("{\"status\":\"success\", \"message\":\"Producto actualizado en el carrito\"}");
+    }
+
+    private void agregarOActualizarProductoEnCarrito(HttpServletRequest request, String idProducto, String cantidadStr, String totalPrecioStr) {
+        HttpSession session = request.getSession();
         List<Map<String, String>> carrito = (List<Map<String, String>>) session.getAttribute("carrito");
         if (carrito == null) {
             carrito = new ArrayList<>();
             session.setAttribute("carrito", carrito);
         }
 
-        // Crear un nuevo producto y añadirlo al carrito
-        Map<String, String> producto = new HashMap<>();
-        producto.put("idProducto", idProducto);
-        producto.put("cantidad", cantidad);
-        producto.put("totalPrecio", totalPrecio);
+        EntityManagerFactory emf = Persistence.createEntityManagerFactory("TiendaPanchonPU");
+        ServicioProducto sp = new ServicioProducto(emf);
+        Producto prod = sp.findProducto(Long.parseLong(idProducto));
+        CategoriaProducto cat = prod.getCategoria();
 
-        carrito.add(producto); // Añadir el producto al carrito
+        int cantidadNueva = Integer.parseInt(cantidadStr);
+        double precioUnidad = prod.getPrecio();
 
-        // Depuración: Mostrar el contenido del carrito
-        System.out.println("Carrito actualizado: " + carrito);
+        boolean encontrado = false;
+        for (Map<String, String> item : carrito) {
+            if (item.get("idProducto").equals(idProducto)) {
+                int cantidadActual = Integer.parseInt(item.get("cantidad"));
+                int nuevaCantidad = cantidadActual + cantidadNueva;
+                item.put("cantidad", String.valueOf(nuevaCantidad));
+                item.put("totalPrecio", String.format("%.2f", nuevaCantidad * precioUnidad).replace(",", "."));
+                encontrado = true;
+                break;
+            }
+        }
 
-        // Responder al cliente con un mensaje de éxito
-        response.setContentType("application/json");
-        response.getWriter().write("{\"status\":\"success\", \"message\":\"Producto añadido al carrito\"}");
+        if (!encontrado) {
+            Map<String, String> producto = new HashMap<>();
+            producto.put("idProducto", idProducto);
+            producto.put("nombre", prod.getNombre());
+            producto.put("categoria", cat.getNombre());
+            producto.put("cantidad", cantidadStr);
+            producto.put("totalPrecio", totalPrecioStr);
+            carrito.add(producto);
+        }
+
+        emf.close();
     }
 
     @Override

@@ -113,8 +113,8 @@
         <div id="modal" style="display:none; position:fixed; top:50%; left:50%; transform:translate(-50%, -50%); background:white; padding:20px; border:1px solid black; z-index:9999">
             <h2 id="productoNombre"></h2>
             <p>Precio unitario: <span id="productoPrecio"></span></p>
-            <label for="cantidad">Cantidad:</label>
-            <input type="number" id="cantidad" min="1" oninput="actualizarPrecio()">
+            <label for="cantidadModal">Cantidad:</label>
+            <input type="number" id="cantidadModal" min="1" oninput="actualizarPrecio()">
             <p>Precio total: <span id="totalPrecio"></span></p>
             <input type="hidden" id="idProducto">
             <input type="hidden" id="precioUnitario">
@@ -123,5 +123,60 @@
         </div>
 
         <jsp:include page="/includes/footer.jsp" />
+
+        <!-- SCRIPT PARA MODAL -->
+        <script>
+            function abrirModal(id, nombre, precio, stock) {
+                document.getElementById("idProducto").value = id;
+                document.getElementById("productoNombre").textContent = nombre;
+                document.getElementById("productoPrecio").textContent = precio.toFixed(2) + " €";
+                document.getElementById("precioUnitario").value = precio;
+                document.getElementById("cantidadModal").value = 1;
+                document.getElementById("cantidadModal").max = stock;
+                document.getElementById("totalPrecio").textContent = precio.toFixed(2) + " €";
+                document.getElementById("modal").style.display = "block";
+            }
+
+            function cerrarModal() {
+                document.getElementById("modal").style.display = "none";
+            }
+
+            function actualizarPrecio() {
+                const cantidad = parseInt(document.getElementById("cantidadModal").value);
+                const precio = parseFloat(document.getElementById("precioUnitario").value);
+                const total = cantidad * precio;
+                document.getElementById("totalPrecio").textContent = total.toFixed(2) + " €";
+            }
+
+            function agregarASesion() {
+                const idProducto = document.getElementById("idProducto").value;
+                const cantidad = document.getElementById("cantidadModal").value;
+                const precioUnitario = parseFloat(document.getElementById("precioUnitario").value);
+                const totalPrecio = (cantidad * precioUnitario).toFixed(2);
+
+                fetch("/TiendaPanchon/Controladores.Carrito/ControladorCarrito", {
+                    method: "POST",
+                    headers: {"Content-Type": "application/x-www-form-urlencoded"},
+                    body: "idProducto=" + encodeURIComponent(idProducto) +
+                            "&cantidad=" + encodeURIComponent(cantidad) +
+                            "&totalPrecio=" + encodeURIComponent(totalPrecio)
+                })
+                        .then(response => {
+                            if (response.ok) {
+                                cerrarModal();
+                                alert("Producto agregado al carrito.");
+                            } else {
+                                return response.text().then(text => {
+                                    console.error("Error del servidor:", text);
+                                    alert("Error al agregar al carrito.");
+                                });
+                            }
+                        })
+                        .catch(error => {
+                            console.error("Error de red:", error);
+                            alert("No se pudo conectar con el servidor.");
+                        });
+            }
+        </script>
     </body>
 </html>

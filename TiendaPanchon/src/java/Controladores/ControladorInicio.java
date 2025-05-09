@@ -27,14 +27,7 @@ public class ControladorInicio extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        EntityManagerFactory emf = Persistence.createEntityManagerFactory("TiendaPanchonPU");
-        ServicioCategoriaProducto sc = new ServicioCategoriaProducto(emf);
-
-        List<CategoriaProducto> categorias = sc.findCategoriaProductoEntities();
-        request.setAttribute("categorias", categorias);
-
-        emf.close();
-        getServletContext().getRequestDispatcher("/usuarios/inicio.jsp").forward(request, response);
+        // Redirigir directamente al controlador de productos
+        response.sendRedirect(request.getContextPath() + "/Controladores.Productos/ControladorListarProductos");
     }
 }
-
