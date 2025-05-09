@@ -60,6 +60,8 @@ public class ControladorPedidosUsuario extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
+        request.setCharacterEncoding("UTF-8"); // ✅ evita errores con caracteres
+
         Usuario usuario = (Usuario) request.getSession().getAttribute("usuario");
         if (usuario == null) {
             response.sendRedirect(request.getContextPath() + "/login.jsp");
@@ -70,7 +72,6 @@ public class ControladorPedidosUsuario extends HttpServlet {
 
         if ("eliminar".equals(accion)) {
             Long idPedido = Long.parseLong(request.getParameter("idPedido"));
-
             ServicioProducto servicioProducto = new ServicioProducto(emf);
             boolean exito = servicioPedido.cancelarPedidoConRestauracionStock(idPedido, servicioProducto);
 
@@ -92,7 +93,6 @@ public class ControladorPedidosUsuario extends HttpServlet {
                 return;
             }
 
-            // Verificar stock antes de tramitar el pedido
             StringBuilder mensajeErrorStock = new StringBuilder();
             boolean stockSuficiente = true;
             ServicioProducto servicioProducto = new ServicioProducto(emf);
@@ -102,27 +102,27 @@ public class ControladorPedidosUsuario extends HttpServlet {
                 int cantidad = Integer.parseInt(item.get("cantidad"));
 
                 Producto producto = servicioProducto.findProducto(idProducto);
-
                 if (producto.getStock() < cantidad) {
                     stockSuficiente = false;
-                    mensajeErrorStock.append("Producto '")
+                    mensajeErrorStock.append("<li>'")
                             .append(producto.getNombre())
-                            .append("' - Cantidad disponible: ")
+                            .append("' Stock disponible: ")
                             .append(producto.getStock())
                             .append(", cantidad solicitada: ")
                             .append(cantidad)
-                            .append(". ");
+                            .append(".</li>");
+
                 }
             }
 
             if (!stockSuficiente) {
-                // Si no hay stock suficiente, redirigir al carrito con el mensaje de error
-                request.getSession().setAttribute("mensajeError", "No se puede tramitar el pedido debido a la falta de stock: " + mensajeErrorStock.toString());
+                request.getSession().setAttribute("mensajeError",
+                        "No se puede tramitar el pedido debido a la falta de stock de los siguientes productos: " + mensajeErrorStock);
                 response.sendRedirect(request.getContextPath() + "/carrito/carrito.jsp");
                 return;
             }
 
-            // Si el stock es suficiente, proceder con el pedido
+            // Crear pedido
             Pedido pedido = new Pedido();
             pedido.setUsuario(usuario);
             pedido.setFechaPedido(LocalDate.now());
@@ -138,11 +138,7 @@ public class ControladorPedidosUsuario extends HttpServlet {
                 totalPedido += total;
 
                 Producto producto = servicioProducto.findProducto(idProducto);
-                int stockRestante = producto.getStock() - cantidad;
-                if (stockRestante < 0) {
-                    stockRestante = 0;
-                }
-                producto.setStock(stockRestante);
+                producto.setStock(Math.max(0, producto.getStock() - cantidad));
                 try {
                     servicioProducto.edit(producto);
                 } catch (Exception ex) {
@@ -153,19 +149,15 @@ public class ControladorPedidosUsuario extends HttpServlet {
                 pp.setProducto(producto);
                 pp.setCantidad(cantidad);
                 pp.setPedido(pedido);
-
                 productosPedido.add(pp);
             }
 
             pedido.setProductos(productosPedido);
             pedido.setPrecio(totalPedido);
-
             servicioPedido.create(pedido);
-            request.getSession().removeAttribute("carrito");
 
-            // Establecer mensaje de éxito
+            request.getSession().removeAttribute("carrito");
             request.getSession().setAttribute("mensajeExito", "Pedido realizado correctamente.");
-            // Redirigir a la página de pedidos
             response.sendRedirect(request.getContextPath() + "/Controladores.Pedidos/ControladorPedidosUsuario");
             return;
         }

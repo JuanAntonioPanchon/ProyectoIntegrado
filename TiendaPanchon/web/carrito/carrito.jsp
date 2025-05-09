@@ -60,17 +60,24 @@
                         <div class="col-md-4 text-end">
                             <p><strong>Cantidad total:</strong> <span id="cantidadTotal">0</span> productos</p>
                             <p><strong>Total cesta:</strong> <span id="precioTotalCesta">0.00 €</span></p>
-                            <button class="btn btn-success" onclick="
-                                    if (confirm(
-                                            '¿Deseas realizar el pedido con ' +
-                                            document.getElementById('cantidadTotal').textContent.trim() +
-                                            ' productos por un total de ' +
-                                            document.getElementById('precioTotalCesta').textContent.trim() +
-                                            '?'
-                                            )) {
-                                        tramitarPedido();
-                                    }
-                                    ">Tramitar Pedido</button>
+                            
+                            <!-- NO SE PUEDE QUITAR EL SCRIPT ESE DE LINEA PORQUE SI NO NO FUNCIONA  
+                                YA QUE SALE EL MENSAJE DE ALERT SIN LA CANTIDAD DE PRODUCTO NI PRECIO TOTAL DE LA CESTA
+                            -->
+                            
+                            <form method="post"
+                                  action="${pageContext.request.contextPath}/Controladores.Pedidos/ControladorPedidosUsuario"
+                                  onsubmit="return confirm(
+                      '¿Deseas realizar el pedido con ' +
+                      document.getElementById('cantidadTotal').textContent.trim() +
+                      ' productos por un total de ' +
+                      document.getElementById('precioTotalCesta').textContent.trim() +
+                      '?'
+                      );">
+                                <input type="hidden" name="accion" value="tramitar">
+                                <button type="submit" class="btn btn-success">Tramitar Pedido</button>
+                            </form>
+
                         </div>
                     </div>
                 </c:when>
@@ -96,17 +103,7 @@
                         idProducto: id,
                         delta: delta
                     })
-                })
-                        .then(res => {
-                            if (res.ok) {
-                                location.reload();
-                            } else {
-                                res.text().then(text => console.error("Error al modificar cantidad:", text));
-                            }
-                        })
-                        .catch(err => {
-                            console.error("Error de red al modificar cantidad:", err);
-                        });
+                }).then(res => res.ok && location.reload());
             }
 
             function eliminarProducto(id) {
@@ -117,17 +114,7 @@
                         accion: "eliminar",
                         idProducto: id
                     })
-                })
-                        .then(res => {
-                            if (res.ok) {
-                                location.reload();
-                            } else {
-                                console.error("Error al eliminar producto");
-                            }
-                        })
-                        .catch(err => {
-                            console.error("Error de red al eliminar producto:", err);
-                        });
+                }).then(res => res.ok && location.reload());
             }
 
             function vaciarCarrito() {
@@ -135,14 +122,7 @@
                     method: "POST",
                     headers: {"Content-Type": "application/x-www-form-urlencoded"},
                     body: "accion=vaciar"
-                })
-                        .then(res => {
-                            if (res.ok) {
-                                location.reload();
-                            } else {
-                                alert("Error al vaciar el carrito.");
-                            }
-                        });
+                }).then(res => res.ok && location.reload());
             }
 
             function actualizarResumen() {
@@ -157,28 +137,10 @@
                 document.getElementById("cantidadTotal").textContent = cantidadTotal;
                 document.getElementById("precioTotalCesta").textContent = precioTotal.toFixed(2) + " €";
             }
-            function tramitarPedido() {
-                fetch("/TiendaPanchon/Controladores.Pedidos/ControladorPedidosUsuario", {
-                    method: "POST",
-                    headers: {"Content-Type": "application/x-www-form-urlencoded"},
-                    body: "accion=tramitar"
-                })
-                        .then(res => {
-                            if (res.ok) {
-                                window.location.href = "/TiendaPanchon/Controladores.Pedidos/ControladorPedidosUsuario";
-                            } else {
-                                alert("Hubo un error al tramitar el pedido.");
-                            }
-                        })
-                        .catch(err => {
-                            console.error("Error de red:", err);
-                        });
-            }
 
-            document.addEventListener("DOMContentLoaded", () => {
-                actualizarResumen();
-            });
+            
 
+            document.addEventListener("DOMContentLoaded", actualizarResumen);
         </script>
     </body>
 </html>
