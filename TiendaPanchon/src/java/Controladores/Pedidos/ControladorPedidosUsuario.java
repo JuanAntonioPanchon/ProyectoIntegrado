@@ -1,35 +1,19 @@
-/*
- * ControladorPedidosUsuario
- */
 package Controladores.Pedidos;
 
 import java.io.IOException;
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
-import javax.servlet.http.HttpServlet;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import modelo.entidades.EstadoPedidoEnum;
-import modelo.entidades.Pedido;
-import modelo.entidades.PedidoProducto;
-import modelo.entidades.Producto;
-import modelo.entidades.Usuario;
+import javax.servlet.http.*;
+import modelo.entidades.*;
 import modelo.servicio.ServicioPedido;
 import modelo.servicio.ServicioProducto;
 
-/**
- *
- * @author juan-antonio
- */
 @WebServlet(name = "ControladorPedidosUsuario", urlPatterns = {"/Controladores.Pedidos/ControladorPedidosUsuario"})
 public class ControladorPedidosUsuario extends HttpServlet {
 
@@ -86,38 +70,14 @@ public class ControladorPedidosUsuario extends HttpServlet {
 
         if ("eliminar".equals(accion)) {
             Long idPedido = Long.parseLong(request.getParameter("idPedido"));
-            Pedido pedido = servicioPedido.findPedido(idPedido);
 
-            if (pedido != null && pedido.getUsuario().getId().equals(usuario.getId())) {
-                if (pedido.getEstado() == EstadoPedidoEnum.proceso) {
-                    try {
-                        ServicioProducto servicioProducto = new ServicioProducto(emf);
+            ServicioProducto servicioProducto = new ServicioProducto(emf);
+            boolean exito = servicioPedido.cancelarPedidoConRestauracionStock(idPedido, servicioProducto);
 
-                        // Obtener productos del pedido
-                        List<PedidoProducto> productosPedido = servicioPedido.findProductosPorPedido(idPedido);
-
-                        for (PedidoProducto pp : productosPedido) {
-                            Producto producto = pp.getProducto();
-                            int cantidadRestaurada = pp.getCantidad();
-
-                            // Aumentar stock del producto
-                            producto.setStock(producto.getStock() + cantidadRestaurada);
-                            servicioProducto.edit(producto);
-                        }
-
-                        // Eliminar pedido
-                        servicioPedido.destroy(idPedido);
-
-                        request.getSession().setAttribute("mensajeExito", "Pedido cancelado correctamente.");
-                    } catch (Exception e) {
-                        Logger.getLogger(ControladorPedidosUsuario.class.getName()).log(Level.SEVERE, null, e);
-                        request.getSession().setAttribute("mensajeError", "Error al cancelar el pedido.");
-                    }
-                } else {
-                    request.getSession().setAttribute("mensajeError", "No puedes cancelar un pedido que que ya esta tramitado");
-                }
+            if (exito) {
+                request.getSession().setAttribute("mensajeExito", "Pedido cancelado correctamente.");
             } else {
-                request.getSession().setAttribute("mensajeError", "Pedido no válido.");
+                request.getSession().setAttribute("mensajeError", "No puedes cancelar un pedido que ya está tramitado o no existe.");
             }
 
             response.sendRedirect(request.getContextPath() + "/Controladores.Pedidos/ControladorPedidosUsuario");
@@ -155,7 +115,7 @@ public class ControladorPedidosUsuario extends HttpServlet {
                 }
                 producto.setStock(stockRestante);
                 try {
-                    servicioProducto.edit(producto); // importante
+                    servicioProducto.edit(producto);
                 } catch (Exception ex) {
                     Logger.getLogger(ControladorPedidosUsuario.class.getName()).log(Level.SEVERE, null, ex);
                 }
@@ -163,7 +123,7 @@ public class ControladorPedidosUsuario extends HttpServlet {
                 PedidoProducto pp = new PedidoProducto();
                 pp.setProducto(producto);
                 pp.setCantidad(cantidad);
-                pp.setPedido(pedido); // bidireccional
+                pp.setPedido(pedido);
 
                 productosPedido.add(pp);
             }

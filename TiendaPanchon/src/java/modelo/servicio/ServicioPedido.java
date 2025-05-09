@@ -14,8 +14,10 @@ import javax.persistence.EntityManagerFactory;
 import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
+import modelo.entidades.EstadoPedidoEnum;
 import modelo.entidades.Pedido;
 import modelo.entidades.PedidoProducto;
+import modelo.entidades.Producto;
 import modelo.servicio.exceptions.NonexistentEntityException;
 
 public class ServicioPedido implements Serializable {
@@ -147,4 +149,40 @@ public class ServicioPedido implements Serializable {
             em.close();
         }
     }
+
+    public boolean cancelarPedidoConRestauracionStock(Long idPedido, ServicioProducto servicioProducto) {
+        EntityManager em = getEntityManager();
+        try {
+            Pedido pedido = em.find(Pedido.class, idPedido);
+            if (pedido == null || pedido.getEstado() != EstadoPedidoEnum.proceso) {
+                return false;
+            }
+
+            em.getTransaction().begin();
+
+            // Restaurar stock de productos
+            List<PedidoProducto> productosPedido = findProductosPorPedido(idPedido);
+            for (PedidoProducto pp : productosPedido) {
+                Producto producto = pp.getProducto();
+                int nuevaCantidad = producto.getStock() + pp.getCantidad();
+                producto.setStock(nuevaCantidad);
+                servicioProducto.edit(producto); // Usa merge dentro del método edit()
+            }
+
+            // Eliminar el pedido
+            pedido = em.merge(pedido); // Asegurar que está gestionado
+            em.remove(pedido);
+
+            em.getTransaction().commit();
+            return true;
+
+        } catch (Exception e) {
+            em.getTransaction().rollback();
+            e.printStackTrace();
+            return false;
+        } finally {
+            em.close();
+        }
+    }
+
 }
