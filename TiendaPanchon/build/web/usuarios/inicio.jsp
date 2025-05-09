@@ -95,9 +95,9 @@
                                                     <i class="bi bi-journal-plus"></i>
                                                 </button>
                                             </form>
-                                            <!-- Aquí ocultamos el campo de cantidad -->
-                                            <input type="number" class="form-control w-25" min="1" max="${producto.stock}" value="1" id="cantidad_${producto.id}" style="display:none;">
-                                            <button class="btn btn-outline-primary" onclick="abrirModal('${producto.id}', '${producto.nombre}', ${producto.precio}, ${producto.stock})">
+                                            <!-- Muestra el campo de cantidad en lugar de la modal -->
+                                            <input type="number" class="form-control w-25" min="1" max="${producto.stock}" value="1" id="cantidad_${producto.id}">
+                                            <button class="btn btn-outline-primary" onclick="agregarAlCarrito('${producto.id}', '${producto.nombre}', ${producto.precio}, ${producto.stock}, 'cantidad_${producto.id}')">
                                                 <i class="bi bi-cart-plus"></i>
                                             </button>
                                         </div>
@@ -110,82 +110,22 @@
             </div>
         </div>
 
-        <!-- MODAL CARRITO -->
-        <div id="modal" style="display:none; position:fixed; top:50%; left:50%; transform:translate(-50%, -50%); background:white; padding:20px; border:1px solid black; z-index:9999">
-            <h2 id="productoNombre"></h2>
-            <p>Precio unitario: <span id="productoPrecio"></span></p>
-            <label for="cantidadModal">Cantidad:</label>
-            <input type="number" id="cantidadModal" min="1" oninput="actualizarPrecio()">
-            <p>Precio total: <span id="totalPrecio"></span></p>
-            <input type="hidden" id="idProducto">
-            <input type="hidden" id="precioUnitario">
-            <button onclick="cerrarModal()" class="btn btn-secondary">Cancelar</button>
-            <button onclick="agregarASesion()" class="btn btn-primary">Aceptar</button>
-        </div>
-
         <jsp:include page="/includes/footer.jsp" />
 
-        <!-- SCRIPT PARA MODAL -->
+        <!-- SCRIPT PARA AGREGAR AL CARRITO -->
         <script>
-            // Variable para almacenar el evento del modal
-            let cantidadModalInput;
+            function agregarAlCarrito(idProducto, nombre, precio, stock, idCantidad) {
+                const cantidad = document.getElementById(idCantidad).value;
 
-            function abrirModal(id, nombre, precio, stock) {
-                // Establecer el nombre del producto
-                document.getElementById("idProducto").value = id;
-                document.getElementById("productoNombre").textContent = nombre;
-                document.getElementById("productoPrecio").textContent = precio.toFixed(2) + " €";
-                document.getElementById("precioUnitario").value = precio;
-
-                // Restablecer la cantidad a 1 y actualizar el valor máximo según el stock disponible
-                document.getElementById("cantidadModal").value = 1;
-                document.getElementById("cantidadModal").max = stock; // Limitar la cantidad al stock disponible
-
-                // Actualizar el precio total
-                document.getElementById("totalPrecio").textContent = precio.toFixed(2) + " €";
-
-                // Mostrar la modal
-                document.getElementById("modal").style.display = "block";
-
-                // Limitar cantidad máxima al stock disponible y actualizar el precio al cambiar la cantidad
-                cantidadModalInput = document.getElementById("cantidadModal");
-
-                cantidadModalInput.addEventListener('input', function () {
-                    let cantidad = parseInt(this.value);
-
-                    // Si la cantidad es mayor que el stock, ajusta al máximo disponible
-                    if (cantidad > stock) {
-                        this.value = stock; // Ajusta la cantidad al stock
-                    }
-
-                    // Actualiza el precio total basado en la cantidad
-                    actualizarPrecio();
-                });
-            }
-
-            function cerrarModal() {
-                // Cerrar la modal
-                document.getElementById("modal").style.display = "none";
-
-                // Eliminar el eventListener de cantidad para evitar conflictos cuando se abra otra modal
-                if (cantidadModalInput) {
-                    cantidadModalInput.removeEventListener('input', function () {});
+                // Verificar que la cantidad no exceda el stock disponible
+                if (parseInt(cantidad) > stock) {
+                    alert('La cantidad solicitada excede el stock disponible.');
+                    return;
                 }
-            }
 
-            function actualizarPrecio() {
-                const cantidad = parseInt(document.getElementById("cantidadModal").value);
-                const precio = parseFloat(document.getElementById("precioUnitario").value);
-                const total = cantidad * precio;
-                document.getElementById("totalPrecio").textContent = total.toFixed(2) + " €";
-            }
+                const totalPrecio = (parseInt(cantidad) * precio).toFixed(2);
 
-            function agregarASesion() {
-                const idProducto = document.getElementById("idProducto").value;
-                const cantidad = document.getElementById("cantidadModal").value;
-                const precioUnitario = parseFloat(document.getElementById("precioUnitario").value);
-                const totalPrecio = (cantidad * precioUnitario).toFixed(2);
-
+                // Enviar el producto al carrito
                 fetch("/TiendaPanchon/Controladores.Carrito/ControladorCarrito", {
                     method: "POST",
                     headers: {"Content-Type": "application/x-www-form-urlencoded"},
@@ -195,7 +135,6 @@
                 })
                         .then(response => {
                             if (response.ok) {
-                                cerrarModal();
                                 alert("Producto agregado al carrito.");
                             } else {
                                 return response.text().then(text => {

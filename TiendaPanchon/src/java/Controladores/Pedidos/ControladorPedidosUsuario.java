@@ -77,7 +77,7 @@ public class ControladorPedidosUsuario extends HttpServlet {
             if (exito) {
                 request.getSession().setAttribute("mensajeExito", "Pedido cancelado correctamente.");
             } else {
-                request.getSession().setAttribute("mensajeError", "No puedes cancelar un pedido que ya está tramitado o no existe.");
+                request.getSession().setAttribute("mensajeError", "No puedes cancelar un pedido que ya está tramitado");
             }
 
             response.sendRedirect(request.getContextPath() + "/Controladores.Pedidos/ControladorPedidosUsuario");
