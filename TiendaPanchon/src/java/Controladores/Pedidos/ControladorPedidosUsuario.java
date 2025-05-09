@@ -92,6 +92,37 @@ public class ControladorPedidosUsuario extends HttpServlet {
                 return;
             }
 
+            // Verificar stock antes de tramitar el pedido
+            StringBuilder mensajeErrorStock = new StringBuilder();
+            boolean stockSuficiente = true;
+            ServicioProducto servicioProducto = new ServicioProducto(emf);
+
+            for (Map<String, String> item : carrito) {
+                Long idProducto = Long.parseLong(item.get("idProducto"));
+                int cantidad = Integer.parseInt(item.get("cantidad"));
+
+                Producto producto = servicioProducto.findProducto(idProducto);
+
+                if (producto.getStock() < cantidad) {
+                    stockSuficiente = false;
+                    mensajeErrorStock.append("Producto '")
+                            .append(producto.getNombre())
+                            .append("' - Cantidad disponible: ")
+                            .append(producto.getStock())
+                            .append(", cantidad solicitada: ")
+                            .append(cantidad)
+                            .append(". ");
+                }
+            }
+
+            if (!stockSuficiente) {
+                // Si no hay stock suficiente, redirigir al carrito con el mensaje de error
+                request.getSession().setAttribute("mensajeError", "No se puede tramitar el pedido debido a la falta de stock: " + mensajeErrorStock.toString());
+                response.sendRedirect(request.getContextPath() + "/carrito/carrito.jsp");
+                return;
+            }
+
+            // Si el stock es suficiente, proceder con el pedido
             Pedido pedido = new Pedido();
             pedido.setUsuario(usuario);
             pedido.setFechaPedido(LocalDate.now());
@@ -99,8 +130,6 @@ public class ControladorPedidosUsuario extends HttpServlet {
 
             double totalPedido = 0.0;
             List<PedidoProducto> productosPedido = new ArrayList<>();
-
-            ServicioProducto servicioProducto = new ServicioProducto(emf);
 
             for (Map<String, String> item : carrito) {
                 Long idProducto = Long.parseLong(item.get("idProducto"));
@@ -134,7 +163,9 @@ public class ControladorPedidosUsuario extends HttpServlet {
             servicioPedido.create(pedido);
             request.getSession().removeAttribute("carrito");
 
+            // Establecer mensaje de éxito
             request.getSession().setAttribute("mensajeExito", "Pedido realizado correctamente.");
+            // Redirigir a la página de pedidos
             response.sendRedirect(request.getContextPath() + "/Controladores.Pedidos/ControladorPedidosUsuario");
             return;
         }

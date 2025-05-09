@@ -15,6 +15,12 @@
         <div class="container py-4">
             <h2 class="text-center fw-bold mb-4">CESTA DE LA COMPRA</h2>
 
+            <!-- Mostrar mensaje de error si no hay stock suficiente -->
+            <c:if test="${not empty sessionScope.mensajeError}">
+                <div class="alert alert-danger text-center fw-bold">${sessionScope.mensajeError}</div>
+                <c:remove var="mensajeError" scope="session" />
+            </c:if>
+
             <c:choose>
                 <c:when test="${not empty carrito}">
                     <div class="table-responsive">
@@ -65,9 +71,6 @@
                                         tramitarPedido();
                                     }
                                     ">Tramitar Pedido</button>
-
-
-
                         </div>
                     </div>
                 </c:when>
@@ -171,10 +174,6 @@
                             console.error("Error de red:", err);
                         });
             }
-
-
-
-
 
             document.addEventListener("DOMContentLoaded", () => {
                 actualizarResumen();

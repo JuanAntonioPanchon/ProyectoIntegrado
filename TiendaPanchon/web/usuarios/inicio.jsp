@@ -95,7 +95,8 @@
                                                     <i class="bi bi-journal-plus"></i>
                                                 </button>
                                             </form>
-                                            <input type="number" class="form-control w-25" min="1" max="${producto.stock}" value="1" id="cantidad_${producto.id}">
+                                            <!-- Aquí ocultamos el campo de cantidad -->
+                                            <input type="number" class="form-control w-25" min="1" max="${producto.stock}" value="1" id="cantidad_${producto.id}" style="display:none;">
                                             <button class="btn btn-outline-primary" onclick="abrirModal('${producto.id}', '${producto.nombre}', ${producto.precio}, ${producto.stock})">
                                                 <i class="bi bi-cart-plus"></i>
                                             </button>
@@ -126,19 +127,50 @@
 
         <!-- SCRIPT PARA MODAL -->
         <script>
+            // Variable para almacenar el evento del modal
+            let cantidadModalInput;
+
             function abrirModal(id, nombre, precio, stock) {
+                // Establecer el nombre del producto
                 document.getElementById("idProducto").value = id;
                 document.getElementById("productoNombre").textContent = nombre;
                 document.getElementById("productoPrecio").textContent = precio.toFixed(2) + " €";
                 document.getElementById("precioUnitario").value = precio;
+
+                // Restablecer la cantidad a 1 y actualizar el valor máximo según el stock disponible
                 document.getElementById("cantidadModal").value = 1;
-                document.getElementById("cantidadModal").max = stock;
+                document.getElementById("cantidadModal").max = stock; // Limitar la cantidad al stock disponible
+
+                // Actualizar el precio total
                 document.getElementById("totalPrecio").textContent = precio.toFixed(2) + " €";
+
+                // Mostrar la modal
                 document.getElementById("modal").style.display = "block";
+
+                // Limitar cantidad máxima al stock disponible y actualizar el precio al cambiar la cantidad
+                cantidadModalInput = document.getElementById("cantidadModal");
+
+                cantidadModalInput.addEventListener('input', function () {
+                    let cantidad = parseInt(this.value);
+
+                    // Si la cantidad es mayor que el stock, ajusta al máximo disponible
+                    if (cantidad > stock) {
+                        this.value = stock; // Ajusta la cantidad al stock
+                    }
+
+                    // Actualiza el precio total basado en la cantidad
+                    actualizarPrecio();
+                });
             }
 
             function cerrarModal() {
+                // Cerrar la modal
                 document.getElementById("modal").style.display = "none";
+
+                // Eliminar el eventListener de cantidad para evitar conflictos cuando se abra otra modal
+                if (cantidadModalInput) {
+                    cantidadModalInput.removeEventListener('input', function () {});
+                }
             }
 
             function actualizarPrecio() {
@@ -178,5 +210,6 @@
                         });
             }
         </script>
+
     </body>
 </html>

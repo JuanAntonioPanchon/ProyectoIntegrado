@@ -8,20 +8,13 @@ import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
-import javax.servlet.http.HttpServlet;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
+import javax.servlet.http.*;
 import modelo.entidades.CategoriaProducto;
 import modelo.entidades.Producto;
 import modelo.entidades.Usuario;
 import modelo.servicio.ServicioCategoriaProducto;
 import modelo.servicio.ServicioProducto;
 
-/**
- *
- * @author juan-antonio
- */
 @WebServlet(name = "ControladorListarProductos", urlPatterns = {"/Controladores.Productos/ControladorListarProductos"})
 public class ControladorListarProductos extends HttpServlet {
 
@@ -44,6 +37,9 @@ public class ControladorListarProductos extends HttpServlet {
 
             if ("true".equals(ofertaStr)) {
                 List<Producto> productosConOferta = sp.findProductosConOferta();
+                // Filtrar productos con stock mayor que 0
+                productosConOferta.removeIf(producto -> producto.getStock() <= 0);
+
                 for (Producto producto : productosConOferta) {
                     Double precioOriginal = producto.getPrecio();
                     if (producto.getOferta() != null && producto.getOferta()) {
@@ -58,6 +54,9 @@ public class ControladorListarProductos extends HttpServlet {
 
             } else if ("true".equals(novedadesStr)) {
                 List<Producto> productosNovedades = sp.findProductosNovedades();
+                // Filtrar productos con stock mayor que 0
+                productosNovedades.removeIf(producto -> producto.getStock() <= 0);
+
                 for (Producto producto : productosNovedades) {
                     Double precioOriginal = producto.getPrecio();
                     if (producto.getOferta() != null && producto.getOferta()) {
@@ -86,6 +85,9 @@ public class ControladorListarProductos extends HttpServlet {
                     List<Producto> productos = sp.findProductosByCategoria(idCategoria);
                     CategoriaProducto categoriaSeleccionada = sc.findCategoriaProducto(idCategoria);
                     request.setAttribute("nombreCategoria", categoriaSeleccionada.getNombre());
+
+                    // Filtrar productos con stock mayor que 0
+                    productos.removeIf(producto -> producto.getStock() <= 0);
 
                     for (Producto producto : productos) {
                         Double precioOriginal = producto.getPrecio();
