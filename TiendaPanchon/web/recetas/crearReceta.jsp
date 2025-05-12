@@ -24,7 +24,7 @@
             <div class="p-4 mx-auto border rounded shadow-lg form-container" style="max-width: 600px;">
                 <h2 class="text-center fw-bold text-uppercase">${empty id ? "CREAR" : "EDITAR"} RECETA</h2>
 
-                <form method="post" action="/TiendaPanchon/Controladores/ControladorReceta" id="formReceta">
+                <form method="post" action="${pageContext.request.contextPath}/Controladores/ControladorReceta" id="formReceta">
                     <input type="hidden" name="id" value="${id}">
                     <input type="hidden" name="idUsuario" value="${idUsuario}">
 
