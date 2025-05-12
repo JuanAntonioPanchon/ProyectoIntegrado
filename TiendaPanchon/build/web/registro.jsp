@@ -82,7 +82,7 @@
 
                         <div class="d-flex justify-content-between mt-3">
                             <div class="d-flex justify-content-between contenedorAceptar">
-                                <a href="/TiendaPanchon/Controladores/ControladorInicio" class="btn btn-volver btn-sm botones">Cancelar</a>
+                                <a href="${pageContext.request.contextPath}/Controladores/ControladorInicio" class="btn btn-volver btn-sm botones">Cancelar</a>
                                 <input type="submit" name="${empty idUsuario ? 'crear' : 'editar'}" value="Aceptar" class="btn btn-crear btn-sm me-3 botones">
                             </div>
                     </form>

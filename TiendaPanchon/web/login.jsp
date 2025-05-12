@@ -28,7 +28,7 @@
                 <div class="col-md-6 d-flex justify-content-center">
                     <div class="form-container p-5 rounded-3 shadow-lg text-center mt-4">
                         <h2 class="mb-3 fw-bold">Inicio de Sesión</h2>
-                        <form method="POST" action="/TiendaPanchon/Controladores/ControladorLogin">
+                        <form method="POST" action="${pageContext.request.contextPath}/Controladores/ControladorLogin">
                             <div class="mb-3">
                                 <label for="email" class="fw-bold">
                                     <i class="bi bi-person-circle fs-4"></i> USUARIO
@@ -49,7 +49,7 @@
                             </c:if>
 
                             <div class="mt-3">
-                                <a href="/TiendaPanchon/Controladores.Usuarios/ControladorUsuarios?crear=true" class="text-dark text-decoration-none">¿Aun no tienes cuenta? Regístrate</a>
+                                <a href="${pageContext.request.contextPath}/Controladores.Usuarios/ControladorUsuarios?crear=true" class="text-dark text-decoration-none">¿Aun no tienes cuenta? Regístrate</a>
                             </div>
                         </form>
                     </div>
