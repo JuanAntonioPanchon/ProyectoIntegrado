@@ -5,6 +5,6 @@
 -->
 <html>
     <head>
-        <meta http-equiv="refresh" content="0; url=${pageContext.request.contextPath}/Controladores/ControladorInicio">
+        <meta http-equiv="refresh" content="0; url=/TiendaPanchon/Controladores/ControladorInicio">
     </head>
 </html>
