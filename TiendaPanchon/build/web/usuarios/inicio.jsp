@@ -22,7 +22,7 @@
                             <h1 class="h4 mb-0">EL RINCÓN DE LAURA</h1>
                         </div>
                         <!-- para local <a class="btn btn-outline-dark" href="/TiendaPanchon/Controladores/ControladorLogin">Iniciar Sesión</a> -->
-                        <a class="btn btn-outline-dark" href="/Controladores/ControladorLogin">Iniciar Sesión</a>
+                        <a class="btn btn-outline-dark"  href="${pageContext.request.contextPath}/Controladores/ControladorLogin">Iniciar Sesión</a>
                     </div>
                 </header>
             </c:otherwise>
