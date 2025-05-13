@@ -182,28 +182,65 @@ public class ServicioListaCompra implements Serializable {
         try {
             em.getTransaction().begin();
 
-            // Buscar usuario y producto
             Usuario usuario = em.find(Usuario.class, idUsuario);
             Producto producto = em.find(Producto.class, idProducto);
 
             if (usuario != null && producto != null) {
-                // Buscar la lista de compra del usuario
                 ListaCompra listaCompra = em.createQuery(
                         "SELECT l FROM ListaCompra l WHERE l.usuario.id = :idUsuario", ListaCompra.class)
                         .setParameter("idUsuario", idUsuario)
-                        .getSingleResult();
+                        .getResultStream()
+                        .findFirst()
+                        .orElse(null);
 
-                // Agregar el producto a la lista si no está ya incluido
-                if (!listaCompra.getProductos().contains(producto)) {
+                if (listaCompra == null) {
+                    listaCompra = new ListaCompra();
+                    listaCompra.setUsuario(usuario);
                     listaCompra.getProductos().add(producto);
-                    em.merge(listaCompra);
+                    em.persist(listaCompra);
+
+                } else {
+                    listaCompra = em.merge(listaCompra);
+                    if (!listaCompra.getProductos().contains(producto)) {
+                        listaCompra.getProductos().add(producto);
+
+                    } else {
+
+                    }
                 }
+
+            } else {
+
             }
 
             em.getTransaction().commit();
         } catch (Exception e) {
             em.getTransaction().rollback();
-            throw e;
+        } finally {
+            em.close();
+        }
+    }
+
+    public boolean productoYaEnLista(Long idUsuario, Long idProducto) {
+        EntityManager em = getEntityManager();
+        try {
+            Long count = em.createQuery(
+                    "SELECT COUNT(p) FROM ListaCompra l JOIN l.productos p WHERE l.usuario.id = :idUsuario AND p.id = :idProducto",
+                    Long.class)
+                    .setParameter("idUsuario", idUsuario)
+                    .setParameter("idProducto", idProducto)
+                    .getSingleResult();
+            return count > 0;
+        } finally {
+            em.close();
+        }
+    }
+
+    public String obtenerNombreProducto(Long idProducto) {
+        EntityManager em = getEntityManager();
+        try {
+            Producto producto = em.find(Producto.class, idProducto);
+            return (producto != null) ? producto.getNombre() : "desconocido";
         } finally {
             em.close();
         }

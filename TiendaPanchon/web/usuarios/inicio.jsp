@@ -10,6 +10,7 @@
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     </head>
     <body>
+
         <c:choose>
             <c:when test="${not empty sessionScope.usuario}">
                 <jsp:include page="/includes/headerUsuario.jsp" />
@@ -21,7 +22,7 @@
                             <img src="../imagenes/elRinconDeLaura.jpeg" alt="Logo" class="rounded-circle me-2" style="width: 60px;">
                             <h1 class="h4 mb-0">EL RINCÓN DE LAURA</h1>
                         </div>
-                        <a class="btn btn-outline-dark"  href="${pageContext.request.contextPath}/Controladores/ControladorLogin">Iniciar Sesión</a>
+                        <a class="btn btn-outline-dark" href="${pageContext.request.contextPath}/Controladores/ControladorLogin">Iniciar Sesión</a>
                     </div>
                 </header>
             </c:otherwise>
@@ -70,6 +71,16 @@
 
                     <!-- PRODUCTOS -->
                     <h3 class="mb-3">Productos de la categoría: ${nombreCategoria}</h3>
+
+                    <!-- Mensajes -->
+                    <c:if test="${param.mensaje == 'existe'}">
+                        <div class="alert alert-warning">El producto <strong>${param.nombreProducto}</strong> ya está en la lista de la compra.</div>
+                    </c:if>
+                    <c:if test="${param.mensaje == 'ok'}">
+                        <div class="alert alert-success">Producto <strong>${param.nombreProducto}</strong> añadido correctamente a la lista de la compra.</div>
+                    </c:if>
+
+
                     <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-4">
                         <c:forEach var="producto" items="${productos}">
                             <div class="col">
@@ -89,13 +100,13 @@
                                         <p class="card-text text-success fw-bold">${producto.precio} €</p>
                                         <div class="d-flex justify-content-between align-items-center">
                                             <form action="${pageContext.request.contextPath}/Controladores.ListaCompra/ControladorListaCompra" method="post">
-                                                <input type="hidden" name="accion" value="añadirProducto">
+                                                <input type="hidden" name="accion" value="anadirProducto">
                                                 <input type="hidden" name="idProducto" value="${producto.id}">
+                                                <input type="hidden" name="idCategoria" value="${producto.categoria.id}">
                                                 <button type="submit" class="btn btn-outline-secondary">
                                                     <i class="bi bi-journal-plus"></i>
                                                 </button>
                                             </form>
-                                            <!-- Muestra el campo de cantidad en lugar de la modal -->
                                             <input type="number" class="form-control w-25" min="1" max="${producto.stock}" value="1" id="cantidad_${producto.id}">
                                             <button class="btn btn-outline-primary" onclick="agregarAlCarrito('${producto.id}', '${producto.nombre}', ${producto.precio}, ${producto.stock}, 'cantidad_${producto.id}')">
                                                 <i class="bi bi-cart-plus"></i>
@@ -112,16 +123,12 @@
 
         <jsp:include page="/includes/footer.jsp" />
 
-        <!-- SCRIPT PARA AGREGAR AL CARRITO -->
         <script>
-
-
             document.addEventListener("DOMContentLoaded", function () {
                 document.querySelectorAll("input[type='number'][id^='cantidad_']").forEach(function (input) {
                     input.addEventListener("input", function () {
                         const max = parseInt(this.getAttribute("max"));
                         const value = parseInt(this.value);
-
                         if (value > max) {
                             this.value = max;
                         } else if (value < 1 || isNaN(value)) {
@@ -133,16 +140,11 @@
 
             function agregarAlCarrito(idProducto, nombre, precio, stock, idCantidad) {
                 const cantidad = document.getElementById(idCantidad).value;
-
-                // Verificar que la cantidad no exceda el stock disponible
                 if (parseInt(cantidad) > stock) {
                     alert('La cantidad solicitada excede el stock disponible.');
                     return;
                 }
-
                 const totalPrecio = (parseInt(cantidad) * precio).toFixed(2);
-
-                // Enviar el producto al carrito
                 fetch("/TiendaPanchon/Controladores.Carrito/ControladorCarrito", {
                     method: "POST",
                     headers: {"Content-Type": "application/x-www-form-urlencoded"},
@@ -166,6 +168,5 @@
                         });
             }
         </script>
-
     </body>
 </html>

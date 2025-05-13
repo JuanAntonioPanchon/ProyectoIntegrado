@@ -10,10 +10,10 @@
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>Lista de la Compra</title>
-        <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/estiloListaCompra.css">
         <link href="https://fonts.googleapis.com/css2?family=Switzer:wght@400;700&display=swap" rel="stylesheet">
     </head>
     <body>
+
         <header class="cabecera">
             <div class="izquierdaCabecera">
                 <h1>Lista de la Compra</h1>
@@ -24,7 +24,7 @@
                 <c:if test="${not empty error}">
                     <p class="error">${error}</p>
                 </c:if>
-                
+
                 <table class="tablaLista">
                     <tr>
                         <th>Categoría</th>
@@ -53,7 +53,7 @@
                 </form>
             </section>
         </main>
-        
+
         <script>
             function añadirAlCarrito(idProducto) {
                 alert("Producto " + idProducto + " añadido al carrito.");

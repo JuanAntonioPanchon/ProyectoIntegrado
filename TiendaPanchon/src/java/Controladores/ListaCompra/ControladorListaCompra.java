@@ -59,17 +59,45 @@ public class ControladorListaCompra extends HttpServlet {
                 if ("eliminarProducto".equals(accion) && idProductoStr != null) {
                     Long idProducto = Long.parseLong(idProductoStr);
                     servicioLista.eliminarProductoDeLista(usuario.getId(), idProducto);
+
                 } else if ("eliminarLista".equals(accion)) {
                     servicioLista.vaciarListaCompra(usuario.getId());
-                } else if ("añadirProducto".equals(accion) && idProductoStr != null) { // NUEVA ACCIÓN
+
+                } else if ("anadirProducto".equals(accion) && idProductoStr != null) {
                     Long idProducto = Long.parseLong(idProductoStr);
-                    servicioLista.agregarProductoALista(usuario.getId(), idProducto);
+                    String idCategoria = request.getParameter("idCategoria");
+
+                    // Obtener nombre del producto
+                    String nombreProducto = servicioLista.obtenerNombreProducto(idProducto);
+
+                    // Comprobar si ya está en la lista
+                    boolean yaExiste = servicioLista.productoYaEnLista(usuario.getId(), idProducto);
+
+                    // Si no está, lo añadimos
+                    if (!yaExiste) {
+                        servicioLista.agregarProductoALista(usuario.getId(), idProducto);
+                    }
+
+                    // Construimos mensaje
+                    String mensaje = yaExiste ? "existe" : "ok";
+
+                    // Redirigir con mensaje y nombre del producto
+                    response.sendRedirect(request.getContextPath()
+                            + "/Controladores.Productos/ControladorListarProductos?id_categoria=" + idCategoria
+                            + "&mensaje=" + mensaje
+                            + "&nombreProducto=" + java.net.URLEncoder.encode(nombreProducto, "UTF-8"));
+
+                    emf.close();
+                    return;
                 }
+
             } catch (NumberFormatException e) {
                 request.setAttribute("error", "ID de producto no válido.");
+                e.printStackTrace();
             }
         } else {
             request.setAttribute("error", "Usuario no autenticado.");
+
         }
 
         emf.close();
