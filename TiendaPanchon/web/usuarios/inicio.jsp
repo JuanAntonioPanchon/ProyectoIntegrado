@@ -114,6 +114,23 @@
 
         <!-- SCRIPT PARA AGREGAR AL CARRITO -->
         <script>
+
+
+            document.addEventListener("DOMContentLoaded", function () {
+                document.querySelectorAll("input[type='number'][id^='cantidad_']").forEach(function (input) {
+                    input.addEventListener("input", function () {
+                        const max = parseInt(this.getAttribute("max"));
+                        const value = parseInt(this.value);
+
+                        if (value > max) {
+                            this.value = max;
+                        } else if (value < 1 || isNaN(value)) {
+                            this.value = 1;
+                        }
+                    });
+                });
+            });
+
             function agregarAlCarrito(idProducto, nombre, precio, stock, idCantidad) {
                 const cantidad = document.getElementById(idCantidad).value;
 
