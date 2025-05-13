@@ -112,7 +112,7 @@
                                                         <a href="/TiendaPanchon/Controladores.Admin/ControladorProducto?editar=true&id_producto=${producto.id}" class="btn btn-sm btn-warning mb-1">Editar</a>
                                                         <form action="/TiendaPanchon/Controladores.Admin/ControladorProducto" method="POST" style="display:inline;">
                                                             <input type="hidden" name="id" value="${producto.id}">
-                                                            <button type="submit" name="eliminar" class="btn btn-sm btn-danger mb-1" onclick="return confirm('¿Eliminar ${producto.nombre}?');">Eliminar</button>
+                                                            <button type="submit" name="eliminar" value="Eliminar" class="btn btn-sm btn-danger mb-1" onclick="return confirm('¿Eliminar ${producto.nombre}?');">Eliminar</button>
                                                         </form>
                                                         <a href="../Controladores.Admin/ControladorSubirFoto?productoId=${producto.id}" class="btn btn-sm btn-info">Añadir Imágenes</a>
                                                     </td>
