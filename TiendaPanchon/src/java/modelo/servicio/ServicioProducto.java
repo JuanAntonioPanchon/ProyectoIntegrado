@@ -20,6 +20,7 @@ import javax.persistence.Query;
 import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
+import modelo.entidades.ListaCompra;
 import modelo.entidades.Producto;
 import modelo.servicio.exceptions.NonexistentEntityException;
 
@@ -210,8 +211,8 @@ public class ServicioProducto implements Serializable {
             // Preparar consulta
             Query query = em.createNativeQuery(sql);
             query.setParameter(1, java.sql.Date.valueOf(fechaInicio));
-            query.setParameter(2, java.sql.Date.valueOf(fechaFin));     
-            query.setParameter(3, categoriaId);                        
+            query.setParameter(2, java.sql.Date.valueOf(fechaFin));
+            query.setParameter(3, categoriaId);
 
             // Ejecutar consulta
             List<Object[]> productos = query.getResultList();
@@ -220,6 +221,35 @@ public class ServicioProducto implements Serializable {
         } catch (Exception e) {
             e.printStackTrace();
             return null;
+        } finally {
+            em.close();
+        }
+    }
+
+    public void eliminarProductoYLimpiarListas(Long idProducto) {
+        EntityManager em = getEntityManager();
+        try {
+            em.getTransaction().begin();
+
+            Producto producto = em.find(Producto.class, idProducto);
+
+            if (producto != null) {
+                
+                for (ListaCompra lista : producto.getListasCompra()) {
+                    lista.getProductos().remove(producto);
+                    em.merge(lista);
+                }
+
+                producto.getListasCompra().clear();
+
+                
+                em.remove(em.merge(producto));
+            }
+
+            em.getTransaction().commit();
+        } catch (Exception e) {
+            em.getTransaction().rollback();
+            throw e;
         } finally {
             em.close();
         }

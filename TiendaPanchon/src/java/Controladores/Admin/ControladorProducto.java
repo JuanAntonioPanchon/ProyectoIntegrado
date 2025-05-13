@@ -75,7 +75,7 @@ public class ControladorProducto extends HttpServlet {
                 long idProducto = Long.parseLong(eliminarProductoStr);
                 Producto producto = sp.findProducto(idProducto);
                 if (producto != null) {
-                    sp.destroy(idProducto);
+                    sp.eliminarProductoYLimpiarListas(idProducto);
                 }
             } catch (Exception e) {
                 request.setAttribute("error", "Error al eliminar el producto.");

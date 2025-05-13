@@ -154,11 +154,26 @@ public class ServicioListaCompra implements Serializable {
         EntityManager em = getEntityManager();
         try {
             em.getTransaction().begin();
-            Query query = em.createQuery("DELETE FROM Producto p WHERE p.id = :idProducto AND p.listaCompra.usuario.id = :idUsuario")
-                    .setParameter("idProducto", idProducto)
-                    .setParameter("idUsuario", idUsuario);
-            query.executeUpdate();
+
+            // Buscar la lista del usuario
+            ListaCompra lista = em.createQuery(
+                    "SELECT l FROM ListaCompra l WHERE l.usuario.id = :idUsuario", ListaCompra.class)
+                    .setParameter("idUsuario", idUsuario)
+                    .getSingleResult();
+
+            // Buscar el producto
+            Producto producto = em.find(Producto.class, idProducto);
+
+            // Eliminar la relación
+            if (lista != null && producto != null) {
+                lista.getProductos().remove(producto);
+                em.merge(lista);
+            }
+
             em.getTransaction().commit();
+        } catch (Exception e) {
+            em.getTransaction().rollback();
+            throw e;
         } finally {
             em.close();
         }

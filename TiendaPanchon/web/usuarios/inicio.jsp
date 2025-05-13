@@ -83,7 +83,7 @@
 
                     <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-4">
                         <c:forEach var="producto" items="${productos}">
-                            <div class="col">
+                            <div class="col" id="producto_${producto.id}">
                                 <div class="card h-100">
                                     <c:choose>
                                         <c:when test="${not empty producto.imagenes}">
