@@ -3,100 +3,114 @@
     Created on : 31 mar 2025, 17:37:02
     Author     : juan-antonio
 --%>
-<%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
+<%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <!DOCTYPE html>
 <html>
     <head>
-        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <meta charset="UTF-8">
         <title>Lista de la Compra</title>
-        <link href="https://fonts.googleapis.com/css2?family=Switzer:wght@400;700&display=swap" rel="stylesheet">
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+        <link rel="stylesheet" href="../estilos/coloresPersonalizados.css">
+        <link rel="stylesheet" href="../estilos/tablas.css">
         <style>
-            .cabecera {
-                padding: 1rem;
-                background-color: #f8f9fa;
+            a.enlace-producto {
+                text-decoration: none !important;
+                font-weight: 500;
+                color: #000 !important;
+                cursor: pointer;
             }
-            .contenedorLista {
-                padding: 1.5rem;
+            a.enlace-producto:hover {
+                text-decoration: none !important;
+                color: #000 !important;
             }
-            .tablaLista {
-                width: 100%;
-                border-collapse: collapse;
-            }
-            .tablaLista th, .tablaLista td {
-                border: 1px solid #dee2e6;
-                padding: 0.75rem;
-                text-align: left;
-            }
-            .btnEliminar, .btnCarrito, .btnEliminarLista {
-                margin: 0.25rem;
-            }
-            .error {
-                color: red;
-                font-weight: bold;
-                margin-bottom: 1rem;
-            }
+
         </style>
     </head>
-    <body>
+    <body class="colorFondo">
+        <jsp:include page="/includes/headerUsuario.jsp" />
 
-        <header class="cabecera">
-            <div class="izquierdaCabecera">
-                <h1>Lista de la Compra</h1>
+        <div class="container py-4">
+            <h2 class="text-center fw-bold mb-4">LISTA DE LA COMPRA</h2>
+
+            <c:if test="${not empty error}">
+                <div class="alert alert-danger text-center fw-bold">${error}</div>
+            </c:if>
+
+            <c:choose>
+                <c:when test="${not empty productosLista}">
+                    <div class="table-responsive">
+                        <table class="tabla-personalizada table table-bordered text-center align-middle">
+                            <thead>
+                                <tr>
+                                    <th>Producto</th>
+                                    <th>Categoría</th>
+                                    <th>Acciones</th>
+                                </tr>
+                            </thead>
+                            <tbody id="tablaListaCompra">
+                                <c:forEach var="producto" items="${productosLista}">
+                                    <tr>
+                                        <td>
+                                            <c:choose>
+                                                <c:when test="${producto.stock > 0}">
+                                                    <a class="enlace-producto"
+                                                       href="${pageContext.request.contextPath}/Controladores.Productos/ControladorListarProductos?id_categoria=${producto.categoria.id}#producto_${producto.id}">
+                                                        ${producto.nombre}
+                                                    </a>
+                                                </c:when>
+                                                <c:otherwise>
+                                                    <span class="text-muted">${producto.nombre} (producto agotado en este momento)</span>
+                                                </c:otherwise>
+                                            </c:choose>
+                                        </td>
+                                        <td>${producto.categoria.nombre}</td>
+                                        <td>
+                                            <form method="post" action="ControladorListaCompra" style="display:inline;"
+                                                  onsubmit="return confirm('¿Estás seguro que quieres eliminar el producto ${producto.nombre}?');">
+                                                <input type="hidden" name="accion" value="eliminarProducto">
+                                                <input type="hidden" name="idProducto" value="${producto.id}">
+                                                <button type="submit" class="btn btn-danger btn-sm">Eliminar</button>
+                                            </form>
+                                        </td>
+                                    </tr>
+                                </c:forEach>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div class="row mt-4">
+                        <div class="col-md-8">
+                            <form method="post" action="ControladorListaCompra"
+                                  onsubmit="return confirm('¿Estás seguro que quieres vaciar la lista de la compra completa?');">
+                                <input type="hidden" name="accion" value="eliminarLista">
+                                <button type="submit" class="btn btn-danger">Vaciar Lista de la Compra</button>
+                            </form>
+                        </div>
+                        <div class="col-md-4 text-end">
+                            <p><strong>Cantidad total:</strong> <span id="cantidadTotal">0</span> productos</p>
+                        </div>
+                    </div>
+                </c:when>
+                <c:otherwise>
+                    <div class="alert alert-warning text-center fs-5">No tienes productos en tu lista.</div>
+                </c:otherwise>
+            </c:choose>
+
+            <div class="text-center mt-4">
+                <a href="${pageContext.request.contextPath}/Controladores/ControladorInicio" class="btn btn-secondary">Volver a la tienda</a>
             </div>
-        </header>
+        </div>
 
-        <main>
-            <section class="contenedorLista">
-                <c:if test="${not empty error}">
-                    <p class="error">${error}</p>
-                </c:if>
+        <jsp:include page="/includes/footer.jsp" />
 
-                <table class="tablaLista">
-                    <tr>
-                        <th>Categoría</th>
-                        <th>Producto</th>
-                        <th>Acciones</th>
-                    </tr>
-                    <c:forEach var="producto" items="${productosLista}">
-                        <tr>
-                            <td>${producto.categoria.nombre}</td>
-                            <td>
-                                <c:choose>
-                                    <c:when test="${producto.stock > 0}">
-                                        <a href="${pageContext.request.contextPath}/Controladores.Productos/ControladorListarProductos?id_categoria=${producto.categoria.id}#producto_${producto.id}">
-                                            ${producto.nombre}
-                                        </a>
-                                    </c:when>
-                                    <c:otherwise>
-                                        <span class="text-muted">${producto.nombre} (producto agotado en este momento)</span>
-                                    </c:otherwise>
-                                </c:choose>
-                            </td>
-                            <td>
-                                <form action="ControladorListaCompra" method="post" class="formAccion" 
-                                      onsubmit="return confirm('¿Estás seguro que quieres eliminar el producto ${producto.nombre}?');">
-                                    <input type="hidden" name="accion" value="eliminarProducto">
-                                    <input type="hidden" name="idProducto" value="${producto.id}">
-                                    <button type="submit" class="btnEliminar">Eliminar</button>
-                                </form>
+        <script>
+            function actualizarResumen() {
+                const total = document.querySelectorAll("#tablaListaCompra tr").length;
+                document.getElementById("cantidadTotal").textContent = total;
+            }
 
-                                <button onclick="alert('Producto ${producto.nombre} añadido al carrito.')" class="btnCarrito">
-                                    Añadir al carrito
-                                </button>
-                            </td>
-                        </tr>
-                    </c:forEach>
-                </table>
-
-
-                <form action="ControladorListaCompra" method="post" class="formEliminarLista"
-                      onsubmit="return confirm('¿Estás seguro que quieres vaciar la lista de la compra completa?');">
-                    <input type="hidden" name="accion" value="eliminarLista">
-                    <button type="submit" class="btnEliminarLista">Eliminar toda la lista</button>
-                </form>
-            </section>
-        </main>
-
+            document.addEventListener("DOMContentLoaded", actualizarResumen);
+        </script>
     </body>
 </html>

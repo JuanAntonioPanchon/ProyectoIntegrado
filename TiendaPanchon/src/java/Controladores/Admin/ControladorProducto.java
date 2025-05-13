@@ -101,12 +101,12 @@ public class ControladorProducto extends HttpServlet {
                         long idProducto = Long.parseLong(idProductoStr);
                         Producto producto = sp.findProducto(idProducto);
                         if (producto != null) {
-                            sp.destroy(idProducto); // Llamada para eliminar el producto
-                            System.out.println("Producto eliminado: " + producto.getNombre());
+                            sp.destroy(idProducto);
+                            
                         }
                     } catch (Exception e) {
                         request.setAttribute("error", "Error al eliminar el producto.");
-                        System.out.println("Error al eliminar el producto: " + e.getMessage());
+                        
                     }
                 }
             }
@@ -122,7 +122,7 @@ public class ControladorProducto extends HttpServlet {
                 if (precioStr != null && !precioStr.isEmpty()) {
                     double precio = Double.valueOf(precioStr);
                     producto.setPrecio(precio);
-                    System.out.println("precio " + precio);
+                    
                 }
 
                 // Obtener y validar el stock
@@ -157,8 +157,7 @@ public class ControladorProducto extends HttpServlet {
                 String precioVentaStr = request.getParameter("precioVenta");
                 if (precioVentaStr != null && !precioVentaStr.isEmpty()) {
                     double precioFinal = Double.parseDouble(precioVentaStr);
-                    System.out.println("precioFinal " + precioFinal);
-                    System.out.println("precioVenta " + precioVentaStr);
+                    
                 }
 
                 
@@ -175,7 +174,7 @@ public class ControladorProducto extends HttpServlet {
                     producto.setNovedad(true);
                 }
 
-                System.out.println("precio " + producto.getPrecio());
+                
 
                 sp.create(producto);
             } else if (request.getParameter("editar") != null) {
@@ -192,7 +191,7 @@ public class ControladorProducto extends HttpServlet {
                     if (precioStr != null && !precioStr.isEmpty()) {
                         double precio = Double.parseDouble(precioStr);
                         producto.setPrecio(precio);
-                        System.out.println("precio " + precio);
+                        
                     }
 
                     // Obtener y validar el stock
@@ -216,8 +215,7 @@ public class ControladorProducto extends HttpServlet {
                     String precioVentaStr = request.getParameter("precioVenta");
                     if (precioVentaStr != null && !precioVentaStr.isEmpty()) {
                         double precioFinal = Double.parseDouble(precioVentaStr);
-                        System.out.println("precioFinal " + precioFinal);
-                        System.out.println("precioVenta " + precioVentaStr);
+                        
                     }
 
                     // Asignar el precioVenta a la petición para que esté disponible en el JSP
