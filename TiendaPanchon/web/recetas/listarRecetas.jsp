@@ -10,6 +10,8 @@
         <link rel="stylesheet" type="text/css" href="../estilos/coloresPersonalizados.css">
         <link rel="stylesheet" type="text/css" href="../estilos/tablas.css">
         <link rel="stylesheet" type="text/css" href="../estilos/recetas.css">
+        <link rel="stylesheet" type="text/css" href="../estilos/paginacion.css">
+
 
         <!-- si lo saco a otro archivo me da problemas -->
         <style>
@@ -18,6 +20,7 @@
                 opacity: 0.7;
             }
         </style>
+
     </head>
     <body>
 
@@ -75,7 +78,8 @@
                                 <p class="card-text"><strong>Ingredientes:</strong> ${receta.ingredientes}</p>
 
                                 <div class="d-flex justify-content-between align-items-center mt-auto">
-                                    <a href="ControladorReceta?id=${receta.id}" class="btn btn-editar">Editar</a>
+                                    <a href="ControladorReceta?id=${receta.id}&pagina=${paginaActual}" class="btn btn-editar">Editar</a>
+
                                     <span class="mx-3">
                                         <strong> ${receta.publicada ? "Pública" : "Privada"} </strong>
                                     </span>
@@ -119,6 +123,34 @@
                 </c:forEach>
             </div>
 
+            <c:if test="${totalPaginas > 1}">
+                <div class="d-flex justify-content-center mt-4">
+                    <nav aria-label="Paginación de recetas">
+                        <ul class="pagination pagination-personalizada">
+                            <li class="page-item ${paginaActual == 1 ? 'disabled' : ''}">
+                                <a class="page-link" href="ControladorReceta?pagina=${paginaActual - 1}">
+                                    <i class="bi bi-chevron-left"></i>
+                                </a>
+                            </li>
+
+                            <c:forEach begin="1" end="${totalPaginas}" var="i">
+                                <li class="page-item ${i == paginaActual ? 'active' : ''}">
+                                    <a class="page-link" href="ControladorReceta?pagina=${i}">${i}</a>
+                                </li>
+                            </c:forEach>
+
+                            <li class="page-item ${paginaActual == totalPaginas ? 'disabled' : ''}">
+                                <a class="page-link" href="ControladorReceta?pagina=${paginaActual + 1}">
+                                    <i class="bi bi-chevron-right"></i>
+                                </a>
+                            </li>
+                        </ul>
+
+                    </nav>
+                </div>
+            </c:if>
+
+
             <div class="mt-4">
                 <c:choose>
                     <c:when test="${sessionScope.usuario.rol == 'admin'}">
@@ -134,8 +166,8 @@
 
         <jsp:include page="/includes/footer.jsp" />
 
-        
-        
+
+
 
         <script src="../js/eliminarImagenReceta.js"></script>
 

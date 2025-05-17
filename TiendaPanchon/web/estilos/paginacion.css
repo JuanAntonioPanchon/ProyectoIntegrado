@@ -1,0 +1,60 @@
+.colorVerde {
+    background-color: #8a9a5b !important;
+    border: none !important;
+}
+
+body, .colorFondo {
+    background-color: #C19469 !important;
+}
+
+.form-container, .tarjeta {
+    background-color: #eac6a5 !important;
+}
+
+.pagination-personalizada {
+    display: flex;
+    justify-content: center;
+    gap: 0.5rem;
+    margin-top: 2rem;
+}
+
+.pagination-personalizada .page-item .page-link {
+    background-color: #f4d2aa;
+    color: #000;
+    border: none;
+    border-radius: 0.5rem;
+    padding: 0.5rem 0.9rem;
+    font-weight: bold;
+    transition: all 0.2s ease-in-out;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.pagination-personalizada .page-item .page-link:hover {
+    background-color: #e5c194;
+    color: #000;
+}
+
+.pagination-personalizada .page-item.active .page-link {
+    background-color: #8a9a5b;
+    color: white;
+}
+
+.pagination-personalizada .page-item.disabled .page-link {
+    background-color: #d9b38c;
+    color: #a07c52;
+    opacity: 0.7;
+    cursor: not-allowed;
+}
+
+.pagination-personalizada .page-item.active {
+    background-color: transparent !important;
+}
+
+.pagination-personalizada .page-item.active .page-link {
+    background-color: #8a9a5b;
+    color: white;
+    box-shadow: none !important;
+    outline: none !important;
+    border: none !important;
+}
+

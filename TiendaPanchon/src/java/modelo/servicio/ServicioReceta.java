@@ -7,7 +7,6 @@ package modelo.servicio;
  *
  * @author juan-antonio
  */
-
 import java.io.Serializable;
 import java.util.List;
 import javax.persistence.EntityManager;
@@ -136,7 +135,7 @@ public class ServicioReceta implements Serializable {
             em.close();
         }
     }
-    
+
     public List<Receta> findRecetasPublicadas() {
         EntityManager em = getEntityManager();
         try {
@@ -147,17 +146,37 @@ public class ServicioReceta implements Serializable {
         }
     }
 
-    public List<Receta> findRecetasPorUsuario(Long idUsuario) {
+    public List<Receta> findRecetasPorUsuarioPaginado(Long idUsuario, int pagina, int tamanio) {
         EntityManager em = getEntityManager();
         try {
             CriteriaBuilder cb = em.getCriteriaBuilder();
             CriteriaQuery<Receta> cq = cb.createQuery(Receta.class);
             Root<Receta> root = cq.from(Receta.class);
-            Predicate predicate = cb.equal(root.get("usuario").get("id"), idUsuario);
-            cq.where(predicate);
-            return em.createQuery(cq).getResultList();
+            cq.select(root);
+            cq.where(cb.equal(root.get("usuario").get("id"), idUsuario));
+            cq.orderBy(cb.desc(root.get("id"))); // Opcional: ordenar por ID descendente
+
+            return em.createQuery(cq)
+                    .setFirstResult((pagina - 1) * tamanio)
+                    .setMaxResults(tamanio)
+                    .getResultList();
         } finally {
             em.close();
         }
     }
+
+    public long contarRecetasPorUsuario(Long idUsuario) {
+        EntityManager em = getEntityManager();
+        try {
+            CriteriaBuilder cb = em.getCriteriaBuilder();
+            CriteriaQuery<Long> cq = cb.createQuery(Long.class);
+            Root<Receta> root = cq.from(Receta.class);
+            cq.select(cb.count(root));
+            cq.where(cb.equal(root.get("usuario").get("id"), idUsuario));
+            return em.createQuery(cq).getSingleResult();
+        } finally {
+            em.close();
+        }
+    }
+
 }

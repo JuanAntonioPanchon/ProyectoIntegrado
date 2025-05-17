@@ -52,9 +52,25 @@ public class ControladorReceta extends HttpServlet {
 
             // listar las recetas
             if (request.getParameter("id") == null && request.getParameter("crear") == null) {
-                List<Receta> recetas = srec.findRecetasPorUsuario(idUsuario);
+                int pagina = 1;
+                int tamanio = 6;
+
+                if (request.getParameter("pagina") != null) {
+                    try {
+                        pagina = Integer.parseInt(request.getParameter("pagina"));
+                    } catch (NumberFormatException e) {
+                        pagina = 1;
+                    }
+                }
+
+                List<Receta> recetas = srec.findRecetasPorUsuarioPaginado(idUsuario, pagina, tamanio);
+                long total = srec.contarRecetasPorUsuario(idUsuario);
+                int totalPaginas = (int) Math.ceil((double) total / tamanio);
+
                 request.setAttribute("idUsuario", idUsuario);
                 request.setAttribute("recetas", recetas);
+                request.setAttribute("paginaActual", pagina);
+                request.setAttribute("totalPaginas", totalPaginas);
             } // crear una nueva receta
             else if (request.getParameter("crear") != null) {
                 vista = "/recetas/crearReceta.jsp";
@@ -70,7 +86,11 @@ public class ControladorReceta extends HttpServlet {
                     request.setAttribute("publicada", receta.isPublicada());
                     request.setAttribute("imagenes", receta.getImagenes());
 
+                    if (request.getParameter("pagina") != null) {
+                        request.setAttribute("paginaActual", request.getParameter("pagina"));
+                    }
                     vista = "/recetas/crearReceta.jsp";
+
                 } catch (Exception e) {
                     request.setAttribute("error", "Error al obtener la receta.");
                 }
@@ -133,6 +153,12 @@ public class ControladorReceta extends HttpServlet {
         if (!error.isEmpty()) {
             sesion.setAttribute("error", error);
         }
-        response.sendRedirect("ControladorReceta");
+        String pagina = request.getParameter("pagina");
+        if (pagina != null && !pagina.isEmpty()) {
+            response.sendRedirect("ControladorReceta?pagina=" + pagina);
+        } else {
+            response.sendRedirect("ControladorReceta");
+        }
+
     }
 }
