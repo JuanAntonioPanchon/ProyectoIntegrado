@@ -278,4 +278,16 @@ public class ServicioProducto implements Serializable {
         }
     }
 
+    public long contarProductosPorCategoriaConStock(Long idCategoria) {
+        EntityManager em = getEntityManager();
+        try {
+            String jpql = "SELECT COUNT(p) FROM Producto p WHERE p.categoria.id = :idCategoria AND p.stock > 0";
+            return em.createQuery(jpql, Long.class)
+                    .setParameter("idCategoria", idCategoria)
+                    .getSingleResult();
+        } finally {
+            em.close();
+        }
+    }
+
 }
