@@ -9,6 +9,7 @@
         <link rel="stylesheet" href="../estilos/coloresPersonalizados.css">
         <link rel="stylesheet" href="../estilos/tablas.css">
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+        <link rel="stylesheet" type="text/css" href="../estilos/paginacion.css">
         <script src="https://cdn.jsdelivr.net/npm/fuse.js@6.6.2"></script>
     </head>
     <body>
@@ -59,6 +60,32 @@
                         </c:forEach>
                     </tbody>
                 </table>
+                <c:if test="${totalPaginas > 1}">
+                    <div class="d-flex justify-content-center mt-4">
+                        <nav aria-label="Paginación de usuarios">
+                            <ul class="pagination pagination-personalizada">
+                                <li class="page-item ${paginaActual == 1 ? 'disabled' : ''}">
+                                    <a class="page-link" href="ControladorGestionarUsuarios?pagina=${paginaActual - 1}">
+                                        &laquo;
+                                    </a>
+                                </li>
+
+                                <c:forEach begin="1" end="${totalPaginas}" var="i">
+                                    <li class="page-item ${i == paginaActual ? 'active' : ''}">
+                                        <a class="page-link" href="ControladorGestionarUsuarios?pagina=${i}">${i}</a>
+                                    </li>
+                                </c:forEach>
+
+                                <li class="page-item ${paginaActual == totalPaginas ? 'disabled' : ''}">
+                                    <a class="page-link" href="ControladorGestionarUsuarios?pagina=${paginaActual + 1}">
+                                        &raquo;
+                                    </a>
+                                </li>
+                            </ul>
+                        </nav>
+                    </div>
+                </c:if>
+
             </div>            
 
             <div class="text-center mt-4">

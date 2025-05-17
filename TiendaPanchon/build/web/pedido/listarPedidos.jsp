@@ -16,6 +16,7 @@
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
         <link rel="stylesheet" href="../estilos/coloresPersonalizados.css">
         <link rel="stylesheet" href="../estilos/tablas.css">
+        <link rel="stylesheet" type="text/css" href="../estilos/paginacion.css">
     </head>
     <body class="colorFondo">
 
@@ -60,6 +61,26 @@
                         </div>
                     </div>
                 </c:forEach>
+                <!-- Paginación -->
+                <c:if test="${totalPaginas > 1}">
+                    <nav aria-label="Paginación de pedidos" class="mt-4">
+                        <ul class="pagination pagination-personalizada justify-content-center">
+                            <li class="page-item ${paginaActual == 1 ? 'disabled' : ''}">
+                                <a class="page-link" href="${pageContext.request.contextPath}/Controladores.Pedidos/ControladorPedidosUsuario?pagina=${paginaActual - 1}">&laquo;</a>
+                            </li>
+
+                            <c:forEach begin="1" end="${totalPaginas}" var="i">
+                                <li class="page-item ${i == paginaActual ? 'active' : ''}">
+                                    <a class="page-link" href="${pageContext.request.contextPath}/Controladores.Pedidos/ControladorPedidosUsuario?pagina=${i}">${i}</a>
+                                </li>
+                            </c:forEach>
+
+                            <li class="page-item ${paginaActual == totalPaginas ? 'disabled' : ''}">
+                                <a class="page-link" href="${pageContext.request.contextPath}/Controladores.Pedidos/ControladorPedidosUsuario?pagina=${paginaActual + 1}">&raquo;</a>
+                            </li>
+                        </ul>
+                    </nav>
+                </c:if>
             </div>
 
             <div class="text-center mt-5">

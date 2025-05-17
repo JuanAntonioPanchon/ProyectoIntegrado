@@ -118,24 +118,25 @@
                         <nav aria-label="Paginación">
                             <ul class="pagination pagination-personalizada">
                                 <li class="page-item ${paginaActual == 1 ? 'disabled' : ''}">
-                                    <a class="page-link" href="ControladorListadoReceta?pagina=${paginaActual - 1}">
-                                        <i class="bi bi-chevron-left"></i>
+                                    <a class="page-link" href="${pageContext.request.contextPath}/Controladores/ControladorListadoReceta?pagina=${paginaActual - 1}">
+                                        &laquo;
                                     </a>
                                 </li>
                                 <c:forEach begin="1" end="${totalPaginas}" var="i">
                                     <li class="page-item ${i == paginaActual ? 'active' : ''}">
-                                        <a class="page-link" href="ControladorListadoReceta?pagina=${i}">${i}</a>
+                                        <a class="page-link" href="${pageContext.request.contextPath}/Controladores/ControladorListadoReceta?pagina=${i}">${i}</a>
                                     </li>
                                 </c:forEach>
                                 <li class="page-item ${paginaActual == totalPaginas ? 'disabled' : ''}">
-                                    <a class="page-link" href="ControladorListadoReceta?pagina=${paginaActual + 1}">
-                                        <i class="bi bi-chevron-right"></i>
+                                    <a class="page-link" href="${pageContext.request.contextPath}/Controladores/ControladorListadoReceta?pagina=${paginaActual + 1}">
+                                        &raquo;
                                     </a>
                                 </li>
                             </ul>
                         </nav>
                     </div>
                 </c:if>
+
             </div>
 
             <div class="mt-4">

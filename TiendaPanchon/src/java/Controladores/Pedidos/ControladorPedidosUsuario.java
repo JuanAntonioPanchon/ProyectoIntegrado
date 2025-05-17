@@ -45,14 +45,30 @@ public class ControladorPedidosUsuario extends HttpServlet {
             }
         }
 
-        List<Pedido> pedidosUsuario = servicioPedido.findPedidosPorUsuario(usuario.getId());
+        // Paginación
+        int pagina = 1;
+        int tamanio = 8; // 8 pedidos por página
 
-        pedidosUsuario.sort(Comparator
-                .comparing(Pedido::getFechaPedido)
-                .thenComparing(Pedido::getId)
-                .reversed());
+        if (request.getParameter("pagina") != null) {
+            try {
+                pagina = Integer.parseInt(request.getParameter("pagina"));
+            } catch (NumberFormatException e) {
+                pagina = 1;
+            }
+        }
 
+        // Obtener pedidos paginados
+        List<Pedido> pedidosUsuario = servicioPedido.findPedidosPorUsuarioPaginado(usuario.getId(), pagina, tamanio);
+
+        // Total pedidos para calcular páginas
+        long total = servicioPedido.contarPedidosPorUsuario(usuario.getId());
+        int totalPaginas = (int) Math.ceil((double) total / tamanio);
+
+        // Enviar atributos a JSP
         request.setAttribute("pedidos", pedidosUsuario);
+        request.setAttribute("paginaActual", pagina);
+        request.setAttribute("totalPaginas", totalPaginas);
+
         getServletContext().getRequestDispatcher(vista).forward(request, response);
     }
 

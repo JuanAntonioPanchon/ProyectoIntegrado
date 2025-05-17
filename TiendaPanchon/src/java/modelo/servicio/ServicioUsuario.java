@@ -144,7 +144,6 @@ public class ServicioUsuario implements Serializable {
 //        }
 //        return null;
 //    }
-
     public Usuario findUsuarioByEmail(String email) {
         EntityManager em = getEntityManager();
         try {
@@ -153,6 +152,33 @@ public class ServicioUsuario implements Serializable {
             return (Usuario) query.getSingleResult();
         } catch (Exception e) {
             return null;
+        } finally {
+            em.close();
+        }
+    }
+
+    public List<Usuario> findUsuarioEntitiesPaginado(int pagina, int tamanio) {
+        EntityManager em = getEntityManager();
+        try {
+            CriteriaQuery<Usuario> cq = em.getCriteriaBuilder().createQuery(Usuario.class);
+            Root<Usuario> root = cq.from(Usuario.class);
+            cq.select(root);
+            Query q = em.createQuery(cq);
+            q.setFirstResult((pagina - 1) * tamanio);
+            q.setMaxResults(tamanio);
+            return q.getResultList();
+        } finally {
+            em.close();
+        }
+    }
+
+    public long contarUsuarios() {
+        EntityManager em = getEntityManager();
+        try {
+            CriteriaQuery<Long> cq = em.getCriteriaBuilder().createQuery(Long.class);
+            Root<Usuario> root = cq.from(Usuario.class);
+            cq.select(em.getCriteriaBuilder().count(root));
+            return em.createQuery(cq).getSingleResult();
         } finally {
             em.close();
         }

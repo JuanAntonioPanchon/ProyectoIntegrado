@@ -28,6 +28,7 @@ public class ControladorGestionarUsuarios extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+
         String vista = "/admin/listarUsuarios.jsp";
         String accion = request.getParameter("accion");
         String error = "";
@@ -39,12 +40,11 @@ public class ControladorGestionarUsuarios extends HttpServlet {
             Long idUsuario = Long.parseLong(request.getParameter("idUsuario"));
             Usuario usuario = servicioUsuario.findUsuario(idUsuario);
             if (usuario != null) {
-                request.setAttribute("usuario", usuario); 
-                vista = "/admin/crearUsuario.jsp"; 
+                request.setAttribute("usuario", usuario);
+                vista = "/admin/crearUsuario.jsp";
             } else {
                 error = "Usuario no encontrado.";
                 request.setAttribute("error", error);
-                vista = "/admin/listarUsuarios.jsp"; 
             }
         } else if ("Eliminar".equals(accion)) {
             Long idUsuario = Long.parseLong(request.getParameter("idUsuario"));
@@ -58,16 +58,33 @@ public class ControladorGestionarUsuarios extends HttpServlet {
             }
         }
 
-        
-        List<Usuario> usuarios = servicioUsuario.findUsuarioEntities();
+        // 🔽 Paginación
+        int pagina = 1;
+        int tamanio = 10;
+
+        if (request.getParameter("pagina") != null) {
+            try {
+                pagina = Integer.parseInt(request.getParameter("pagina"));
+            } catch (NumberFormatException e) {
+                pagina = 1;
+            }
+        }
+
+        List<Usuario> usuarios = servicioUsuario.findUsuarioEntitiesPaginado(pagina, tamanio);
+        long total = servicioUsuario.contarUsuarios();
+        int totalPaginas = (int) Math.ceil((double) total / tamanio);
+
         request.setAttribute("usuarios", usuarios);
+        request.setAttribute("paginaActual", pagina);
+        request.setAttribute("totalPaginas", totalPaginas);
+
         getServletContext().getRequestDispatcher(vista).forward(request, response);
     }
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        String vista = "/admin/crearUsuario.jsp"; 
+        String vista = "/admin/crearUsuario.jsp";
         String error = "";
         String accion = request.getParameter("accion");
         Long idUsuario = null;
@@ -129,7 +146,6 @@ public class ControladorGestionarUsuarios extends HttpServlet {
             request.setAttribute("error", error);
         }
 
-        
         usuario.setNombre(nombre);
         usuario.setApellidos(apellidos);
         usuario.setDireccion(direccion);
@@ -152,7 +168,7 @@ public class ControladorGestionarUsuarios extends HttpServlet {
         }
 
         request.setAttribute("error", error);
-        
+
         request.setAttribute("usuario", usuario);
         getServletContext().getRequestDispatcher(vista).forward(request, response);
     }

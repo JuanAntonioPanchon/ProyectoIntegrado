@@ -261,4 +261,33 @@ public class ServicioListaCompra implements Serializable {
         }
     }
 
+    public List<Producto> obtenerListaPorUsuarioPaginado(Long idUsuario, int pagina, int tamanio) {
+        EntityManager em = getEntityManager();
+        try {
+            return em.createQuery(
+                    "SELECT p FROM Producto p "
+                    + "JOIN p.listasCompra lc "
+                    + "WHERE lc.usuario.id = :idUsuario", Producto.class)
+                    .setParameter("idUsuario", idUsuario)
+                    .setFirstResult((pagina - 1) * tamanio)
+                    .setMaxResults(tamanio)
+                    .getResultList();
+        } finally {
+            em.close();
+        }
+    }
+
+    public long contarProductosPorUsuario(Long idUsuario) {
+        EntityManager em = getEntityManager();
+        try {
+            return em.createQuery(
+                    "SELECT COUNT(p) FROM Producto p "
+                    + "JOIN p.listasCompra lc "
+                    + "WHERE lc.usuario.id = :idUsuario", Long.class)
+                    .setParameter("idUsuario", idUsuario)
+                    .getSingleResult();
+        } finally {
+            em.close();
+        }
+    }
 }

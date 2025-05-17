@@ -128,23 +128,20 @@
                     <nav aria-label="Paginación de recetas">
                         <ul class="pagination pagination-personalizada">
                             <li class="page-item ${paginaActual == 1 ? 'disabled' : ''}">
-                                <a class="page-link" href="ControladorReceta?pagina=${paginaActual - 1}">
-                                    <i class="bi bi-chevron-left"></i>
-                                </a>
+                                <a class="page-link" href="${pageContext.request.contextPath}/Controladores/ControladorReceta?pagina=${paginaActual - 1}">&laquo;</a>
                             </li>
 
                             <c:forEach begin="1" end="${totalPaginas}" var="i">
                                 <li class="page-item ${i == paginaActual ? 'active' : ''}">
-                                    <a class="page-link" href="ControladorReceta?pagina=${i}">${i}</a>
+                                    <a class="page-link" href="${pageContext.request.contextPath}/Controladores/ControladorReceta?pagina=${i}">${i}</a>
                                 </li>
                             </c:forEach>
 
                             <li class="page-item ${paginaActual == totalPaginas ? 'disabled' : ''}">
-                                <a class="page-link" href="ControladorReceta?pagina=${paginaActual + 1}">
-                                    <i class="bi bi-chevron-right"></i>
-                                </a>
+                                <a class="page-link" href="${pageContext.request.contextPath}/Controladores/ControladorReceta?pagina=${paginaActual + 1}">&raquo;</a>
                             </li>
                         </ul>
+
 
                     </nav>
                 </div>

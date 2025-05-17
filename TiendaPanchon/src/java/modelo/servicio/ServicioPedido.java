@@ -185,4 +185,32 @@ public class ServicioPedido implements Serializable {
         }
     }
 
+    // Devuelve pedidos paginados para un usuario
+    public List<Pedido> findPedidosPorUsuarioPaginado(Long idUsuario, int pagina, int tamanio) {
+        EntityManager em = getEntityManager();
+        try {
+            String jpql = "SELECT p FROM Pedido p WHERE p.usuario.id = :id ORDER BY p.fechaPedido DESC";
+            return em.createQuery(jpql, Pedido.class)
+                    .setParameter("id", idUsuario)
+                    .setFirstResult((pagina - 1) * tamanio)
+                    .setMaxResults(tamanio)
+                    .getResultList();
+        } finally {
+            em.close();
+        }
+    }
+
+// Contar total de pedidos para un usuario
+    public long contarPedidosPorUsuario(Long idUsuario) {
+        EntityManager em = getEntityManager();
+        try {
+            String jpql = "SELECT COUNT(p) FROM Pedido p WHERE p.usuario.id = :id";
+            return em.createQuery(jpql, Long.class)
+                    .setParameter("id", idUsuario)
+                    .getSingleResult();
+        } finally {
+            em.close();
+        }
+    }
+
 }

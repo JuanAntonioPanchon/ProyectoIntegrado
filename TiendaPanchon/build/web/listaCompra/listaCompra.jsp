@@ -13,6 +13,7 @@
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
         <link rel="stylesheet" href="../estilos/coloresPersonalizados.css">
         <link rel="stylesheet" href="../estilos/tablas.css">
+        <link rel="stylesheet" type="text/css" href="../estilos/paginacion.css">
         <style>
             a.enlace-producto {
                 text-decoration: none !important;
@@ -96,6 +97,28 @@
                     <div class="alert alert-warning text-center fs-5">No tienes productos en tu lista.</div>
                 </c:otherwise>
             </c:choose>
+
+            <!-- Paginación -->
+            <c:if test="${totalPaginas > 1}">
+                <nav aria-label="Paginación lista de compra" class="mt-4">
+                    <ul class="pagination pagination-personalizada justify-content-center">
+                        <li class="page-item ${paginaActual == 1 ? 'disabled' : ''}">
+                            <a class="page-link" href="${pageContext.request.contextPath}/Controladores.ListaCompra/ControladorListaCompra?pagina=${paginaActual - 1}">&laquo;</a>
+                        </li>
+
+                        <c:forEach begin="1" end="${totalPaginas}" var="i">
+                            <li class="page-item ${i == paginaActual ? 'active' : ''}">
+                                <a class="page-link" href="${pageContext.request.contextPath}/Controladores.ListaCompra/ControladorListaCompra?pagina=${i}">${i}</a>
+                            </li>
+                        </c:forEach>
+
+                        <li class="page-item ${paginaActual == totalPaginas ? 'disabled' : ''}">
+                            <a class="page-link" href="${pageContext.request.contextPath}/Controladores.ListaCompra/ControladorListaCompra?pagina=${paginaActual + 1}">&raquo;</a>
+                        </li>
+                    </ul>
+                </nav>
+            </c:if>
+
 
             <div class="text-center mt-4">
                 <a href="${pageContext.request.contextPath}/Controladores/ControladorInicio" class="btn btn-secondary">Volver a la tienda</a>

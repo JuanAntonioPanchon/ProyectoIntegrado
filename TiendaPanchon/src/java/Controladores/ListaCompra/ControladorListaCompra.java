@@ -1,7 +1,3 @@
-/*
- * ControladorListaCompra
- * El usuario listara, eliminara productos de la lista de la compra
- */
 package Controladores.ListaCompra;
 
 import java.io.IOException;
@@ -10,11 +6,7 @@ import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
-import javax.servlet.http.HttpServlet;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
-import modelo.entidades.ListaCompra;
+import javax.servlet.http.*;
 import modelo.entidades.Producto;
 import modelo.entidades.Usuario;
 import modelo.servicio.ServicioListaCompra;
@@ -31,15 +23,40 @@ public class ControladorListaCompra extends HttpServlet {
         HttpSession sesion = request.getSession();
         Usuario usuario = (Usuario) sesion.getAttribute("usuario");
 
+        String vista = "/listaCompra/listaCompra.jsp";
+
         if (usuario != null) {
-            List<Producto> productosLista = servicioLista.obtenerListaPorUsuario(usuario.getId());
+            int pagina = 1;
+            int tamanio = 10; // 10 productos por página
+
+            if (request.getParameter("pagina") != null) {
+                try {
+                    pagina = Integer.parseInt(request.getParameter("pagina"));
+                    if (pagina < 1) {
+                        pagina = 1;
+                    }
+                } catch (NumberFormatException e) {
+                    pagina = 1;
+                }
+            }
+
+            // Obtenemos productos paginados
+            List<Producto> productosLista = servicioLista.obtenerListaPorUsuarioPaginado(usuario.getId(), pagina, tamanio);
+
+            // Contamos total para calcular páginas
+            long total = servicioLista.contarProductosPorUsuario(usuario.getId());
+            int totalPaginas = (int) Math.ceil((double) total / tamanio);
+
             request.setAttribute("productosLista", productosLista);
+            request.setAttribute("paginaActual", pagina);
+            request.setAttribute("totalPaginas", totalPaginas);
+
         } else {
             request.setAttribute("error", "Usuario no autenticado.");
         }
 
         emf.close();
-        getServletContext().getRequestDispatcher("/listaCompra/listaCompra.jsp").forward(request, response);
+        getServletContext().getRequestDispatcher(vista).forward(request, response);
     }
 
     @Override
@@ -103,5 +120,4 @@ public class ControladorListaCompra extends HttpServlet {
         emf.close();
         response.sendRedirect(request.getContextPath() + "/Controladores.ListaCompra/ControladorListaCompra");
     }
-
 }
