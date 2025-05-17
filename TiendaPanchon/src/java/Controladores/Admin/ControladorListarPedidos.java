@@ -38,7 +38,6 @@ public class ControladorListarPedidos extends HttpServlet {
             Pedido pedido = servicioPedido.findPedido(idPedido);
 
             if (pedido != null) {
-                
                 List<PedidoProducto> productosPedidos = servicioPedido.findProductosPorPedido(idPedido);
                 request.setAttribute("pedido", pedido);
                 request.setAttribute("productos", productosPedidos);
@@ -46,16 +45,29 @@ public class ControladorListarPedidos extends HttpServlet {
             }
         }
 
-        
-        List<Pedido> pedidos = servicioPedido.findPedidoEntities();
-        for (Pedido pedido : pedidos) {
-            Usuario usuario = pedido.getUsuario();
-            if (usuario != null) {
-                pedido.setUsuario(usuario);
+        // Paginación
+        int pagina = 1;
+        int tamanio = 8; // 8 pedidos por página
+
+        if (request.getParameter("pagina") != null) {
+            try {
+                pagina = Integer.parseInt(request.getParameter("pagina"));
+            } catch (NumberFormatException e) {
+                pagina = 1;
             }
         }
 
+        // Obtener pedidos paginados
+        List<Pedido> pedidos = servicioPedido.findPedidoEntities(tamanio, (pagina - 1) * tamanio);
+
+        // Contar total para calcular número de páginas
+        int total = servicioPedido.getPedidoCount();
+        int totalPaginas = (int) Math.ceil((double) total / tamanio);
+
         request.setAttribute("pedidos", pedidos);
+        request.setAttribute("paginaActual", pagina);
+        request.setAttribute("totalPaginas", totalPaginas);
+
         getServletContext().getRequestDispatcher(vista).forward(request, response);
     }
 
@@ -78,17 +90,16 @@ public class ControladorListarPedidos extends HttpServlet {
             Pedido pedido = servicioPedido.findPedido(idPedido);
 
             if (pedido != null) {
-                
+
                 String estado = request.getParameter("estado");
                 if (estado != null && !estado.trim().isEmpty()) {
                     try {
-                        pedido.setEstado(EstadoPedidoEnum.valueOf(estado.toUpperCase())); 
+                        pedido.setEstado(EstadoPedidoEnum.valueOf(estado.toUpperCase()));
                     } catch (IllegalArgumentException e) {
                         request.setAttribute("error", "Estado no válido.");
                     }
                 }
 
-                
                 String precioStr = request.getParameter("precio");
                 if (precioStr != null && !precioStr.trim().isEmpty()) {
                     try {
@@ -99,11 +110,9 @@ public class ControladorListarPedidos extends HttpServlet {
                     }
                 }
 
-                
                 try {
-                    servicioPedido.edit(pedido); 
+                    servicioPedido.edit(pedido);
 
-                    
                     String referer = request.getHeader("Referer");
                     response.sendRedirect(referer != null ? referer : request.getContextPath() + "/Controladores.Admin/ControladorActualizarEstado");
                     return;
@@ -113,7 +122,6 @@ public class ControladorListarPedidos extends HttpServlet {
             }
         }
 
-        
         doGet(request, response);
     }
 }

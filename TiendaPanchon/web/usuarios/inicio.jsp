@@ -7,6 +7,7 @@
         <title>El Rincón de Laura</title>
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
         <link rel="stylesheet" href="../estilos/coloresPersonalizados.css">
+        <link rel="stylesheet" type="text/css" href="../estilos/paginacion.css">
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     </head>
     <body>
@@ -117,6 +118,30 @@
                             </div>
                         </c:forEach>
                     </div>
+                    <!-- Paginación -->
+                    <c:if test="${totalPaginas > 1}">
+                        <div class="d-flex justify-content-center mt-4">
+                            <nav aria-label="Paginación de productos">
+                                <ul class="pagination pagination-personalizada">
+                                    <li class="page-item ${paginaActual == 1 ? 'disabled' : ''}">
+                                        <a class="page-link" href="${pageContext.request.contextPath}/Controladores.Productos/ControladorListarProductos?id_categoria=${param.id_categoria}&pagina=${paginaActual - 1}">&laquo;</a>
+                                    </li>
+
+                                    <c:forEach begin="1" end="${totalPaginas}" var="i">
+                                        <li class="page-item ${i == paginaActual ? 'active' : ''}">
+                                            <a class="page-link" href="${pageContext.request.contextPath}/Controladores.Productos/ControladorListarProductos?id_categoria=${param.id_categoria}&pagina=${i}">${i}</a>
+                                        </li>
+                                    </c:forEach>
+
+                                    <li class="page-item ${paginaActual == totalPaginas ? 'disabled' : ''}">
+                                        <a class="page-link" href="${pageContext.request.contextPath}/Controladores.Productos/ControladorListarProductos?id_categoria=${param.id_categoria}&pagina=${paginaActual + 1}">&raquo;</a>
+                                    </li>
+                                </ul>
+                            </nav>
+                        </div>
+                    </c:if>
+
+
                 </div>
             </div>
         </div>

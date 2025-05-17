@@ -234,7 +234,7 @@ public class ServicioProducto implements Serializable {
             Producto producto = em.find(Producto.class, idProducto);
 
             if (producto != null) {
-                
+
                 for (ListaCompra lista : producto.getListasCompra()) {
                     lista.getProductos().remove(producto);
                     em.merge(lista);
@@ -242,7 +242,6 @@ public class ServicioProducto implements Serializable {
 
                 producto.getListasCompra().clear();
 
-                
                 em.remove(em.merge(producto));
             }
 
@@ -250,6 +249,30 @@ public class ServicioProducto implements Serializable {
         } catch (Exception e) {
             em.getTransaction().rollback();
             throw e;
+        } finally {
+            em.close();
+        }
+    }
+
+    public List<Producto> findProductosByCategoriaPaginado(Long idCategoria, int pagina, int tamanio) {
+        EntityManager em = getEntityManager();
+        try {
+            return em.createQuery("SELECT p FROM Producto p WHERE p.categoria.id = :idCategoria AND p.stock > 0 ORDER BY p.id", Producto.class)
+                    .setParameter("idCategoria", idCategoria)
+                    .setFirstResult((pagina - 1) * tamanio)
+                    .setMaxResults(tamanio)
+                    .getResultList();
+        } finally {
+            em.close();
+        }
+    }
+
+    public long contarProductosPorCategoria(Long idCategoria) {
+        EntityManager em = getEntityManager();
+        try {
+            return em.createQuery("SELECT COUNT(p) FROM Producto p WHERE p.categoria.id = :idCategoria AND p.stock > 0", Long.class)
+                    .setParameter("idCategoria", idCategoria)
+                    .getSingleResult();
         } finally {
             em.close();
         }

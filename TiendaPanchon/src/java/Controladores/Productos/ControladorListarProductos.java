@@ -27,7 +27,6 @@ public class ControladorListarProductos extends HttpServlet {
         String vista = "/usuarios/inicio.jsp";
 
         try {
-            // Cargar categorías SIEMPRE
             List<CategoriaProducto> categorias = sc.findCategoriaProductoEntities();
             request.setAttribute("categorias", categorias);
 
@@ -35,44 +34,49 @@ public class ControladorListarProductos extends HttpServlet {
             String novedadesStr = request.getParameter("novedades");
             Map<Long, Double> preciosOriginales = new HashMap<>();
 
-            if ("true".equals(ofertaStr)) {
-                List<Producto> productosConOferta = sp.findProductosConOferta();
-                // Filtrar productos con stock mayor que 0
-                productosConOferta.removeIf(producto -> producto.getStock() <= 0);
+            int pagina = 1;
+            int tamanio = 6; // 9 productos por página
 
-                for (Producto producto : productosConOferta) {
-                    Double precioOriginal = producto.getPrecio();
-                    if (producto.getOferta() != null && producto.getOferta()) {
-                        Double precioConDescuento = precioOriginal * (1 - producto.getDescuento() / 100);
-                        producto.setPrecio(Math.round(precioConDescuento * 100.0) / 100.0);
-                        preciosOriginales.put(producto.getId(), precioOriginal);
-                    }
+            // Obtener página solicitada
+            String paginaStr = request.getParameter("pagina");
+            if (paginaStr != null) {
+                try {
+                    pagina = Integer.parseInt(paginaStr);
+                } catch (NumberFormatException e) {
+                    pagina = 1;
                 }
-                request.setAttribute("productos", productosConOferta);
+            }
+
+            List<Producto> productos;
+            long totalProductos = 0;
+
+            if ("true".equals(ofertaStr)) {
+                productos = sp.findProductosConOferta();
+                productos.removeIf(p -> p.getStock() <= 0);
+                totalProductos = productos.size(); // Para ofertas tomamos el tamaño actual
+
+                // Aplicar paginación manual ya que método paginado no implementado para oferta
+                productos = productos.stream()
+                        .skip((pagina - 1) * tamanio)
+                        .limit(tamanio)
+                        .toList();
+
                 request.setAttribute("nombreCategoria", "Ofertas");
-                request.setAttribute("precioInicial", true);
 
             } else if ("true".equals(novedadesStr)) {
-                List<Producto> productosNovedades = sp.findProductosNovedades();
-                // Filtrar productos con stock mayor que 0
-                productosNovedades.removeIf(producto -> producto.getStock() <= 0);
+                productos = sp.findProductosNovedades();
+                productos.removeIf(p -> p.getStock() <= 0);
+                totalProductos = productos.size(); // Para novedades, igual
 
-                for (Producto producto : productosNovedades) {
-                    Double precioOriginal = producto.getPrecio();
-                    if (producto.getOferta() != null && producto.getOferta()) {
-                        Double precioConDescuento = precioOriginal * (1 - producto.getDescuento() / 100);
-                        producto.setPrecio(Math.round(precioConDescuento * 100.0) / 100.0);
-                        preciosOriginales.put(producto.getId(), precioOriginal);
-                    }
-                }
-                request.setAttribute("productos", productosNovedades);
+                productos = productos.stream()
+                        .skip((pagina - 1) * tamanio)
+                        .limit(tamanio)
+                        .toList();
+
                 request.setAttribute("nombreCategoria", "Novedades");
-                request.setAttribute("precioInicial", false);
 
             } else {
                 String idCategoriaStr = request.getParameter("id_categoria");
-
-                // Si no se ha enviado ninguna categoría, muestro la primera
                 if (idCategoriaStr == null && ofertaStr == null && novedadesStr == null) {
                     if (!categorias.isEmpty()) {
                         CategoriaProducto primera = categorias.get(0);
@@ -82,26 +86,34 @@ public class ControladorListarProductos extends HttpServlet {
 
                 if (idCategoriaStr != null) {
                     long idCategoria = Long.parseLong(idCategoriaStr);
-                    List<Producto> productos = sp.findProductosByCategoria(idCategoria);
+
+                    // Usar método paginado (tendrás que implementarlo en ServicioProducto)
+                    productos = sp.findProductosByCategoriaPaginado(idCategoria, pagina, tamanio);
+                    totalProductos = sp.contarProductosPorCategoria(idCategoria);
+
                     CategoriaProducto categoriaSeleccionada = sc.findCategoriaProducto(idCategoria);
                     request.setAttribute("nombreCategoria", categoriaSeleccionada.getNombre());
-
-                    // Filtrar productos con stock mayor que 0
-                    productos.removeIf(producto -> producto.getStock() <= 0);
-
-                    for (Producto producto : productos) {
-                        Double precioOriginal = producto.getPrecio();
-                        if (producto.getOferta() != null && producto.getOferta()) {
-                            Double precioConDescuento = precioOriginal * (1 - producto.getDescuento() / 100);
-                            producto.setPrecio(Math.round(precioConDescuento * 100.0) / 100.0);
-                            preciosOriginales.put(producto.getId(), precioOriginal);
-                        }
-                    }
-
-                    request.setAttribute("productos", productos);
+                } else {
+                    productos = List.of();
                 }
             }
+
+            // Redondear precios y calcular precios originales
+            for (Producto producto : productos) {
+                Double precioOriginal = producto.getPrecio();
+                if (producto.getOferta() != null && producto.getOferta()) {
+                    Double precioConDescuento = precioOriginal * (1 - producto.getDescuento() / 100);
+                    producto.setPrecio(Math.round(precioConDescuento * 100.0) / 100.0);
+                    preciosOriginales.put(producto.getId(), precioOriginal);
+                }
+            }
+
+            int totalPaginas = (int) Math.ceil((double) totalProductos / tamanio);
+
+            request.setAttribute("productos", productos);
             request.setAttribute("preciosOriginales", preciosOriginales);
+            request.setAttribute("paginaActual", pagina);
+            request.setAttribute("totalPaginas", totalPaginas);
 
         } catch (NumberFormatException e) {
             request.setAttribute("error", "ID de categoría no válido.");
