@@ -86,10 +86,5 @@ public class ListaCompra implements Serializable{
         return Objects.equals(this.id, other.id);
     }
 
-    @Override
-    public String toString() {
-        return "ListaCompra{" + "id=" + id + ", usuario=" + usuario + ", productos=" + productos + '}';
-    }
-    
     
 }

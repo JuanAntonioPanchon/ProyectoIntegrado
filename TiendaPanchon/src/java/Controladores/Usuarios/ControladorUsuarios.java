@@ -18,6 +18,7 @@ import modelo.entidades.Usuario;
 import modelo.entidades.RolEnum;
 import modelo.servicio.ServicioUsuario;
 import modelo.servicio.exceptions.NonexistentEntityException;
+import org.mindrot.jbcrypt.BCrypt;
 
 /**
  *
@@ -47,7 +48,7 @@ public class ControladorUsuarios extends HttpServlet {
                 request.setAttribute("password", usuario.getPassword());
                 request.setAttribute("direccion", usuario.getDireccion());
                 request.setAttribute("telefono", usuario.getTelefono());
-                
+
                 if (usuario.getRol() != null) {
                     request.setAttribute("rol", usuario.getRol().name());
                 } else {
@@ -100,14 +101,15 @@ public class ControladorUsuarios extends HttpServlet {
                 nuevoUsuario.setEmail(email);
                 nuevoUsuario.setDireccion(direccion);
                 nuevoUsuario.setTelefono(telefono);
-                
+
                 if (rol == null) {
                     rol = RolEnum.normal;
                 }
                 nuevoUsuario.setRol(rol);
 
                 if (password.equals(password2)) {
-                    nuevoUsuario.setPassword(password);
+                    String hash = BCrypt.hashpw(password, BCrypt.gensalt());
+                    nuevoUsuario.setPassword(hash); // ✅ Encriptado
                 } else {
                     error = "Las contraseñas no coinciden.";
                 }
@@ -129,9 +131,10 @@ public class ControladorUsuarios extends HttpServlet {
                 usuario.setDireccion(direccion);
                 usuario.setTelefono(telefono);
                 usuario.setRol(rol);
-                
+
                 if (password.equals(password2)) {
-                    usuario.setPassword(password);
+                    String hash = BCrypt.hashpw(password, BCrypt.gensalt());
+                    usuario.setPassword(hash); // ✅ encriptado correctamente
                 } else {
                     error = "Las contraseñas no coinciden.";
                 }
@@ -173,4 +176,3 @@ public class ControladorUsuarios extends HttpServlet {
         getServletContext().getRequestDispatcher(vista).forward(request, response);
     }
 }
-

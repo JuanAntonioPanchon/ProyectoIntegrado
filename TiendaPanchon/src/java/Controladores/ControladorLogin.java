@@ -15,6 +15,7 @@ import javax.servlet.http.HttpSession;
 import modelo.entidades.RolEnum;
 import modelo.entidades.Usuario;
 import modelo.servicio.ServicioUsuario;
+import org.mindrot.jbcrypt.BCrypt;
 
 /**
  *
@@ -59,35 +60,69 @@ public class ControladorLogin extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+
         String email = request.getParameter("email");
         String password = request.getParameter("password");
         String error = "";
 
         if (email == null || password == null || email.isEmpty() || password.isEmpty()) {
-            error = "El e-mail y la constraseña son obligatorias";
+            error = "El e-mail y la contraseña son obligatorios";
         } else {
             EntityManagerFactory emf = Persistence.createEntityManagerFactory("TiendaPanchonPU");
             ServicioUsuario su = new ServicioUsuario(emf);
-            Usuario usu = su.validarUsuario(email, password);
-            if (usu != null) {
-                HttpSession sesion = request.getSession();
-                sesion.setAttribute("usuario", usu);
-                if (usu.getRol() == RolEnum.normal) {
-                    response.sendRedirect("ControladorInicio");
-                    return;
-                } else if (usu.getRol() == RolEnum.admin)  {
-                    response.sendRedirect("../Controladores.Admin/ControladorAdmin");
-                    return;
-                }
+            Usuario usuario = su.findUsuarioByEmail(email);
 
+            if (usuario != null) {
+                String passGuardada = usuario.getPassword();
+
+                if (passGuardada.startsWith("$2a$")) {
+                    // Contraseña cifrada con bcrypt
+                    if (BCrypt.checkpw(password, passGuardada)) {
+                        iniciarSesion(usuario, request, response);
+                        emf.close();
+                        return;
+                    } else {
+                        error = "Contraseña incorrecta";
+                    }
+                } else {
+                    // Contraseña antigua sin hash → migramos
+                    if (password.equals(passGuardada)) {
+                        String nuevaHash = BCrypt.hashpw(password, BCrypt.gensalt());
+                        usuario.setPassword(nuevaHash);
+                        try {
+                            su.edit(usuario);
+                            iniciarSesion(usuario, request, response);
+                            emf.close();
+                            return;
+                        } catch (Exception e) {
+                            error = "Error actualizando la contraseña";
+                            e.printStackTrace();
+                        }
+                    } else {
+                        error = "Contraseña incorrecta";
+                    }
+                }
             } else {
-                error = "e-mail o contraseña incorrecta";
+                error = "El usuario no existe";
             }
+
             emf.close();
         }
+
         request.setAttribute("error", error);
-        
         getServletContext().getRequestDispatcher("/login.jsp").forward(request, response);
+    }
+
+    //Mejor aqui ya que no hay ningun servicio que se adapte del todo para meterlo
+    private void iniciarSesion(Usuario usu, HttpServletRequest request, HttpServletResponse response) throws IOException {
+        HttpSession sesion = request.getSession();
+        sesion.setAttribute("usuario", usu);
+
+        if (usu.getRol() == RolEnum.normal) {
+            response.sendRedirect("ControladorInicio");
+        } else if (usu.getRol() == RolEnum.admin) {
+            response.sendRedirect("../Controladores.Admin/ControladorAdmin");
+        }
     }
 
     /**

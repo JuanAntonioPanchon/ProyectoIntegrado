@@ -30,7 +30,7 @@ public class Usuario implements Serializable {
     private Long id;
     @Column(length = 100, nullable = false, unique = true)
     private String email;
-    @Column(length = 30, nullable = false)
+    @Column(length = 100, nullable = false)
     private String password;
     @Column(length = 20, nullable = false)
     private String nombre;
@@ -166,9 +166,4 @@ public class Usuario implements Serializable {
         return Objects.equals(this.id, other.id);
     }
 
-    @Override
-    public String toString() {
-        return "Usuario{" + "id=" + id + ", email=" + email + ", password=" + password + ", nombre=" + nombre + ", apellidos=" + apellidos + ", direccion=" + direccion + ", telefono=" + telefono + ", rol=" + rol + ", pedidos=" + pedidos + ", listaCompra=" + listaCompra + ", recetas=" + recetas + '}';
-    }
-    
 }

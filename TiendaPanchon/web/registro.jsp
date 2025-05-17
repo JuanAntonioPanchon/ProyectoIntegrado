@@ -31,7 +31,7 @@
                         </c:if>
                     </div>
 
-                    <form method="post" action="${pageContext.request.contextPath}/Controladores/ControladorUsuarios">
+                    <form method="post" action="${pageContext.request.contextPath}/Controladores.Usuarios/ControladorUsuarios">
 
                         <c:if test="${not empty idUsuario}">
                             <input type="hidden" name="idUsuario" value="${idUsuario}">
