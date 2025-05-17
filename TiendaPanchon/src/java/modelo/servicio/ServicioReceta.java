@@ -179,4 +179,26 @@ public class ServicioReceta implements Serializable {
         }
     }
 
+    public List<Receta> findRecetasPublicadasPaginado(int pagina, int tamanio) {
+        EntityManager em = getEntityManager();
+        try {
+            return em.createQuery("SELECT r FROM Receta r WHERE r.publicada = true ORDER BY r.id DESC", Receta.class)
+                    .setFirstResult((pagina - 1) * tamanio)
+                    .setMaxResults(tamanio)
+                    .getResultList();
+        } finally {
+            em.close();
+        }
+    }
+
+    public long contarRecetasPublicadas() {
+        EntityManager em = getEntityManager();
+        try {
+            return em.createQuery("SELECT COUNT(r) FROM Receta r WHERE r.publicada = true", Long.class)
+                    .getSingleResult();
+        } finally {
+            em.close();
+        }
+    }
+
 }
