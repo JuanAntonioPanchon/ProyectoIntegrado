@@ -290,4 +290,17 @@ public class ServicioProducto implements Serializable {
         }
     }
 
+    public Producto findProductoByNombre(String nombre) {
+        EntityManager em = getEntityManager();
+        try {
+            TypedQuery<Producto> query = em.createQuery(
+                    "SELECT p FROM Producto p WHERE LOWER(p.nombre) = LOWER(:nombre)", Producto.class);
+            query.setParameter("nombre", nombre.trim());
+            List<Producto> resultados = query.getResultList();
+            return resultados.isEmpty() ? null : resultados.get(0);
+        } finally {
+            em.close();
+        }
+    }
+
 }

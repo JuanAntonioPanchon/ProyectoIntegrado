@@ -28,7 +28,7 @@
                     <div class="mb-3">
                         <label class="form-label fw-bold">CATEGORÍA</label>
                         <select class="form-select" name="id_categoria" required>
-                            <option value="" disabled selected>Seleccione una categoría</option>
+                            <option value="" disabled ${empty id_categoria ? 'selected' : ''}>Seleccione una categoría</option>
                             <c:forEach var="categoria" items="${categorias}">
                                 <option value="${categoria.id}" ${categoria.id == id_categoria ? 'selected' : ''}>
                                     ${categoria.nombre}
@@ -55,11 +55,11 @@
                     <div class="mb-3">
                         <label class="form-label fw-bold d-block">NOVEDAD</label>
                         <div class="form-check form-check-inline">
-                            <input class="form-check-input" type="radio" name="novedad" value="true">
+                            <input class="form-check-input" type="radio" name="novedad" value="true" ${novedad == 'true' ? 'checked' : ''}>
                             <label class="form-check-label">Sí</label>
                         </div>
                         <div class="form-check form-check-inline">
-                            <input class="form-check-input" type="radio" name="novedad" value="false" checked>
+                            <input class="form-check-input" type="radio" name="novedad" value="false" ${novedad == 'false' ? 'checked' : ''}>
                             <label class="form-check-label">No</label>
                         </div>
                     </div>
@@ -94,8 +94,6 @@
         </main>
 
         <jsp:include page="/includes/footer.jsp" />
-
-
         <script type="text/javascript" src="../js/gestionProducto.js"></script>
     </body>
 </html>

@@ -30,14 +30,13 @@ public class ControladorProducto extends HttpServlet {
 
         request.setAttribute("categorias", sc.findCategoriaProductoEntities());
 
-        // Si se pasa un id de categoría, listar los productos de esa categoría
         String idCategoriaStr = request.getParameter("id_categoria");
         if (idCategoriaStr != null) {
             long idCategoria = Long.parseLong(idCategoriaStr);
             CategoriaProducto categoria = sc.findCategoriaProducto(idCategoria);
             request.setAttribute("productos", sp.findProductosByCategoria(idCategoria));
             request.setAttribute("nombreCategoria", categoria.getNombre());
-            request.setAttribute("idCategoriaSeleccionada", categoria.getId()); // necesario para los botones
+            request.setAttribute("idCategoriaSeleccionada", categoria.getId());
         }
 
         // Editar
@@ -59,6 +58,7 @@ public class ControladorProducto extends HttpServlet {
                     request.setAttribute("id_categoria", producto.getCategoria().getId());
                 }
 
+                request.setAttribute("categorias", sc.findCategoriaProductoEntities());
                 vista = "/admin/crearProducto.jsp";
             } catch (Exception e) {
                 request.setAttribute("error", "Error al obtener el producto.");
@@ -67,7 +67,7 @@ public class ControladorProducto extends HttpServlet {
 
         // Crear
         if (request.getParameter("crear") != null) {
-            request.setAttribute("categorias", sc.findCategoriaProductoEntities()); // ⬅️ Añadir esto
+            request.setAttribute("categorias", sc.findCategoriaProductoEntities());
             vista = "/admin/crearProducto.jsp";
         }
 
@@ -104,134 +104,85 @@ public class ControladorProducto extends HttpServlet {
                         Producto producto = sp.findProducto(idProducto);
                         if (producto != null) {
                             sp.destroy(idProducto);
-
                         }
                     } catch (Exception e) {
                         request.setAttribute("error", "Error al eliminar el producto.");
-
                     }
                 }
             }
 
-            if (request.getParameter("crear") != null) {
-                // Crear
-                Producto producto = new Producto();
-                producto.setNombre(request.getParameter("nombre"));
-                producto.setDescripcion(request.getParameter("descripcion"));
+            // CREAR o EDITAR
+            boolean esEditar = request.getParameter("editar") != null;
+            Long id = esEditar ? Long.valueOf(request.getParameter("id")) : null;
+            String nombre = request.getParameter("nombre").trim();
+            Producto duplicado = sp.findProductoByNombre(nombre);
+            Producto producto = esEditar ? sp.findProducto(id) : new Producto();
 
-                // Obtener y validar el precio
-                String precioStr = request.getParameter("precio");
-                if (precioStr != null && !precioStr.isEmpty()) {
-                    double precio = Double.valueOf(precioStr);
-                    producto.setPrecio(precio);
-
-                }
-
-                // Obtener y validar el stock
-                String stockStr = request.getParameter("stock");
-                if (stockStr != null && !stockStr.isEmpty()) {
-                    producto.setStock(Integer.valueOf(stockStr));
-                }
-
-                // Obtener y asignar el valor de novedad
-                producto.setNovedad(Boolean.valueOf(request.getParameter("novedad")));
-
-                producto.setFechaProducto(java.time.LocalDate.now());
-
-                // Obtener y asignar el descuento
-                String descuentoStr = request.getParameter("descuento");
-                if (descuentoStr != null && !descuentoStr.isEmpty()) {
-                    producto.setDescuento(Double.valueOf(descuentoStr));
-                }
-
-                // Cambiar la forma en que se establece la oferta
-                String ofertaStr = request.getParameter("oferta");
-                boolean oferta = "true".equals(ofertaStr);
-                producto.setOferta(oferta);
-
-                // Establecer la categoría del producto
-                String categoriaIdStr = request.getParameter("id_categoria");
-                if (categoriaIdStr != null && !categoriaIdStr.isEmpty()) {
-                    producto.setCategoria(sc.findCategoriaProducto(Long.valueOf(categoriaIdStr)));
-                }
-
-                // Asignar el precioVenta a partir del frontend
-                String precioVentaStr = request.getParameter("precioVenta");
-                if (precioVentaStr != null && !precioVentaStr.isEmpty()) {
-                    double precioFinal = Double.parseDouble(precioVentaStr);
-
-                }
-
-                request.setAttribute("precioVenta", precioVentaStr);
-
-                // Si hay más de 10 productos novedosos, desmarcar el más antiguo
-                if (sp.findProductosNovedades().size() == 10) {
-                    // Desmarcar el producto más antiguo como novedad
-                    Producto productoMasAntiguo = sp.findProductosNovedades().get(0); // Obtener el primero (más antiguo)
-                    productoMasAntiguo.setNovedad(false);
-                    sp.edit(productoMasAntiguo); // Actualizar el producto más antiguo
-                    producto.setNovedad(true);
-                } else {
-                    producto.setNovedad(true);
-                }
-
-                sp.create(producto);
-            } else if (request.getParameter("editar") != null) {
-                // Editar 
-                Long id = Long.valueOf(request.getParameter("id"));
-                Producto producto = sp.findProducto(id);
-
-                if (producto != null) {
-                    producto.setNombre(request.getParameter("nombre"));
-                    producto.setDescripcion(request.getParameter("descripcion"));
-
-                    // Obtener y validar el precio
-                    String precioStr = request.getParameter("precio");
-                    if (precioStr != null && !precioStr.isEmpty()) {
-                        double precio = Double.parseDouble(precioStr);
-                        producto.setPrecio(precio);
-
-                    }
-
-                    // Obtener y validar el stock
-                    String stockStr = request.getParameter("stock");
-                    if (stockStr != null && !stockStr.isEmpty()) {
-                        producto.setStock(Integer.parseInt(stockStr));
-                    }
-
-                    // Obtener y asignar el descuento
-                    String descuentoStr = request.getParameter("descuento");
-                    if (descuentoStr != null && !descuentoStr.isEmpty()) {
-                        producto.setDescuento(Double.parseDouble(descuentoStr));
-                    }
-
-                    // Cambiar la forma en que se establece la oferta
-                    String ofertaStr = request.getParameter("oferta");
-                    boolean oferta = "true".equals(ofertaStr);
-                    producto.setOferta(oferta);
-
-                    // Asignar el precioVenta a partir del frontend (como en crear)
-                    String precioVentaStr = request.getParameter("precioVenta");
-                    if (precioVentaStr != null && !precioVentaStr.isEmpty()) {
-                        double precioFinal = Double.parseDouble(precioVentaStr);
-
-                    }
-
-                    // Asignar el precioVenta a la petición para que esté disponible en el JSP
-                    request.setAttribute("precioVenta", precioVentaStr);
-
-                    // Actualizar la categoría del producto
-                    String categoriaIdStr = request.getParameter("id_categoria");
-                    if (categoriaIdStr != null && !categoriaIdStr.isEmpty()) {
-                        producto.setCategoria(sc.findCategoriaProducto(Long.parseLong(categoriaIdStr)));
-                    }
-
-                    sp.edit(producto);
-                }
+            if (duplicado != null && (!esEditar || !duplicado.getId().equals(producto.getId()))) {
+                request.setAttribute("error", "El producto \"" + nombre + "\" ya existe.");
+                request.setAttribute("id", request.getParameter("id"));
+                request.setAttribute("nombre", nombre);
+                request.setAttribute("descripcion", request.getParameter("descripcion"));
+                request.setAttribute("precio", request.getParameter("precio"));
+                request.setAttribute("stock", request.getParameter("stock"));
+                request.setAttribute("descuento", request.getParameter("descuento"));
+                request.setAttribute("oferta", request.getParameter("oferta"));
+                request.setAttribute("novedad", request.getParameter("novedad"));
+                request.setAttribute("precioVenta", request.getParameter("precioVenta"));
+                request.setAttribute("id_categoria", request.getParameter("id_categoria"));
+                request.setAttribute("categorias", sc.findCategoriaProductoEntities());
+                request.getRequestDispatcher("/admin/crearProducto.jsp").forward(request, response);
+                return;
             }
 
-            // Si hay una categoría seleccionada, redirigir a ella
+            producto.setNombre(nombre);
+            producto.setDescripcion(request.getParameter("descripcion"));
+
+            String precioStr = request.getParameter("precio");
+            if (precioStr != null && !precioStr.isEmpty()) {
+                producto.setPrecio(Double.parseDouble(precioStr));
+            }
+
+            String stockStr = request.getParameter("stock");
+            if (stockStr != null && !stockStr.isEmpty()) {
+                producto.setStock(Integer.parseInt(stockStr));
+            }
+
+            producto.setNovedad(Boolean.parseBoolean(request.getParameter("novedad")));
+            producto.setFechaProducto(java.time.LocalDate.now());
+
+            String descuentoStr = request.getParameter("descuento");
+            if (descuentoStr != null && !descuentoStr.isEmpty()) {
+                producto.setDescuento(Double.parseDouble(descuentoStr));
+            }
+
+            String ofertaStr = request.getParameter("oferta");
+            boolean oferta = "true".equals(ofertaStr);
+            producto.setOferta(oferta);
+
             String categoriaIdStr = request.getParameter("id_categoria");
+            if (categoriaIdStr != null && !categoriaIdStr.isEmpty()) {
+                producto.setCategoria(sc.findCategoriaProducto(Long.valueOf(categoriaIdStr)));
+            }
+
+            String precioVentaStr = request.getParameter("precioVenta");
+            request.setAttribute("precioVenta", precioVentaStr);
+
+            // Lógica de novedad
+            if (!esEditar && sp.findProductosNovedades().size() == 10) {
+                Producto masAntiguo = sp.findProductosNovedades().get(0);
+                masAntiguo.setNovedad(false);
+                sp.edit(masAntiguo);
+                producto.setNovedad(true);
+            }
+
+            if (esEditar) {
+                sp.edit(producto);
+            } else {
+                sp.create(producto);
+            }
+
+            // Redirigir a la categoría
             if (categoriaIdStr != null && !categoriaIdStr.isEmpty()) {
                 response.sendRedirect("ControladorProducto?id_categoria=" + categoriaIdStr);
             } else {
@@ -240,6 +191,7 @@ public class ControladorProducto extends HttpServlet {
 
         } catch (Exception e) {
             sesion.setAttribute("error", "Error al procesar la solicitud.");
+            response.sendRedirect("ControladorProducto");
         }
     }
 }
