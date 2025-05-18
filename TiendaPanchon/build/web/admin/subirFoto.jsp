@@ -25,15 +25,15 @@
 
                 <form method="post" enctype="multipart/form-data"
                       onsubmit="
-              const nuevo = document.getElementById('ficheroInput').files[0];
-              const ruta = '${producto.imagenes != null && !producto.imagenes.isEmpty() ? producto.imagenes[0] : ''}';
-              const anterior = ruta ? ruta.substring(ruta.lastIndexOf('_') + 1) : 'ninguna';
-              return confirm(
-                      'Se va a sustituir la imagen:\n\n' +
-                      'Anterior: ' + anterior + '\n' +
-                      'Nueva: ' + nuevo.name + '\n\n' +
-                      '\u00BFDeseas continuar?'
-                      );
+                              const nuevo = document.getElementById('ficheroInput').files[0];
+                              const ruta = '${producto.imagenes != null && !producto.imagenes.isEmpty() ? producto.imagenes[0] : ''}';
+                              const anterior = ruta ? ruta.substring(ruta.lastIndexOf('_') + 1) : 'ninguna';
+                              return confirm(
+                                      'Se va a sustituir la imagen:\n\n' +
+                                      'Anterior: ' + anterior + '\n' +
+                                      'Nueva: ' + nuevo.name + '\n\n' +
+                                      '\u00BFDeseas continuar?'
+                                      );
                       ">
 
                     <input type="file" name="fichero" id="ficheroInput" required>
@@ -47,9 +47,10 @@
 
 
 
-                <a href="/TiendaPanchon/Controladores.Admin/ControladorListarCategorias">
+                <a href="/TiendaPanchon/Controladores.Admin/ControladorProducto?id_categoria=${producto.categoria.id}">
                     <button class="boton">Volver a Productos</button>
                 </a>
+
             </div>
         </main>
 

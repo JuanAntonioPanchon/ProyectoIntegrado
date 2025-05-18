@@ -67,6 +67,7 @@ public class ControladorProducto extends HttpServlet {
 
         // Crear
         if (request.getParameter("crear") != null) {
+            request.setAttribute("categorias", sc.findCategoriaProductoEntities()); // ⬅️ Añadir esto
             vista = "/admin/crearProducto.jsp";
         }
 
@@ -229,14 +230,11 @@ public class ControladorProducto extends HttpServlet {
                 }
             }
 
-            // Obtener la URL de referencia (referer) desde el formulario
-            String referer = request.getParameter("referer");
-
-            // Si existe la URL de referencia, redirigir allí
-            if (referer != null && !referer.isEmpty()) {
-                response.sendRedirect(referer);
+            // Si hay una categoría seleccionada, redirigir a ella
+            String categoriaIdStr = request.getParameter("id_categoria");
+            if (categoriaIdStr != null && !categoriaIdStr.isEmpty()) {
+                response.sendRedirect("ControladorProducto?id_categoria=" + categoriaIdStr);
             } else {
-                // Si no existe, redirigir a la lista de productos
                 response.sendRedirect("ControladorProducto");
             }
 

@@ -98,7 +98,8 @@ public class ControladorSubirFoto extends HttpServlet {
             }
         }
 
-        response.sendRedirect(request.getContextPath() + "/Controladores.Admin/ControladorProducto");
+        response.sendRedirect(request.getContextPath() + "/Controladores.Admin/ControladorProducto?id_categoria=" + producto.getCategoria().getId());
+
     }
 
 }

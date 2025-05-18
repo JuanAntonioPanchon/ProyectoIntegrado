@@ -28,7 +28,7 @@
                     <div class="mb-3">
                         <label class="form-label fw-bold">CATEGORÍA</label>
                         <select class="form-select" name="id_categoria" required>
-                            <option disabled selected>SELECCIONE UN TIPO DE ROL</option>
+                            <option value="" disabled selected>Seleccione una categoría</option>
                             <c:forEach var="categoria" items="${categorias}">
                                 <option value="${categoria.id}" ${categoria.id == id_categoria ? 'selected' : ''}>
                                     ${categoria.nombre}
@@ -95,7 +95,7 @@
 
         <jsp:include page="/includes/footer.jsp" />
 
-        
+
         <script type="text/javascript" src="../js/gestionProducto.js"></script>
     </body>
 </html>

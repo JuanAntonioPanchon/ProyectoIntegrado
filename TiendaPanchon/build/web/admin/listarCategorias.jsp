@@ -108,11 +108,15 @@
                                                            class="btn btn-editar btn-sm mb-1">Editar</a>
 
 
-                                                        <form action="/TiendaPanchon/Controladores.Admin/ControladorProducto" method="POST"
-                                                              onsubmit="return confirm('¿Eliminar ${producto.nombre}?');" class="d-inline">
+                                                        <form action="/TiendaPanchon/Controladores.Admin/ControladorProducto"
+                                                              method="POST"
+                                                              onsubmit="return confirm('¿Eliminar ${producto.nombre}?');"
+                                                              class="d-inline">
                                                             <input type="hidden" name="id" value="${producto.id}">
+                                                            <input type="hidden" name="id_categoria" value="${idCategoriaSeleccionada}">
                                                             <button type="submit" name="eliminar" value="Eliminar" class="btn btn-eliminar btn-sm">Eliminar</button>
                                                         </form>
+
 
                                                         <a href="../Controladores.Admin/ControladorSubirFoto?productoId=${producto.id}"
                                                            class="btn btn-ver btn-sm">Añadir Imágenes</a>
