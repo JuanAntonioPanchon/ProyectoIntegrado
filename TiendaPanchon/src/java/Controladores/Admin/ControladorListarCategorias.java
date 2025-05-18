@@ -58,6 +58,7 @@ public class ControladorListarCategorias extends HttpServlet {
                     List<Producto> productos = scp.cargarProductosDeCategoria(primeraCategoria.getId());
                     request.setAttribute("productos", productos);
                     request.setAttribute("nombreCategoria", primeraCategoria.getNombre());
+                    request.setAttribute("idCategoriaSeleccionada", primeraCategoria.getId());
                 }
 
                 vista = "/admin/listarCategorias.jsp"; 

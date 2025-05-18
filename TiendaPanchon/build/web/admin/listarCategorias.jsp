@@ -7,7 +7,6 @@
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>Listar Categorías</title>
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-        <link rel="stylesheet" type="text/css" href="../estilos/estilos.css">
         <link rel="stylesheet" type="text/css" href="../estilos/coloresPersonalizados.css">
     </head>
     <body>
@@ -23,38 +22,46 @@
                         <table class="table table-bordered table-striped">
                             <thead class="table-success text-center">
                                 <tr>
-                                    <th>Nombre</th>
-                                    <th>Editar</th>
-                                    <th>Eliminar</th>
+                                    <th colspan="3">Nombre</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 <c:forEach var="categoria" items="${categorias}">
                                     <tr>
-                                        <td>
-                                            <a href="/TiendaPanchon/Controladores.Admin/ControladorProducto?id_categoria=${categoria.id}" class="btn btn-outline-success">
+                                        <td colspan="3">
+                                            <a href="/TiendaPanchon/Controladores.Admin/ControladorProducto?id_categoria=${categoria.id}"
+                                               class="btn btn-outline-success w-100 mb-1">
                                                 ${categoria.nombre}
                                             </a>
-                                        </td>
-                                        <td>
-                                            <a href="/TiendaPanchon/Controladores.Admin/ControladorListarCategorias?id=${categoria.id}" class="btn btn-sm btn-warning">
-                                                Editar
-                                            </a>
-                                        </td>
-                                        <td>
-                                            <form action="/TiendaPanchon/Controladores.Admin/ControladorListarCategorias" method="POST" onsubmit="return confirmarEliminacion('${categoria.nombre}');" style="display:inline;">
-                                                <input type="hidden" name="id" value="${categoria.id}">
-                                                <input type="submit" name="eliminar" value="Eliminar" class="btn btn-sm btn-danger">
-                                            </form>
                                         </td>
                                     </tr>
                                 </c:forEach>
                             </tbody>
                         </table>
                     </c:if>
-                    <a href="/TiendaPanchon/Controladores.Admin/ControladorListarCategorias?crear" class="btn btn-sm btn-success">
-                        Crear Categoria Nueva
+
+                    <a href="/TiendaPanchon/Controladores.Admin/ControladorListarCategorias?crear"
+                       class="btn btn-sm btn-success w-100 mb-3">
+                        Crear Categoría Nueva
                     </a>
+
+                    <c:if test="${not empty idCategoriaSeleccionada}">
+                        <div class="border rounded bg-light p-2">
+                            <p class="text-center fw-bold mb-2">
+                                Categoría seleccionada: 
+                                <span class="text-primary">${nombreCategoria}</span>
+                            </p>
+                            <div class="d-grid gap-2">
+                                <a href="/TiendaPanchon/Controladores.Admin/ControladorListarCategorias?id=${idCategoriaSeleccionada}"
+                                   class="btn btn-warning">
+                                    Editar Categoría
+                                </a>
+                            </div>
+                        </div>
+                    </c:if>
+
+
+
                 </div>
 
                 <!-- Columna de Productos (derecha) -->
@@ -62,7 +69,8 @@
                     <section>
                         <div class="d-flex justify-content-between align-items-center mb-3">
                             <h3>PRODUCTOS: ${nombreCategoria}</h3>
-                            <a href="/TiendaPanchon/Controladores.Admin/ControladorProducto?crear=true" class="btn btn-primary">
+                            <a href="/TiendaPanchon/Controladores.Admin/ControladorProducto?crear=true"
+                               class="btn btn-primary">
                                 Añadir Producto Nuevo
                             </a>
                         </div>
@@ -109,12 +117,17 @@
                                                         </c:if>
                                                     </td>
                                                     <td>
-                                                        <a href="/TiendaPanchon/Controladores.Admin/ControladorProducto?editar=true&id_producto=${producto.id}" class="btn btn-sm btn-warning mb-1">Editar</a>
-                                                        <form action="/TiendaPanchon/Controladores.Admin/ControladorProducto" method="POST" style="display:inline;">
+                                                        <a href="/TiendaPanchon/Controladores.Admin/ControladorProducto?editar=true&id_producto=${producto.id}"
+                                                           class="btn btn-sm btn-warning mb-1">Editar</a>
+                                                        <form action="/TiendaPanchon/Controladores.Admin/ControladorProducto"
+                                                              method="POST" style="display:inline;">
                                                             <input type="hidden" name="id" value="${producto.id}">
-                                                            <button type="submit" name="eliminar" value="Eliminar" class="btn btn-sm btn-danger mb-1" onclick="return confirm('¿Eliminar ${producto.nombre}?');">Eliminar</button>
+                                                            <button type="submit" name="eliminar" value="Eliminar"
+                                                                    class="btn btn-sm btn-danger mb-1"
+                                                                    onclick="return confirm('¿Eliminar ${producto.nombre}?');">Eliminar</button>
                                                         </form>
-                                                        <a href="../Controladores.Admin/ControladorSubirFoto?productoId=${producto.id}" class="btn btn-sm btn-info">Añadir Imágenes</a>
+                                                        <a href="../Controladores.Admin/ControladorSubirFoto?productoId=${producto.id}"
+                                                           class="btn btn-sm btn-info">Añadir Imágenes</a>
                                                     </td>
                                                 </tr>
                                             </c:forEach>
@@ -132,8 +145,6 @@
         </main>
 
         <jsp:include page="/includes/footer.jsp" />
-
-       
         <script type="text/javascript" src="../js/gestionCategoria.js"></script>
     </body>
 </html>

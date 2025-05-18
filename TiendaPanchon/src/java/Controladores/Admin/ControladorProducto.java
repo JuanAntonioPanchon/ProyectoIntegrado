@@ -9,6 +9,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import modelo.entidades.CategoriaProducto;
 import modelo.entidades.Producto;
 import modelo.servicio.ServicioCategoriaProducto;
 import modelo.servicio.ServicioProducto;
@@ -27,15 +28,16 @@ public class ControladorProducto extends HttpServlet {
 
         String vista = "/admin/listarCategorias.jsp";
 
-        
         request.setAttribute("categorias", sc.findCategoriaProductoEntities());
 
         // Si se pasa un id de categoría, listar los productos de esa categoría
         String idCategoriaStr = request.getParameter("id_categoria");
         if (idCategoriaStr != null) {
             long idCategoria = Long.parseLong(idCategoriaStr);
+            CategoriaProducto categoria = sc.findCategoriaProducto(idCategoria);
             request.setAttribute("productos", sp.findProductosByCategoria(idCategoria));
-            request.setAttribute("nombreCategoria", sc.findCategoriaProducto(idCategoria).getNombre());
+            request.setAttribute("nombreCategoria", categoria.getNombre());
+            request.setAttribute("idCategoriaSeleccionada", categoria.getId()); // necesario para los botones
         }
 
         // Editar
@@ -82,7 +84,6 @@ public class ControladorProducto extends HttpServlet {
             }
         }
 
-        
         getServletContext().getRequestDispatcher(vista).forward(request, response);
     }
 
@@ -102,11 +103,11 @@ public class ControladorProducto extends HttpServlet {
                         Producto producto = sp.findProducto(idProducto);
                         if (producto != null) {
                             sp.destroy(idProducto);
-                            
+
                         }
                     } catch (Exception e) {
                         request.setAttribute("error", "Error al eliminar el producto.");
-                        
+
                     }
                 }
             }
@@ -122,7 +123,7 @@ public class ControladorProducto extends HttpServlet {
                 if (precioStr != null && !precioStr.isEmpty()) {
                     double precio = Double.valueOf(precioStr);
                     producto.setPrecio(precio);
-                    
+
                 }
 
                 // Obtener y validar el stock
@@ -157,10 +158,9 @@ public class ControladorProducto extends HttpServlet {
                 String precioVentaStr = request.getParameter("precioVenta");
                 if (precioVentaStr != null && !precioVentaStr.isEmpty()) {
                     double precioFinal = Double.parseDouble(precioVentaStr);
-                    
+
                 }
 
-                
                 request.setAttribute("precioVenta", precioVentaStr);
 
                 // Si hay más de 10 productos novedosos, desmarcar el más antiguo
@@ -173,8 +173,6 @@ public class ControladorProducto extends HttpServlet {
                 } else {
                     producto.setNovedad(true);
                 }
-
-                
 
                 sp.create(producto);
             } else if (request.getParameter("editar") != null) {
@@ -191,7 +189,7 @@ public class ControladorProducto extends HttpServlet {
                     if (precioStr != null && !precioStr.isEmpty()) {
                         double precio = Double.parseDouble(precioStr);
                         producto.setPrecio(precio);
-                        
+
                     }
 
                     // Obtener y validar el stock
@@ -215,7 +213,7 @@ public class ControladorProducto extends HttpServlet {
                     String precioVentaStr = request.getParameter("precioVenta");
                     if (precioVentaStr != null && !precioVentaStr.isEmpty()) {
                         double precioFinal = Double.parseDouble(precioVentaStr);
-                        
+
                     }
 
                     // Asignar el precioVenta a la petición para que esté disponible en el JSP
