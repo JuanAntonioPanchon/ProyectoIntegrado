@@ -61,11 +61,11 @@ public class ControladorListarCategorias extends HttpServlet {
                     request.setAttribute("idCategoriaSeleccionada", primeraCategoria.getId());
                 }
 
-                vista = "/admin/listarCategorias.jsp"; 
+                vista = "/admin/listarCategorias.jsp";
             } // Crear una nueva categoría
             else if (request.getParameter("crear") != null) {
-                vista = "/admin/crearCategoria.jsp"; 
-                
+                vista = "/admin/crearCategoria.jsp";
+
             } // Editar una categoría
             else if (request.getParameter("id") != null) {
                 try {
@@ -73,10 +73,10 @@ public class ControladorListarCategorias extends HttpServlet {
                     CategoriaProducto categoria = scp.findCategoriaProducto(id);
                     request.setAttribute("id", categoria.getId());
                     request.setAttribute("nombre", categoria.getNombre());
-                    vista = "/admin/crearCategoria.jsp"; 
+                    vista = "/admin/crearCategoria.jsp";
                 } catch (Exception e) {
                     request.setAttribute("error", "Error al obtener la categoría.");
-                    vista = "/admin/crearCategoria.jsp"; 
+                    vista = "/admin/crearCategoria.jsp";
                 }
             } // Eliminar una categoría
             else if (request.getParameter("eliminar") != null) {
@@ -123,26 +123,41 @@ public class ControladorListarCategorias extends HttpServlet {
 
         if (usuario != null) {
             try {
-                // Comprobar si la categoría ya existe
+                // Crear nueva categoría
                 if (request.getParameter("crear") != null) {
                     if (scp.findCategoriaProductoByName(nombre) != null) {
-                        
-                        error = "La categoría ya existe.";
+                        error = "La categoría \"" + nombre + "\" ya existe.";
+                        request.setAttribute("nombre", nombre);
+                        request.setAttribute("error", error);
+                        vista = "/admin/crearCategoria.jsp";
+                        emf.close();
+                        request.getRequestDispatcher(vista).forward(request, response);
+                        return;
                     } else {
-                        // Crear una nueva categoría
                         CategoriaProducto categoria = new CategoriaProducto();
                         categoria.setNombre(nombre);
                         scp.create(categoria);
                     }
-                } // Editar una categoría
+                } // Editar categoría existente
                 else if (request.getParameter("editar") != null) {
                     long id = Long.parseLong(idStr);
+                    CategoriaProducto existente = scp.findCategoriaProductoByName(nombre);
+                    if (existente != null && existente.getId() != id) {
+                        error = "Ya existe una categoría con el nombre \"" + nombre + "\".";
+                        request.setAttribute("id", id);
+                        request.setAttribute("nombre", nombre);
+                        request.setAttribute("error", error);
+                        vista = "/admin/crearCategoria.jsp";
+                        emf.close();
+                        request.getRequestDispatcher(vista).forward(request, response);
+                        return;
+                    }
                     CategoriaProducto categoria = scp.findCategoriaProducto(id);
                     categoria.setNombre(nombre);
                     scp.edit(categoria);
-                } // Eliminar una categoría
+                } // Eliminar categoría
                 else if (request.getParameter("eliminar") != null) {
-                    long id = Long.parseLong(request.getParameter("id"));
+                    long id = Long.parseLong(idStr);
                     try {
                         scp.destroy(id);
                     } catch (NonexistentEntityException e) {
@@ -150,20 +165,27 @@ public class ControladorListarCategorias extends HttpServlet {
                     }
                 }
             } catch (Exception e) {
-                // Error genérico al crear la categoría
-                error = "Error al crear la categoría.";
+                error = "Error al procesar la categoría.";
             }
         } else {
             error = "Usuario no autenticado.";
         }
 
         emf.close();
+
         if (!error.isEmpty()) {
             sesion.setAttribute("error", error);
-            
             request.getRequestDispatcher("/admin/crearCategoria.jsp").forward(request, response);
+            return;
         }
-        response.sendRedirect("ControladorListarCategorias");
+
+        // Redirigir al referer si existe
+        String referer = request.getParameter("referer");
+        if (referer != null && !referer.isEmpty()) {
+            response.sendRedirect(referer);
+        } else {
+            response.sendRedirect("ControladorListarCategorias");
+        }
     }
 
 }
