@@ -17,15 +17,37 @@
                 <jsp:include page="/includes/headerUsuario.jsp" />
             </c:when>
             <c:otherwise>
-                <header class="bg-light py-2">
-                    <div class="container d-flex justify-content-between align-items-center">
-                        <div class="d-flex align-items-center">
-                            <img src="../imagenes/elRinconDeLaura.jpeg" alt="Logo" class="rounded-circle me-2" style="width: 60px;">
-                            <h1 class="h4 mb-0">EL RINCÓN DE LAURA</h1>
+                <header>
+                    <nav class="navbar navbar-expand-md colorVerde text-black px-4">
+                        <div class="container-fluid">
+
+                            <!-- Logo y Título -->
+                            <div class="d-flex align-items-center">
+                                <img src="../imagenes/elRinconDeLaura.jpeg" alt="Logo El Rincón de Laura"
+                                     class="rounded-circle me-3" style="width: 60px;">
+                                <a class="navbar-brand fw-bold mb-0 text-black text-decoration-none" 
+                                   href="${pageContext.request.contextPath}/Controladores/ControladorInicio">
+                                    EL RINCÓN DE LAURA
+                                </a>
+                            </div>
+
+                            <!-- Icono siempre visible, texto solo en md+ -->
+                            <ul class="navbar-nav ms-auto">
+                                <li class="nav-item mx-1">
+                                    <a class="nav-link text-black fw-bold" 
+                                       href="${pageContext.request.contextPath}/Controladores/ControladorLogin">
+                                        <i class="bi bi-box-arrow-in-right me-1"></i>
+                                        <span class="d-none d-md-inline">Iniciar Sesión</span>
+                                    </a>
+                                </li>
+                            </ul>
+
                         </div>
-                        <a class="btn btn-outline-dark" href="${pageContext.request.contextPath}/Controladores/ControladorLogin">Iniciar Sesión</a>
-                    </div>
+                    </nav>
                 </header>
+
+
+
             </c:otherwise>
         </c:choose>
 
