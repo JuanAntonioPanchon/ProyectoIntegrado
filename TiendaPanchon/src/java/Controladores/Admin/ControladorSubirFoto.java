@@ -28,21 +28,26 @@ public class ControladorSubirFoto extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        // Recoger los parámetros de la URL
         String productoIdStr = request.getParameter("productoId");
 
         if (productoIdStr != null) {
             try {
                 long productoId = Long.parseLong(productoIdStr);
                 request.setAttribute("productoId", productoId);
+
+                // ✅ Cargar el producto para mostrar nombre de imagen anterior
+                EntityManagerFactory emf = Persistence.createEntityManagerFactory("TiendaPanchonPU");
+                ServicioProducto sp = new ServicioProducto(emf);
+                Producto producto = sp.findProducto(productoId);
+                request.setAttribute("producto", producto);
+
             } catch (NumberFormatException e) {
-                request.setAttribute("error", "ID de receta no válido.");
+                request.setAttribute("error", "ID de producto no válido.");
             }
         } else {
-            request.setAttribute("error", "Falta el parámetro recetaId.");
+            request.setAttribute("error", "Falta el parámetro productoId.");
         }
 
-        // Redirigir a la vista de subida de archivos
         String vista = "/admin/subirFoto.jsp";
         getServletContext().getRequestDispatcher(vista).forward(request, response);
     }
@@ -56,7 +61,6 @@ public class ControladorSubirFoto extends HttpServlet {
         Part fichero = request.getPart("fichero");
         String nombreOriginal = fichero.getSubmittedFileName();
 
-        
         String productoIdStr = request.getParameter("productoId");
         Long productoId = Long.parseLong(productoIdStr);
 
@@ -82,10 +86,7 @@ public class ControladorSubirFoto extends HttpServlet {
         Producto producto = sr.findProducto(productoId);
 
         if (producto != null) {
-            List<String> imagenes = producto.getImagenes();
-            if (imagenes == null) {
-                imagenes = new ArrayList<>();
-            }
+            List<String> imagenes = new ArrayList<>();
             imagenes.add("imagenesProductos/" + nuevoNombreFichero);
             producto.setImagenes(imagenes);
 
@@ -97,7 +98,6 @@ public class ControladorSubirFoto extends HttpServlet {
             }
         }
 
-        
         response.sendRedirect(request.getContextPath() + "/Controladores.Admin/ControladorProducto");
     }
 
