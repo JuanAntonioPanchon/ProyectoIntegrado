@@ -36,12 +36,22 @@ th {
     background-color: #6c8c4c !important;
     color: white !important;
     border: none !important;
-    transition: background-color 0.3s ease;
+    padding: 4px 8px !important;
+    font-size: 14px !important;
+    line-height: 1.1 !important;
+    height: 28px !important;
+    display: inline-block;
+    vertical-align: middle;
+    text-align: center;
+    white-space: nowrap;
+    border-radius: 4px;
 }
+
 
 .btn-editar:hover {
     background-color: #5b743f !important;
 }
+
 
 
 .btn-eliminar {
@@ -89,22 +99,4 @@ th {
 .btn-ver:hover {
     background-color: #4a6d87 !important;
 }
-
-
-
-
-
-/* Asegura el responsive de la tabla sin scroll lateral */
-
-/*
-.table-responsive {
-    overflow-x: auto;
-}
-
-.table {
-    width: 100%;
-    table-layout: auto;
-    word-break: break-word;
-}
-*/
 
