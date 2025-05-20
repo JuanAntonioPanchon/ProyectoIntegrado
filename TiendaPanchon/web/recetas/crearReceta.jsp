@@ -1,13 +1,13 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<%@ page contentType="text/html" pageEncoding="ISO-8859-1" %>
+<%@ page contentType="text/html" pageEncoding="UTF-8" %>
 <!DOCTYPE html>
 <html>
     <head>
-        <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-        <title>Gesti�n de Recetas</title>
+        <meta charset="UTF-8">
+        <title>Gestión de Recetas</title>
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-        <link rel="stylesheet" type="text/css" href="../estilos/coloresPersonalizados.css">
-        <link rel="stylesheet" type="text/css" href="../estilos/tablas.css">
+        <link rel="stylesheet" href="../estilos/coloresPersonalizados.css">
+        <link rel="stylesheet" href="../estilos/tablas.css">
     </head>
     <body class="colorFondo text-dark">
 
@@ -29,37 +29,34 @@
                     <input type="hidden" name="idUsuario" value="${idUsuario}">
 
                     <div class="mb-3">
-                        <label class="form-label fw-bold">T�TULO</label>
-                        <input type="text" class="form-control" name="titulo" value="${titulo}" maxlength="50" required>
+                        <label class="form-label fw-bold">TÍTULO</label>
+                        <input type="text" class="form-control" name="titulo" value="${titulo}" maxlength="30" required>
+                        <div class="small text-danger" id="errorTitulo"></div>
                     </div>
 
                     <div class="mb-3">
                         <label class="form-label fw-bold">INGREDIENTES</label>
-                        <textarea class="form-control" name="ingredientes" maxlength="500" required>${ingredientes}</textarea>
+                        <textarea class="form-control" name="ingredientes" maxlength="400" required>${ingredientes}</textarea>
+                        <div class="small text-danger" id="errorIngredientes"></div>
                     </div>
 
                     <div class="mb-3">
-                        <label class="form-label fw-bold">DESCRIPCI�N</label>
-                        <textarea class="form-control" name="descripcion" maxlength="500" required>${descripcion}</textarea>
+                        <label class="form-label fw-bold">DESCRIPCIÓN</label>
+                        <textarea class="form-control" name="descripcion" maxlength="400" required>${descripcion}</textarea>
+                        <div class="small text-danger" id="errorDescripcion"></div>
                     </div>
 
                     <div class="mb-3">
                         <label class="form-label fw-bold">PUBLICADA</label><br>
-                        <input type="radio" name="publicada" value="1" ${publicada != null && publicada ? 'checked' : ''}> S�
+                        <input type="radio" name="publicada" value="1" ${publicada != null && publicada ? 'checked' : ''}> Sí
                         <input type="radio" name="publicada" value="0" ${publicada == null || !publicada ? 'checked' : ''}> No
                     </div>
 
                     <div class="d-flex justify-content-between mt-4">
                         <button type="button" id="btnCancelar" class="btn btn-volver px-4">Cancelar</button>
-
-                        <button type="button" id="btnAceptar" class="btn btn-crear px-4">
-                            Aceptar
-                        </button>
-
+                        <button type="button" id="btnAceptar" class="btn btn-crear px-4">Aceptar</button>
                         <c:if test="${not empty id}">
-                            <button type="button" id="btnEliminar" class="btn btn-eliminar">
-                                Eliminar
-                            </button>
+                            <button type="button" id="btnEliminar" class="btn btn-eliminar">Eliminar</button>
                         </c:if>
                     </div>
 
@@ -72,67 +69,99 @@
 
         <jsp:include page="/includes/footer.jsp" />
 
-        <!-- Librer�as necesarias -->
         <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-        <script type="text/javascript" src="../js/gestionReceta.js"></script>
 
         <script>
             document.addEventListener('DOMContentLoaded', function () {
-                const btnCancelar = document.getElementById('btnCancelar');
-                const btnAceptar = document.getElementById('btnAceptar');
-                const btnEliminar = document.getElementById('btnEliminar');
                 const form = document.getElementById('formReceta');
+                const titulo = form['titulo'];
+                const ingredientes = form['ingredientes'];
+                const descripcion = form['descripcion'];
 
-                if (btnCancelar) {
-                    btnCancelar.addEventListener('click', function () {
-                        Swal.fire({
-                            title: '�Cancelar cambios?',
-                            text: 'Perder�s la informaci�n que no hayas guardado.',
-                            icon: 'warning',
-                            confirmButtonColor: '#336b30',
-                            showCancelButton: true,
-                            confirmButtonText: 'S�, cancelar',
-                            cancelButtonText: 'No, volver'
-                        }).then((result) => {
-                            if (result.isConfirmed) {
-                                window.history.back();
-                            }
-                        });
-                    });
+                const errorTitulo = document.getElementById("errorTitulo");
+                const errorIngredientes = document.getElementById("errorIngredientes");
+                const errorDescripcion = document.getElementById("errorDescripcion");
+
+                function validarCampos() {
+                    let valido = true;
+
+                    const regexTitulo = /^[A-ZÁÉÍÓÚÑ][\w\sÁÉÍÓÚÑáéíóúñü]{0,29}$/;
+                    const regexTexto = /^[^<>]{1,400}$/;
+
+                    if (!regexTitulo.test(titulo.value.trim())) {
+                        errorTitulo.textContent = "Debe comenzar con mayúscula. Solo letras, números y espacios. Máx. 30 caracteres.";
+                        valido = false;
+                    } else {
+                        errorTitulo.textContent = "";
+                    }
+
+                    if (!regexTexto.test(ingredientes.value.trim())) {
+                        errorIngredientes.textContent = "Texto inválido o demasiado largo. No se permiten '<' ni '>'";
+                        valido = false;
+                    } else {
+                        errorIngredientes.textContent = "";
+                    }
+
+                    if (!regexTexto.test(descripcion.value.trim())) {
+                        errorDescripcion.textContent = "Texto inválido o demasiado largo. No se permiten '<' ni '>'";
+                        valido = false;
+                    } else {
+                        errorDescripcion.textContent = "";
+                    }
+
+                    return valido;
                 }
 
-                if (btnAceptar) {
-                    btnAceptar.addEventListener('click', function () {
-                        const accion = '${empty id ? 'crear' : 'editar'}';
-                        Swal.fire({
-                            title: '�Confirmar?',
-                            text: accion === 'crear' ? '�Deseas crear esta receta?' : '�Deseas guardar los cambios?',
-                            icon: 'question',
-                            showCancelButton: true,
-                            confirmButtonColor: '#336b30',
-                            confirmButtonText: 'S�, continuar',
-                            cancelButtonText: 'No, revisar'
-                        }).then((result) => {
-                            if (result.isConfirmed) {
-                                const inputAccion = document.createElement('input');
-                                inputAccion.type = 'hidden';
-                                inputAccion.name = accion;
-                                form.appendChild(inputAccion);
-                                form.submit();
-                            }
-                        });
-                    });
-                }
+                document.getElementById('btnAceptar').addEventListener('click', function () {
+                    if (!validarCampos())
+                        return;
 
+                    const accion = '${empty id ? 'crear' : 'editar'}';
+                    Swal.fire({
+                        title: '¿Confirmar?',
+                        text: accion === 'crear' ? '¿Deseas crear esta receta?' : '¿Deseas guardar los cambios?',
+                        icon: 'question',
+                        showCancelButton: true,
+                        confirmButtonColor: '#336b30',
+                        confirmButtonText: 'Sí, continuar',
+                        cancelButtonText: 'No, revisar'
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            const inputAccion = document.createElement('input');
+                            inputAccion.type = 'hidden';
+                            inputAccion.name = accion;
+                            form.appendChild(inputAccion);
+                            form.submit();
+                        }
+                    });
+                });
+
+                document.getElementById('btnCancelar').addEventListener('click', function () {
+                    Swal.fire({
+                        title: '¿Cancelar cambios?',
+                        text: 'Perderás la información que no hayas guardado.',
+                        icon: 'warning',
+                        confirmButtonColor: '#336b30',
+                        showCancelButton: true,
+                        confirmButtonText: 'Sí, cancelar',
+                        cancelButtonText: 'No, volver'
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            window.history.back();
+                        }
+                    });
+                });
+
+                const btnEliminar = document.getElementById('btnEliminar');
                 if (btnEliminar) {
                     btnEliminar.addEventListener('click', function () {
                         Swal.fire({
-                            title: '�Eliminar receta?',
-                            text: '�Est�s seguro de eliminar la receta \"${titulo}\"?',
+                            title: '¿Eliminar receta?',
+                            text: '¿Estás seguro de eliminar la receta "${titulo}"?',
                             icon: 'warning',
                             showCancelButton: true,
                             confirmButtonColor: '#d33',
-                            confirmButtonText: 'S�, eliminar',
+                            confirmButtonText: 'Sí, eliminar',
                             cancelButtonText: 'Cancelar'
                         }).then((result) => {
                             if (result.isConfirmed) {

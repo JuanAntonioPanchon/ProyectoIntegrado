@@ -24,7 +24,7 @@ import javax.persistence.TemporalType;
  * @author juan-antonio
  */
 @Entity
-public class Receta implements Serializable{
+public class Receta implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @Id
@@ -42,7 +42,8 @@ public class Receta implements Serializable{
     @ManyToOne
     @JoinColumn(name = "id_usuario", nullable = false)
     private Usuario usuario;
-    
+
+    @Column(length = 400, nullable = false)
     private String ingredientes;
 
     public Long getId() {
@@ -101,10 +102,6 @@ public class Receta implements Serializable{
         this.ingredientes = ingredientes;
     }
 
-    
-
-    
-
     @Override
     public int hashCode() {
         int hash = 0;
@@ -114,7 +111,7 @@ public class Receta implements Serializable{
 
     @Override
     public boolean equals(Object object) {
-        
+
         if (!(object instanceof Receta)) {
             return false;
         }

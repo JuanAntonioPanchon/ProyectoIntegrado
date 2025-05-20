@@ -170,3 +170,7 @@ ALTER TABLE lista_compra_producto ADD CONSTRAINT FK_lista_compra_producto_id_pro
 
 
 */
+
+/* tamaño de ingrediente
+ALTER TABLE INGREDIENTES MODIFY INGREDIENTES VARCHAR(400) NOT NULL;
+*/

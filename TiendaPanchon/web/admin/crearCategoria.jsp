@@ -46,5 +46,52 @@
         </main>
 
         <jsp:include page="/includes/footer.jsp" />
+
+
+        <script>
+            document.addEventListener("DOMContentLoaded", function () {
+                const form = document.querySelector("form[action*='ControladorListarCategorias']");
+                const inputNombre = form.querySelector("input[name='nombre']");
+                const regex = /^[A-Z¡…Õ”⁄—][a-zA-Z·ÈÌÛ˙¡…Õ”⁄Ò— ]{0,14}$/;
+                const mensaje = "Debe comenzar con may˙scula, solo letras y espacios. M·x. 15 caracteres.";
+
+                function mostrarError(input, mensaje) {
+                    eliminarError(input);
+                    const div = document.createElement("div");
+                    div.className = "text-danger mt-1 small";
+                    div.textContent = mensaje;
+                    input.parentElement.appendChild(div);
+                }
+
+                function eliminarError(input) {
+                    const error = input.parentElement.querySelector(".text-danger");
+                    if (error)
+                        error.remove();
+                }
+
+                function validarNombreCategoria() {
+                    const valor = inputNombre.value.trim();
+                    if (!regex.test(valor)) {
+                        mostrarError(inputNombre, mensaje);
+                        return false;
+                    } else {
+                        eliminarError(inputNombre);
+                        return true;
+                    }
+                }
+
+                inputNombre.addEventListener("input", validarNombreCategoria);
+
+                form.addEventListener("submit", function (e) {
+                    if (!validarNombreCategoria()) {
+                        e.preventDefault();
+                    }
+                });
+
+                // Mostrar mensaje si ya tiene un valor incorrecto al cargar
+                validarNombreCategoria();
+            });
+        </script>
+
     </body>
 </html>
