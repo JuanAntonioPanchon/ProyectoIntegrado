@@ -11,16 +11,12 @@
         <link rel="stylesheet" type="text/css" href="../estilos/tablas.css">
         <link rel="stylesheet" type="text/css" href="../estilos/recetas.css">
         <link rel="stylesheet" type="text/css" href="../estilos/paginacion.css">
-
-
-        <!-- si lo saco a otro archivo me da problemas -->
         <style>
             .imagen-eliminar:hover {
                 cursor: pointer;
                 opacity: 0.7;
             }
         </style>
-
     </head>
     <body>
 
@@ -75,14 +71,15 @@
                             </c:choose>
                             <div class="card-body d-flex flex-column">
                                 <h5 class="card-title">${receta.titulo}</h5>
+                                <p class="card-text"><strong>Visibilidad:</strong> ${receta.publicada ? "Pública" : "Privada"}</p>
                                 <p class="card-text"><strong>Ingredientes:</strong> ${receta.ingredientes}</p>
-
-                                <div class="d-flex justify-content-between align-items-center mt-auto">
+                                <div class="d-flex justify-content-between align-items-center mt-auto flex-wrap gap-2">
                                     <a href="ControladorReceta?id=${receta.id}&pagina=${paginaActual}" class="btn btn-editar">Editar</a>
 
-                                    <span class="mx-3">
-                                        <strong> ${receta.publicada ? "Pública" : "Privada"} </strong>
-                                    </span>
+                                    <a href="../Controladores.Usuarios/ControladorSubirFichero?recetaId=${receta.id}" class="btn btn-crear">
+                                        Añadir Imágenes
+                                    </a>
+
                                     <button type="button" class="btn btn-ver" data-bs-toggle="modal" data-bs-target="#modalReceta${receta.id}">
                                         Ver
                                     </button>
@@ -101,8 +98,8 @@
                                 </div>
                                 <div class="modal-body">
                                     <p><strong>Ingredientes:</strong> ${receta.ingredientes}</p>
-                                    <p><strong>Descripción:</strong> ${receta.descripcion}</p>
                                     <p><strong>Visibilidad:</strong> ${receta.publicada ? "Pública" : "Privada"}</p>
+                                    <p><strong>Descripción:</strong> ${receta.descripcion}</p>
                                     <div class="row">
                                         <c:forEach var="imagen" items="${receta.imagenes}">
                                             <div class="col-md-4 mb-2 d-flex justify-content-center align-items-center">
@@ -113,9 +110,6 @@
                                 </div>
                                 <div class="modal-footer d-flex justify-content-between">
                                     <button type="button" class="btn btn-volver" data-bs-dismiss="modal">Cerrar</button>
-                                    <a href="../Controladores.Usuarios/ControladorSubirFichero?recetaId=${receta.id}">
-                                        <button class="btn btn-crear">Añadir Imágenes</button>
-                                    </a>
                                 </div>
                             </div>
                         </div>
@@ -141,12 +135,9 @@
                                 <a class="page-link" href="${pageContext.request.contextPath}/Controladores/ControladorReceta?pagina=${paginaActual + 1}">&raquo;</a>
                             </li>
                         </ul>
-
-
                     </nav>
                 </div>
             </c:if>
-
 
             <div class="mt-4">
                 <c:choose>
@@ -162,10 +153,6 @@
         </main>
 
         <jsp:include page="/includes/footer.jsp" />
-
-
-
-
         <script src="../js/eliminarImagenReceta.js"></script>
 
     </body>
