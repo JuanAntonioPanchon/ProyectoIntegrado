@@ -11,9 +11,6 @@
         <link rel="stylesheet" href="../estilos/tablas.css">
     </head>
     <body>
-
-        <jsp:include page="/includes/headerUsuario.jsp" /> 
-
         <main>
             <section>
                 <div class="form-container mx-auto p-3 shadow rounded-4 my-4">
