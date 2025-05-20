@@ -117,7 +117,7 @@ public class ControladorUsuarios extends HttpServlet {
                 if (error.isEmpty()) {
                     su.create(nuevoUsuario);
                     sesion.setAttribute("usuario", nuevoUsuario);
-                    response.sendRedirect(request.getContextPath() + "/usuarios/inicio.jsp");
+                    response.sendRedirect(request.getContextPath() + "/Controladores/ControladorLogin");
                     return;
                 }
             } catch (Exception e) {
