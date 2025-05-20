@@ -107,14 +107,17 @@
                                                         <a href="/TiendaPanchon/Controladores.Admin/ControladorProducto?editar=true&id_producto=${producto.id}"
                                                            class="btn btn-editar btn-sm mb-1">Editar</a>
 
-
                                                         <form action="/TiendaPanchon/Controladores.Admin/ControladorProducto"
                                                               method="POST"
-                                                              onsubmit="return confirm('¿Eliminar ${producto.nombre}?');"
                                                               class="d-inline">
                                                             <input type="hidden" name="id" value="${producto.id}">
                                                             <input type="hidden" name="id_categoria" value="${idCategoriaSeleccionada}">
-                                                            <button type="submit" name="eliminar" value="Eliminar" class="btn btn-eliminar btn-sm">Eliminar</button>
+                                                            <button type="button"
+                                                                    class="btn btn-eliminar btn-sm"
+                                                                    onclick="confirmarEliminacion(this)"
+                                                                    data-nombre="${producto.nombre}">
+                                                                Eliminar
+                                                            </button>
                                                         </form>
 
 
@@ -139,5 +142,35 @@
         <jsp:include page="/includes/footer.jsp" />
 
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+        <script>
+                                                                        function confirmarEliminacion(boton) {
+                                                                            const form = boton.closest('form');
+                                                                            const nombre = boton.dataset.nombre;
+
+                                                                            Swal.fire({
+                                                                                title: '¿Eliminar producto?',
+                                                                                text: `¿Estás seguro de eliminar el producto? Esta acción no se puede deshacer.`,
+                                                                                icon: 'warning',
+                                                                                showCancelButton: true,
+                                                                                confirmButtonColor: '#d33',
+                                                                                cancelButtonText: 'Cancelar',
+                                                                                confirmButtonText: 'Sí, eliminar'
+                                                                            }).then((result) => {
+                                                                                if (result.isConfirmed) {
+                                                                                    // 🔁 Insertamos el campo que se pierde al usar .submit()
+                                                                                    const inputEliminar = document.createElement('input');
+                                                                                    inputEliminar.type = 'hidden';
+                                                                                    inputEliminar.name = 'eliminar';
+                                                                                    inputEliminar.value = 'Eliminar';
+                                                                                    form.appendChild(inputEliminar);
+
+                                                                                    form.submit();
+                                                                                }
+                                                                            });
+                                                                        }
+        </script>
+
+
     </body>
 </html>
