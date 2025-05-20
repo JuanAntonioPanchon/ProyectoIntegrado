@@ -39,7 +39,7 @@
                     <div class="d-flex flex-wrap gap-2">
                         <c:forEach var="categoria" items="${categorias}">
                             <a href="/TiendaPanchon/Controladores.Admin/ControladorProducto?id_categoria=${categoria.id}"
-                               class="btn btn-outline-success">
+                               class="btn-categoria">
                                 ${categoria.nombre}
                             </a>
                         </c:forEach>
@@ -139,6 +139,5 @@
         <jsp:include page="/includes/footer.jsp" />
 
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-        <script type="text/javascript" src="../js/gestionCategoria.js"></script>
     </body>
 </html>

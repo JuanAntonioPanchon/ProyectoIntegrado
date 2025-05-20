@@ -29,10 +29,12 @@
                         <a href="${header.referer}" class="btn btn-volver px-4">Cancelar</a>
                         <button type="submit" name="${empty id ? 'crear' : 'editar'}" class="btn btn-crear px-4">Aceptar</button>
                         <c:if test="${not empty id}">
-                            <button type="submit" name="eliminar" class="btn btn-eliminar" onclick="return confirm('¿Estás seguro de que deseas eliminar la categoría?');">
+                            <button type="submit" name="eliminar" class="btn btn-eliminar"
+                                    onclick="return confirm('¿Estás seguro que quieres eliminar la categoría \'${nombre}\'?\nSe eliminarán todos los productos asociados a esta categoría.');">
                                 Eliminar
                             </button>
                         </c:if>
+
 
                     </div>
 
@@ -44,8 +46,5 @@
         </main>
 
         <jsp:include page="/includes/footer.jsp" />
-
-        <
-        <script type="text/javascript" src="../js/gestionCategoria.js"></script>
     </body>
 </html>

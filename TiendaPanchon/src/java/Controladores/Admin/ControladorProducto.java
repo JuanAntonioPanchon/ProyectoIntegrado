@@ -1,6 +1,7 @@
 package Controladores.Admin;
 
 import java.io.IOException;
+import java.util.List;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
 import javax.servlet.ServletException;
@@ -54,6 +55,7 @@ public class ControladorProducto extends HttpServlet {
                     request.setAttribute("stock", producto.getStock());
                     request.setAttribute("oferta", producto.getOferta());
                     request.setAttribute("descuento", producto.getDescuento());
+                    request.setAttribute("novedad", producto.getNovedad());
                     request.setAttribute("precioVenta", producto.getPrecio());
                     request.setAttribute("id_categoria", producto.getCategoria().getId());
                 }
@@ -98,6 +100,8 @@ public class ControladorProducto extends HttpServlet {
             String eliminarProductoStr = request.getParameter("eliminar");
             if (eliminarProductoStr != null && eliminarProductoStr.equals("Eliminar")) {
                 String idProductoStr = request.getParameter("id");
+                String idCategoriaStr = request.getParameter("id_categoria"); // 🔁 capturamos id de categoría
+
                 if (idProductoStr != null) {
                     try {
                         long idProducto = Long.parseLong(idProductoStr);
@@ -109,6 +113,14 @@ public class ControladorProducto extends HttpServlet {
                         request.setAttribute("error", "Error al eliminar el producto.");
                     }
                 }
+
+                // 🔁 Redirigir manteniendo la categoría seleccionada
+                if (idCategoriaStr != null && !idCategoriaStr.isEmpty()) {
+                    response.sendRedirect("ControladorProducto?id_categoria=" + idCategoriaStr);
+                } else {
+                    response.sendRedirect("ControladorProducto");
+                }
+                return;
             }
 
             // CREAR o EDITAR
@@ -169,10 +181,20 @@ public class ControladorProducto extends HttpServlet {
             request.setAttribute("precioVenta", precioVentaStr);
 
             // Lógica de novedad
-            if (!esEditar && sp.findProductosNovedades().size() == 10) {
-                Producto masAntiguo = sp.findProductosNovedades().get(0);
-                masAntiguo.setNovedad(false);
-                sp.edit(masAntiguo);
+            if (!esEditar) {
+                List<Producto> novedades = sp.findProductosNovedades();
+
+                if (novedades.size() >= 10) {
+                    // Desmarcar los más antiguos hasta tener solo 9
+                    int exceso = novedades.size() - 9;
+                    for (int i = 0; i < exceso; i++) {
+                        Producto antiguo = novedades.get(i);
+                        antiguo.setNovedad(false);
+                        sp.edit(antiguo);
+                    }
+                }
+
+                // Marcar este nuevo producto como novedad
                 producto.setNovedad(true);
             }
 
