@@ -89,7 +89,7 @@
 
                     <div class="d-flex justify-content-between mt-4">
                         <a href="${header.referer}" class="btn btn-volver px-4">Cancelar</a>
-                        <button type="submit" name="${empty id ? 'crear' : 'editar'}" class="btn btn-crear px-4">Aceptar</button>
+                        <button type="button" class="btn btn-crear px-4" id="btnAceptar">Aceptar</button>
                     </div>
 
                     <c:if test="${not empty error}">
@@ -101,6 +101,8 @@
         </main>
 
         <jsp:include page="/includes/footer.jsp" />
+        <!-- SweetAlert2 -->
+        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
         <script>
             function calcularPrecioVenta() {
@@ -162,6 +164,47 @@
                         mensaje: "El precio final debe ser un número positivo."
                     }
                 };
+
+                // SweetAlert2 Confirmar
+                const btnAceptar = form.querySelector("button.btn-crear");
+                btnAceptar.addEventListener("click", function (e) {
+                    e.preventDefault();
+
+                    let valido = true;
+                    Object.keys(campos).forEach(nombreCampo => {
+                        if (!validarCampo(nombreCampo))
+                            valido = false;
+                    });
+
+                    if (!valido)
+                        return;
+
+                    document.getElementsByName("descuento")[0].removeAttribute("disabled");
+                    document.getElementsByName("precioVenta")[0].removeAttribute("disabled");
+
+                    const nombreProducto = form["nombre"].value.trim();
+                    const accion = '${empty id ? "crear" : "editar"}';
+
+                    Swal.fire({
+                        title: accion === 'crear' ? '¿Crear producto?' : '¿Guardar cambios?',
+                        text: accion === 'crear'
+                                ? `¿Estás seguro de que quieres crear el producto?`
+                                : `Se modificarán los datos del producto. ¿Estas seguro de continuar?`,
+                        icon: 'question',
+                        showCancelButton: true,
+                        confirmButtonColor: '#336b30',
+                        cancelButtonText: 'No, volver',
+                        confirmButtonText: 'Sí, continuar'
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            const inputAccion = document.createElement('input');
+                            inputAccion.type = 'hidden';
+                            inputAccion.name = accion;
+                            form.appendChild(inputAccion);
+                            form.submit();
+                        }
+                    });
+                });
 
                 function mostrarError(input, mensaje) {
                     eliminarError(input);
@@ -264,6 +307,8 @@
                     });
                 }
             });
+
+
         </script>
 
     </body>
