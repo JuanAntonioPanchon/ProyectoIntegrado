@@ -23,53 +23,61 @@
                     <div class="alert alert-danger mt-3 text-center fw-bold">${error}</div>
                 </c:if>
 
-                <form method="post" action="/TiendaPanchon/Controladores.Admin/ControladorGestionarUsuarios">
+                <form method="post" action="/TiendaPanchon/Controladores.Admin/ControladorGestionarUsuarios" id="formAdminUsuario">
                     <c:if test="${usuario != null}">
                         <input type="hidden" name="idUsuario" value="${usuario.id}">
                     </c:if>
 
                     <input type="hidden" name="tipo" value="usuario">
 
-                    <div class="mb-3">
+                    <div class="mb-2">
                         <label class="form-label fw-bold">NOMBRE</label>
-                        <input type="text" class="form-control" name="nombre" value="${usuario != null ? usuario.nombre : ''}" required>
+                        <input type="text" class="form-control" name="nombre" value="${usuario.nombre}" maxlength="20" required>
                     </div>
 
-                    <div class="mb-3">
+                    <div class="mb-2">
                         <label class="form-label fw-bold">APELLIDOS</label>
-                        <input type="text" class="form-control" name="apellidos" value="${usuario != null ? usuario.apellidos : ''}" required>
+                        <input type="text" class="form-control" name="apellidos" value="${usuario.apellidos}" maxlength="20" required>
                     </div>
 
-                    <div class="mb-3">
+                    <div class="mb-2">
                         <label class="form-label fw-bold">DIRECCIÓN</label>
-                        <input type="text" class="form-control" name="direccion" value="${usuario != null ? usuario.direccion : ''}" required>
+                        <input type="text" class="form-control" name="direccion" value="${usuario.direccion}" maxlength="100" required>
                     </div>
 
-                    <div class="mb-3">
+                    <div class="mb-2">
                         <label class="form-label fw-bold">TELÉFONO</label>
-                        <input type="text" class="form-control" name="telefono" value="${usuario != null ? usuario.telefono : ''}" required>
+                        <input type="text" class="form-control" name="telefono" value="${usuario.telefono}" maxlength="9" required>
                     </div>
 
-                    <div class="mb-3">
+                    <div class="mb-2">
                         <label class="form-label fw-bold">EMAIL</label>
-                        <input type="email" class="form-control" name="email" value="${usuario != null ? usuario.email : ''}" required>
+                        <input type="email" class="form-control" name="email" value="${usuario.email}" maxlength="50" required>
                     </div>
 
-                    <div class="mb-3">
+                    <div class="mb-2">
                         <label class="form-label fw-bold">CONTRASEÑA</label>
-                        <input type="password" class="form-control" name="password" value="${usuario != null ? usuario.password : ''}" required>
+                        <input type="password" class="form-control" name="password" value="${usuario.password}" maxlength="30" required>
                     </div>
 
-                    <div class="mb-3">
+                    <ul id="requisitosPassword" class="small mb-2">
+                        <li class="text-danger">Al menos una letra mayúscula</li>
+                        <li class="text-danger">Al menos un número</li>
+                        <li class="text-danger">Al menos un símbolo</li>
+                        <li class="text-danger">Al menos 8 caracteres</li>
+                    </ul>
+
+                    <div class="mb-2">
                         <label class="form-label fw-bold">REPETIR CONTRASEÑA</label>
-                        <input type="password" class="form-control" name="password2" value="${usuario != null ? usuario.password : ''}" required>
+                        <input type="password" class="form-control" name="password2" value="${usuario.password}" maxlength="30" required>
+                        <div id="feedbackPassword2" class="small mt-1"></div>
                     </div>
 
-                    <div class="mb-3">
+                    <div class="mb-2">
                         <label class="form-label fw-bold">ROL</label>
                         <select class="form-select" name="rol">
-                            <option value="normal" ${usuario != null && usuario.rol == 'normal' ? 'selected' : ''}>Normal</option>
-                            <option value="admin" ${usuario != null && usuario.rol == 'admin' ? 'selected' : ''}>Admin</option>
+                            <option value="normal" ${usuario.rol == 'normal' ? 'selected' : ''}>Normal</option>
+                            <option value="admin" ${usuario.rol == 'admin' ? 'selected' : ''}>Admin</option>
                         </select>
                     </div>
 
@@ -83,7 +91,125 @@
 
         <jsp:include page="/includes/footer.jsp" />
 
-        
-        <script type="text/javascript" src="../js/gestionUsuario.js"></script>
+        <script>
+            document.addEventListener("DOMContentLoaded", function () {
+                const form = document.getElementById("formAdminUsuario");
+                const campos = {
+                    nombre: {
+                        regex: /^[A-ZÁÉÍÓÚÑ][A-Za-zÁÉÍÓÚÑáéíóúñü ]{0,19}$/,
+                        mensaje: "Debe empezar con mayúscula. Máx. 20 letras y espacios."
+                    },
+                    apellidos: {
+                        regex: /^[A-ZÁÉÍÓÚÑ][A-Za-zÁÉÍÓÚÑáéíóúñü ]{0,19}$/,
+                        mensaje: "Debe empezar con mayúscula. Máx. 20 letras y espacios."
+                    },
+                    direccion: {
+                        regex: /^(?=.*\d)[A-Za-z0-9ÁÉÍÓÚÑáéíóúñü ,\/]{1,100}$/,
+                        mensaje: "Debe tener letras, números, / o , y al menos un número."
+                    },
+                    telefono: {
+                        regex: /^[679][0-9]{8}$/,
+                        mensaje: "Debe tener 9 dígitos y empezar por 6, 7 o 9."
+                    },
+                    email: {
+                        regex: /^[\w-.]+@[\w-]+\.[a-z]{2,}$/i,
+                        mensaje: "Debe ser un email válido."
+                    }
+                };
+
+                function crearMensajeError(input, mensaje) {
+                    eliminarMensajeError(input);
+                    const div = document.createElement("div");
+                    div.className = "text-danger mt-1 small";
+                    div.textContent = mensaje;
+                    input.parentElement.appendChild(div);
+                }
+
+                function eliminarMensajeError(input) {
+                    const viejo = input.parentElement.querySelector(".text-danger");
+                    if (viejo)
+                        viejo.remove();
+                }
+
+                function validarCampo(nombreCampo) {
+                    const input = form[nombreCampo];
+                    const {regex, mensaje} = campos[nombreCampo];
+                    if (!regex.test(input.value.trim())) {
+                        crearMensajeError(input, mensaje);
+                        return false;
+                    } else {
+                        eliminarMensajeError(input);
+                        return true;
+                    }
+                }
+
+                Object.keys(campos).forEach(campo => {
+                    const input = form[campo];
+                    validarCampo(campo); // mostrar mensajes iniciales
+                    input.addEventListener("input", () => validarCampo(campo));
+                });
+
+                const passInput = form["password"];
+                const pass2Input = form["password2"];
+                const feedbackList = document.getElementById("requisitosPassword").children;
+
+                const criterios = {
+                    mayuscula: /[A-Z]/,
+                    numero: /[0-9]/,
+                    simbolo: /[^A-Za-z0-9]/,
+                    longitud: /.{8,}/
+                };
+
+                function actualizarFeedbackPassword() {
+                    Object.keys(criterios).forEach((key, i) => {
+                        feedbackList[i].className = criterios[key].test(passInput.value) ? "text-success" : "text-danger";
+                    });
+                }
+
+                const feedbackCoincidencia = document.getElementById("feedbackPassword2");
+
+                function validarCoincidenciaPasswords() {
+                    if (pass2Input.value === "") {
+                        feedbackCoincidencia.textContent = "";
+                        return;
+                    }
+                    if (passInput.value === pass2Input.value) {
+                        feedbackCoincidencia.textContent = "Las contraseñas coinciden.";
+                        feedbackCoincidencia.className = "text-success mt-1 small";
+                    } else {
+                        feedbackCoincidencia.textContent = "Las contraseñas no coinciden.";
+                        feedbackCoincidencia.className = "text-danger mt-1 small";
+                    }
+                }
+
+                passInput.addEventListener("input", () => {
+                    actualizarFeedbackPassword();
+                    validarCoincidenciaPasswords();
+                });
+                pass2Input.addEventListener("input", validarCoincidenciaPasswords);
+
+                form.addEventListener("submit", function (e) {
+                    let valido = true;
+                    Object.keys(campos).forEach(campo => {
+                        if (!validarCampo(campo))
+                            valido = false;
+                    });
+
+                    actualizarFeedbackPassword();
+                    validarCoincidenciaPasswords();
+
+                    const passOk = Object.values(criterios).every(regex => regex.test(passInput.value));
+                    const iguales = passInput.value === pass2Input.value;
+
+                    if (!valido || !passOk || !iguales) {
+                        e.preventDefault();
+                    }
+                });
+
+                actualizarFeedbackPassword();
+                validarCoincidenciaPasswords();
+            });
+        </script>
+
     </body>
 </html>

@@ -76,16 +76,12 @@ public class ControladorLogin extends HttpServlet {
                 String passGuardada = usuario.getPassword();
 
                 if (passGuardada.startsWith("$2a$")) {
-                    // Contraseña cifrada con bcrypt
                     if (BCrypt.checkpw(password, passGuardada)) {
                         iniciarSesion(usuario, request, response);
                         emf.close();
                         return;
-                    } else {
-                        error = "Contraseña incorrecta";
                     }
                 } else {
-                    // Contraseña antigua sin hash → migramos
                     if (password.equals(passGuardada)) {
                         String nuevaHash = BCrypt.hashpw(password, BCrypt.gensalt());
                         usuario.setPassword(nuevaHash);
@@ -95,16 +91,14 @@ public class ControladorLogin extends HttpServlet {
                             emf.close();
                             return;
                         } catch (Exception e) {
-                            error = "Error actualizando la contraseña";
                             e.printStackTrace();
                         }
-                    } else {
-                        error = "Contraseña incorrecta";
                     }
                 }
-            } else {
-                error = "El usuario no existe";
             }
+
+// Si falla todo lo anterior, mostrar mensaje genérico
+            error = "Usuario o contraseña incorrectos";
 
             emf.close();
         }

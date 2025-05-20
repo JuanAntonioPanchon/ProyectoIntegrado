@@ -49,11 +49,15 @@
                                     <div class="d-grid gap-1 d-md-flex justify-content-md-center">
                                         <a href="ControladorGestionarUsuarios?accion=editar&idUsuario=${usuario.id}" class="btn btn-editar btn-sm">Editar</a>
 
-                                        <form method="post" action="ControladorGestionarUsuarios" onsubmit="return confirm('¿Seguro que quieres eliminar al usuario ${usuario.nombre} ${usuario.apellidos} con email: (${usuario.email})?');" class="d-inline">
+                                        <form method="post" action="ControladorGestionarUsuarios?pagina=${paginaActual}"
+                                              onsubmit="return confirm('¿Seguro que quieres eliminar al usuario ${usuario.nombre} ${usuario.apellidos} con email: (${usuario.email})?');"
+                                              class="d-inline">
                                             <input type="hidden" name="idUsuario" value="${usuario.id}">
                                             <input type="hidden" name="accion" value="Eliminar">
+                                            <input type="hidden" name="pagina" value="${paginaActual}"> <!-- 🔽 Añadido -->
                                             <button type="submit" class="btn btn-eliminar btn-sm">Eliminar</button>
                                         </form>
+
                                     </div>
                                 </td>
                             </tr>

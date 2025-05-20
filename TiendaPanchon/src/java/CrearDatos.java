@@ -135,3 +135,38 @@ public class CrearDatos extends HttpServlet {
         return "Short description";
     }
 }
+/*
+-- Receta.usuario → Usuario
+ALTER TABLE RECETA DROP FOREIGN KEY FK_RECETA_id_usuario;
+ALTER TABLE RECETA ADD CONSTRAINT FK_RECETA_id_usuario FOREIGN KEY (id_usuario) REFERENCES USUARIO(ID) ON DELETE CASCADE;
+
+-- Pedido.usuario → Usuario
+ALTER TABLE PEDIDO DROP FOREIGN KEY FK_PEDIDO_id_usuario;
+ALTER TABLE PEDIDO ADD CONSTRAINT FK_PEDIDO_id_usuario FOREIGN KEY (id_usuario) REFERENCES USUARIO(ID) ON DELETE CASCADE;
+
+-- PedidoProducto.pedido → Pedido
+ALTER TABLE PEDIDOPRODUCTO DROP FOREIGN KEY FK_PEDIDOPRODUCTO_id_pedido;
+ALTER TABLE PEDIDOPRODUCTO ADD CONSTRAINT FK_PEDIDOPRODUCTO_id_pedido FOREIGN KEY (id_pedido) REFERENCES PEDIDO(ID) ON DELETE CASCADE;
+
+-- PedidoProducto.producto → Producto
+ALTER TABLE PEDIDOPRODUCTO DROP FOREIGN KEY FK_PEDIDOPRODUCTO_id_producto;
+ALTER TABLE PEDIDOPRODUCTO ADD CONSTRAINT FK_PEDIDOPRODUCTO_id_producto FOREIGN KEY (id_producto) REFERENCES PRODUCTO(ID) ON DELETE CASCADE;
+
+-- Producto.categoria → CategoriaProducto
+ALTER TABLE PRODUCTO DROP FOREIGN KEY FK_PRODUCTO_id_categoria;
+ALTER TABLE PRODUCTO ADD CONSTRAINT FK_PRODUCTO_id_categoria FOREIGN KEY (id_categoria) REFERENCES CATEGORIAPRODUCTO(ID) ON DELETE CASCADE;
+
+-- ListaCompra.usuario → Usuario
+ALTER TABLE LISTACOMPRA DROP FOREIGN KEY FK_LISTACOMPRA_id_usuario;
+ALTER TABLE LISTACOMPRA ADD CONSTRAINT FK_LISTACOMPRA_id_usuario FOREIGN KEY (id_usuario) REFERENCES USUARIO(ID) ON DELETE CASCADE;
+
+-- lista_compra_producto.id_lista_compra → ListaCompra
+ALTER TABLE lista_compra_producto DROP FOREIGN KEY FK_lista_compra_producto_id_lista_compra;
+ALTER TABLE lista_compra_producto ADD CONSTRAINT FK_lista_compra_producto_id_lista_compra FOREIGN KEY (id_lista_compra) REFERENCES LISTACOMPRA(ID) ON DELETE CASCADE;
+
+-- lista_compra_producto.id_producto → Producto
+ALTER TABLE lista_compra_producto DROP FOREIGN KEY FK_lista_compra_producto_id_producto;
+ALTER TABLE lista_compra_producto ADD CONSTRAINT FK_lista_compra_producto_id_producto FOREIGN KEY (id_producto) REFERENCES PRODUCTO(ID) ON DELETE CASCADE;
+
+
+*/

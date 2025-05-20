@@ -92,10 +92,14 @@ public class ControladorGestionarUsuarios extends HttpServlet {
         // Eliminar Usuario
         if ("Eliminar".equals(accion)) {
             idUsuario = Long.parseLong(request.getParameter("idUsuario"));
+            String pagina = request.getParameter("pagina");
+            if (pagina == null || pagina.isEmpty()) {
+                pagina = "1";
+            }
             try {
-                servicioUsuario.destroy(idUsuario); // Llamar al servicio para eliminar el usuario
-                response.sendRedirect(request.getContextPath() + "/Controladores.Admin/ControladorGestionarUsuarios"); // Redirigir a la lista de usuarios
-                return; // Salir para evitar seguir procesando el formulario
+                servicioUsuario.destroy(idUsuario);
+                response.sendRedirect(request.getContextPath() + "/Controladores.Admin/ControladorGestionarUsuarios?pagina=" + pagina);
+                return;
             } catch (NonexistentEntityException e) {
                 error = "El usuario no existe.";
                 request.setAttribute("error", error);
@@ -160,7 +164,12 @@ public class ControladorGestionarUsuarios extends HttpServlet {
                 } else {
                     servicioUsuario.edit(usuario);
                 }
-                response.sendRedirect(request.getContextPath() + "/Controladores.Admin/ControladorGestionarUsuarios");
+                String pagina = request.getParameter("pagina");
+                if (pagina == null || pagina.isEmpty()) {
+                    pagina = "1";
+                }
+                response.sendRedirect(request.getContextPath() + "/Controladores.Admin/ControladorGestionarUsuarios?pagina=" + pagina);
+
                 return;
             } catch (Exception e) {
                 error = "Error al guardar el usuario.";
