@@ -9,8 +9,14 @@
         <link rel="stylesheet" href="../estilos/coloresPersonalizados.css">
         <link rel="stylesheet" href="../estilos/registroUsuarios.css">
         <link rel="stylesheet" href="../estilos/tablas.css">
+        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     </head>
     <body>
+
+        <c:if test="${not empty idUsuario}">
+            <jsp:include page="/includes/headerUsuario.jsp" />
+        </c:if>
+
         <main>
             <section>
                 <div class="form-container mx-auto p-3 shadow rounded-4 my-4">
@@ -78,13 +84,28 @@
 
                         <div class="row mt-3 text-center">
                             <div class="col-4 d-flex justify-content-start">
-                                <a href="${pageContext.request.contextPath}/Controladores/ControladorInicio"
-                                   class="btn btn-volver btn-sm botones">Cancelar</a>
+                                <c:choose>
+                                    <c:when test="${empty idUsuario}">
+                                        <!-- Si está creando (registro) -->
+                                        <a href="${pageContext.request.contextPath}/Controladores/ControladorLogin"
+                                           class="btn btn-volver btn-sm botones">Cancelar</a>
+                                    </c:when>
+                                    <c:otherwise>
+                                        <!-- Si está editando -->
+                                        <a href="${pageContext.request.contextPath}/Controladores/ControladorInicio"
+                                           class="btn btn-volver btn-sm botones">Cancelar</a>
+                                    </c:otherwise>
+                                </c:choose>
                             </div>
 
+
                             <div class="col-4 d-flex justify-content-center">
-                                <input type="submit" name="${empty idUsuario ? 'crear' : 'editar'}"
-                                       value="Aceptar" class="btn btn-crear btn-sm botones">
+                                <button type="button"
+                                        class="btn btn-crear btn-sm botones"
+                                        onclick="confirmarEnvioFormulario('${empty idUsuario ? 'crear' : 'editar'}')">
+                                    Aceptar
+                                </button>
+
                             </div>
 
                             <div class="col-4 d-flex justify-content-end">
@@ -119,12 +140,63 @@
 
         <script>
             function confirmarEliminacion(idUsuario, nombreCompleto) {
-                if (confirm(`¿Estás seguro de que deseas darte de baja ${nombreCompleto}? Tus datos se eliminarán.`)) {
-                    document.getElementById('inputEliminarIdUsuario').value = idUsuario;
-                    document.getElementById('formEliminarUsuario').submit();
-                }
+                Swal.fire({
+                    title: `¿Deseas dar de baja?`,
+                    text: "Los datos se eliminarán de forma permanente.",
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#d33',
+                    cancelButtonColor: '#6c757d',
+                    confirmButtonText: 'Sí, eliminar',
+                    cancelButtonText: 'Cancelar'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        document.getElementById('inputEliminarIdUsuario').value = idUsuario;
+                        document.getElementById('formEliminarUsuario').submit();
+                    }
+                });
             }
+
         </script>
+        <script>
+            function confirmarEnvioFormulario(accion) {
+                const form = document.querySelector("form[action$='ControladorUsuarios']");
+                const eventoSubmit = new Event('submit', {cancelable: true});
+                const validado = form.dispatchEvent(eventoSubmit);
+
+                if (!validado) {
+                    return;
+                }
+
+                // Cambia el texto según si es "crear" o "editar"
+                const esCrear = accion === 'crear';
+                const titulo = esCrear ? '¿Deseas darte de alta?' : '¿Confirmar envío?';
+                const texto = esCrear ? 'Se registrará un nuevo usuario con los datos proporcionados.' :
+                        '¿Estás seguro de que deseas guardar los datos del usuario?';
+
+                Swal.fire({
+                    title: titulo,
+                    text: texto,
+                    icon: 'question',
+                    showCancelButton: true,
+                    confirmButtonText: esCrear ? 'Sí, registrarme' : 'Sí, guardar',
+                    cancelButtonText: 'Cancelar',
+                    confirmButtonColor: '#198754',
+                    cancelButtonColor: '#6c757d'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        const inputAccion = document.createElement("input");
+                        inputAccion.type = "hidden";
+                        inputAccion.name = accion;
+                        inputAccion.value = "Aceptar";
+                        form.appendChild(inputAccion);
+                        form.submit();
+                    }
+                });
+            }
+
+        </script>
+
 
 
         <script>

@@ -9,6 +9,7 @@
         <link rel="stylesheet" href="../estilos/coloresPersonalizados.css">
         <link rel="stylesheet" type="text/css" href="../estilos/paginacion.css">
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     </head>
     <body>
 
@@ -186,12 +187,20 @@
             });
 
             function agregarAlCarrito(idProducto, nombre, precio, stock, idCantidad) {
-                const cantidad = document.getElementById(idCantidad).value;
-                if (parseInt(cantidad) > stock) {
-                    alert('La cantidad solicitada excede el stock disponible.');
+                const cantidad = parseInt(document.getElementById(idCantidad).value);
+
+                if (cantidad > stock) {
+                    Swal.fire({
+                        icon: 'warning',
+                        title: 'Cantidad excedida',
+                        text: 'La cantidad solicitada excede el stock disponible.',
+                        confirmButtonText: 'Aceptar'
+                    });
                     return;
                 }
-                const totalPrecio = (parseInt(cantidad) * precio).toFixed(2);
+
+                const totalPrecio = (cantidad * precio).toFixed(2);
+
                 fetch("/TiendaPanchon/Controladores.Carrito/ControladorCarrito", {
                     method: "POST",
                     headers: {"Content-Type": "application/x-www-form-urlencoded"},
@@ -201,19 +210,34 @@
                 })
                         .then(response => {
                             if (response.ok) {
-                                alert("Producto agregado a la cesta.");
+                                Swal.fire({
+                                    icon: 'success',
+                                    title: '¡Producto añadido!',
+                                    html: `Producto añadido a la cesta correctamente`,
+                                    timer: 2000,
+                                    showConfirmButton: false
+                                });
                             } else {
                                 return response.text().then(text => {
                                     console.error("Error del servidor:", text);
-                                    alert("Error al agregar al carrito.");
+                                    Swal.fire({
+                                        icon: 'error',
+                                        title: 'Error del servidor',
+                                        text: 'No se pudo agregar el producto al carrito.'
+                                    });
                                 });
                             }
                         })
                         .catch(error => {
                             console.error("Error de red:", error);
-                            alert("No se pudo conectar con el servidor.");
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Error de conexión',
+                                text: 'No se pudo conectar con el servidor.'
+                            });
                         });
             }
+
         </script>
     </body>
 </html> 

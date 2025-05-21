@@ -49,9 +49,11 @@
             <div class="d-flex justify-content-between align-items-center mb-4">
                 <h3> Mis Recetas</h3>
                 <form action="ControladorReceta" method="GET">
+                    <input type="hidden" name="pagina" value="${paginaActual}">
                     <input type="submit" name="crear" value="Crear Receta" class="btn btn-success">
                 </form>
             </div>
+
 
             <c:if test="${empty recetas}">
                 <p>No hay recetas registradas. ¡Anímate a compartir tus recetas!</p>

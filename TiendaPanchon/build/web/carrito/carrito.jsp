@@ -88,6 +88,8 @@
         </div>
 
         <jsp:include page="/includes/footer.jsp" />
+        
+        
 
         <script>
             function modificarCantidad(id, delta) {
