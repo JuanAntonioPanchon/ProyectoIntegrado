@@ -11,6 +11,7 @@
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
         <link rel="stylesheet" type="text/css" href="../estilos/paginacion.css">
         <script src="https://cdn.jsdelivr.net/npm/fuse.js@6.6.2"></script>
+        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     </head>
     <body>
 
@@ -49,47 +50,44 @@
                                     <div class="d-grid gap-1 d-md-flex justify-content-md-center">
                                         <a href="ControladorGestionarUsuarios?accion=editar&idUsuario=${usuario.id}" class="btn btn-editar btn-sm">Editar</a>
 
-                                        <form method="post" action="ControladorGestionarUsuarios?pagina=${paginaActual}"
-                                              onsubmit="return confirm('¿Seguro que quieres eliminar al usuario ${usuario.nombre} ${usuario.apellidos} con email: (${usuario.email})?');"
-                                              class="d-inline">
+                                        <form method="post" action="ControladorGestionarUsuarios?pagina=${paginaActual}" class="form-eliminar-usuario d-inline">
                                             <input type="hidden" name="idUsuario" value="${usuario.id}">
                                             <input type="hidden" name="accion" value="Eliminar">
-                                            <input type="hidden" name="pagina" value="${paginaActual}"> <!-- 🔽 Añadido -->
-                                            <button type="submit" class="btn btn-eliminar btn-sm">Eliminar</button>
+                                            <input type="hidden" name="pagina" value="${paginaActual}">
+                                            <button type="button"
+                                                    class="btn btn-eliminar btn-sm btn-eliminar-usuario"
+                                                    data-nombre="${usuario.nombre}"
+                                                    data-apellidos="${usuario.apellidos}"
+                                                    data-email="${usuario.email}">
+                                                Eliminar
+                                            </button>
                                         </form>
-
                                     </div>
                                 </td>
                             </tr>
                         </c:forEach>
                     </tbody>
                 </table>
+
                 <c:if test="${totalPaginas > 1}">
                     <div class="d-flex justify-content-center mt-4">
                         <nav aria-label="Paginación de usuarios">
                             <ul class="pagination pagination-personalizada">
                                 <li class="page-item ${paginaActual == 1 ? 'disabled' : ''}">
-                                    <a class="page-link" href="ControladorGestionarUsuarios?pagina=${paginaActual - 1}">
-                                        &laquo;
-                                    </a>
+                                    <a class="page-link" href="ControladorGestionarUsuarios?pagina=${paginaActual - 1}">&laquo;</a>
                                 </li>
-
                                 <c:forEach begin="1" end="${totalPaginas}" var="i">
                                     <li class="page-item ${i == paginaActual ? 'active' : ''}">
                                         <a class="page-link" href="ControladorGestionarUsuarios?pagina=${i}">${i}</a>
                                     </li>
                                 </c:forEach>
-
                                 <li class="page-item ${paginaActual == totalPaginas ? 'disabled' : ''}">
-                                    <a class="page-link" href="ControladorGestionarUsuarios?pagina=${paginaActual + 1}">
-                                        &raquo;
-                                    </a>
+                                    <a class="page-link" href="ControladorGestionarUsuarios?pagina=${paginaActual + 1}">&raquo;</a>
                                 </li>
                             </ul>
                         </nav>
                     </div>
                 </c:if>
-
             </div>            
 
             <div class="text-center mt-4">
@@ -99,8 +97,36 @@
         </div>
 
         <jsp:include page="/includes/footer.jsp" />
-
         <script src="../js/filtroUsuarioFuse.js"></script>
+
+        <script>
+            document.addEventListener("DOMContentLoaded", function () {
+                const botonesEliminar = document.querySelectorAll(".btn-eliminar-usuario");
+
+                botonesEliminar.forEach(boton => {
+                    boton.addEventListener("click", function () {
+                        const form = boton.closest("form");
+                        const nombre = boton.dataset.nombre;
+                        const apellidos = boton.dataset.apellidos;
+                        const email = boton.dataset.email;
+
+                        Swal.fire({
+                            title: '¿Eliminar usuario?',
+                            html: `¿Seguro que quieres eliminar este usuario?`,
+                            icon: 'warning',
+                            showCancelButton: true,
+                            confirmButtonColor: '#d33',
+                            cancelButtonText: 'No, volver',
+                            confirmButtonText: 'Sí, eliminar'
+                        }).then((result) => {
+                            if (result.isConfirmed) {
+                                form.submit();
+                            }
+                        });
+                    });
+                });
+            });
+        </script>
 
     </body>
 </html>

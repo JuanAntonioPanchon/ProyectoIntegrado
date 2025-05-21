@@ -1,4 +1,4 @@
-<%@page contentType="text/html" pageEncoding="UTF-8"%>
+<%@ page contentType="text/html" pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <!DOCTYPE html>
@@ -9,6 +9,7 @@
         <link rel="stylesheet" href="../estilos/coloresPersonalizados.css">
         <link rel="stylesheet" href="../estilos/tablas.css">
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     </head>
     <body>
 
@@ -47,7 +48,7 @@
             </div>
 
             <h4 class="fw-semibold mt-5">Estado del Pedido</h4>
-            <form action="/TiendaPanchon/Controladores.Admin/ControladorActualizarEstado" method="post" class="row g-3 mt-2">
+            <form action="/TiendaPanchon/Controladores.Admin/ControladorActualizarEstado" method="post" class="row g-3 mt-2" id="formActualizarEstado">
                 <input type="hidden" name="accion" value="actualizarEstado">
                 <input type="hidden" name="idPedido" value="${pedido.id}">
 
@@ -61,7 +62,7 @@
                     </div>
 
                     <div class="col-md-4 align-self-end">
-                        <button type="submit" class="btn btn-crear">Actualizar Estado</button>
+                        <button type="button" class="btn btn-crear" id="btnActualizarEstado">Actualizar Estado</button>
                     </div>
 
                     <div class="col-md-4 align-self-end text-end">
@@ -76,6 +77,31 @@
 
         <jsp:include page="/includes/footer.jsp" />
 
-        
+        <script>
+            document.addEventListener("DOMContentLoaded", function () {
+                const form = document.getElementById("formActualizarEstado");
+                const btn = document.getElementById("btnActualizarEstado");
+                const selectEstado = document.getElementById("estado");
+
+                btn.addEventListener("click", function () {
+                    const estadoSeleccionado = selectEstado.options[selectEstado.selectedIndex].text;
+
+                    Swal.fire({
+                        title: '¿Actualizar estado?',
+                        html: `Se actualizará el estado del pedido ¿Deseas continuar?`,
+                        icon: 'question',
+                        showCancelButton: true,
+                        confirmButtonColor: '#336b30',
+                        cancelButtonText: 'No, volver',
+                        confirmButtonText: 'Sí, actualizar'
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            form.submit();
+                        }
+                    });
+                });
+            });
+        </script>
+
     </body>
 </html>

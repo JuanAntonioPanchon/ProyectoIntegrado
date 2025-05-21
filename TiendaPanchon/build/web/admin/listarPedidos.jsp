@@ -11,6 +11,7 @@
         <link rel="stylesheet" href="../estilos/coloresPersonalizados.css">
         <link rel="stylesheet" href="../estilos/tablas.css">
         <link rel="stylesheet" type="text/css" href="../estilos/paginacion.css">
+        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     </head>
     <body class="colorFondo">
 
@@ -36,17 +37,25 @@
                                 <p><strong>Estado:</strong> ${pedido.estado}</p>
                             </div>
                             <div class="card-footer bg-transparent border-0 d-flex justify-content-between">
-                                <form action="/TiendaPanchon/Controladores.Admin/ControladorListarPedidos" method="post" onsubmit="return confirm('¿Seguro que deseas eliminar el pedido de ${pedido.usuario.nombre} ${pedido.usuario.apellidos}? con un total de ${pedido.precio} €')" class="me-2">
+                                <form action="/TiendaPanchon/Controladores.Admin/ControladorListarPedidos"
+                                      method="post" class="form-cancelar-pedido me-2">
                                     <input type="hidden" name="accion" value="eliminar">
                                     <input type="hidden" name="idPedido" value="${pedido.id}">
-                                    <button type="submit" class="btn btn-eliminar btn-sm">Cancelar Pedido</button>
+                                    <button type="button"
+                                            class="btn btn-eliminar btn-sm btn-cancelar-pedido"
+                                            data-nombre="${pedido.usuario.nombre} ${pedido.usuario.apellidos}"
+                                            data-precio="${pedido.precio}">
+                                        Cancelar Pedido
+                                    </button>
                                 </form>
-                                <a href="/TiendaPanchon/Controladores.Admin/ControladorListarPedidos?accion=editar&idPedido=${pedido.id}" class="btn btn-editar btn-sm">Ver Pedido</a>
+                                <a href="/TiendaPanchon/Controladores.Admin/ControladorListarPedidos?accion=editar&idPedido=${pedido.id}"
+                                   class="btn btn-editar btn-sm">Ver Pedido</a>
                             </div>
                         </div>
                     </div>
                 </c:forEach>
             </div>
+
             <!-- Paginación -->
             <c:if test="${totalPaginas > 1}">
                 <nav aria-label="Paginación de pedidos" class="mt-4">
@@ -74,6 +83,34 @@
         </div>
 
         <jsp:include page="/includes/footer.jsp" />
+
+        <script>
+            document.addEventListener("DOMContentLoaded", function () {
+                const botones = document.querySelectorAll(".btn-cancelar-pedido");
+
+                botones.forEach(boton => {
+                    boton.addEventListener("click", function () {
+                        const form = boton.closest("form");
+                        const nombre = boton.dataset.nombre;
+                        const precio = parseFloat(boton.dataset.precio).toFixed(2);
+
+                        Swal.fire({
+                            title: '¿Cancelar pedido?',
+                            html: `¿Seguro que deseas cancelar el pedido?`,
+                            icon: 'warning',
+                            showCancelButton: true,
+                            confirmButtonColor: '#d33',
+                            cancelButtonText: 'No, volver',
+                            confirmButtonText: 'Sí, cancelar'
+                        }).then((result) => {
+                            if (result.isConfirmed) {
+                                form.submit();
+                            }
+                        });
+                    });
+                });
+            });
+        </script>
 
     </body>
 </html>

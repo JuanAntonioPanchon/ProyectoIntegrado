@@ -8,6 +8,7 @@
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
         <link rel="stylesheet" href="../estilos/coloresPersonalizados.css">
         <link rel="stylesheet" href="../estilos/tablas.css">
+        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     </head>
     <body class="colorFondo text-dark">
 
@@ -83,7 +84,7 @@
 
                     <div class="d-flex justify-content-between mt-4">
                         <a href="/TiendaPanchon/Controladores.Admin/ControladorGestionarUsuarios" class="btn btn-volver px-4">Cancelar</a>
-                        <button type="submit" name="${empty usuario.id ? 'crear' : 'editar'}" class="btn btn-crear px-4">Aceptar</button>
+                        <button type="button" class="btn btn-crear px-4" id="btnAceptar">Aceptar</button>
                     </div>
                 </form>
             </div>
@@ -145,7 +146,7 @@
 
                 Object.keys(campos).forEach(campo => {
                     const input = form[campo];
-                    validarCampo(campo); // mostrar mensajes iniciales
+                    validarCampo(campo);
                     input.addEventListener("input", () => validarCampo(campo));
                 });
 
@@ -188,7 +189,14 @@
                 });
                 pass2Input.addEventListener("input", validarCoincidenciaPasswords);
 
-                form.addEventListener("submit", function (e) {
+                actualizarFeedbackPassword();
+                validarCoincidenciaPasswords();
+
+                const btnAceptar = document.getElementById("btnAceptar");
+
+                btnAceptar.addEventListener("click", function (e) {
+                    e.preventDefault();
+
                     let valido = true;
                     Object.keys(campos).forEach(campo => {
                         if (!validarCampo(campo))
@@ -201,13 +209,32 @@
                     const passOk = Object.values(criterios).every(regex => regex.test(passInput.value));
                     const iguales = passInput.value === pass2Input.value;
 
-                    if (!valido || !passOk || !iguales) {
-                        e.preventDefault();
-                    }
-                });
+                    if (!valido || !passOk || !iguales)
+                        return;
 
-                actualizarFeedbackPassword();
-                validarCoincidenciaPasswords();
+                    const accion = '${empty usuario.id ? "crear" : "editar"}';
+                    const nombre = form["nombre"].value.trim();
+
+                    Swal.fire({
+                        title: accion === 'crear' ? '¿Crear usuario?' : '¿Guardar cambios?',
+                        text: accion === 'crear'
+                                ? `¿Estás seguro de que quieres crear al usuario?`
+                                : `Se modificarán los datos del usuario ¿Estás seguro de continuar?`,
+                        icon: 'question',
+                        showCancelButton: true,
+                        confirmButtonColor: '#336b30',
+                        cancelButtonText: 'No, volver',
+                        confirmButtonText: 'Sí, continuar'
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            const inputAccion = document.createElement('input');
+                            inputAccion.type = 'hidden';
+                            inputAccion.name = accion;
+                            form.appendChild(inputAccion);
+                            form.submit();
+                        }
+                    });
+                });
             });
         </script>
 
