@@ -201,7 +201,7 @@
                 })
                         .then(response => {
                             if (response.ok) {
-                                alert("Producto agregado al carrito.");
+                                alert("Producto agregado a la cesta.");
                             } else {
                                 return response.text().then(text => {
                                     console.error("Error del servidor:", text);

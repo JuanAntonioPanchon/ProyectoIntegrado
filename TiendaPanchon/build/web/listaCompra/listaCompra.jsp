@@ -1,8 +1,3 @@
-<%-- 
-    Document   : listaCompra
-    Created on : 31 mar 2025, 17:37:02
-    Author     : juan-antonio
---%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <!DOCTYPE html>
@@ -14,6 +9,7 @@
         <link rel="stylesheet" href="../estilos/coloresPersonalizados.css">
         <link rel="stylesheet" href="../estilos/tablas.css">
         <link rel="stylesheet" type="text/css" href="../estilos/paginacion.css">
+        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
         <style>
             a.enlace-producto {
                 text-decoration: none !important;
@@ -25,7 +21,6 @@
                 text-decoration: none !important;
                 color: #000 !important;
             }
-
         </style>
     </head>
     <body class="colorFondo">
@@ -67,12 +62,17 @@
                                         </td>
                                         <td>${producto.categoria.nombre}</td>
                                         <td>
-                                            <form method="post" action="ControladorListaCompra" style="display:inline;"
-                                                  onsubmit="return confirm('¿Estás seguro que quieres eliminar el producto ${producto.nombre}?');">
+                                            <form method="post" action="ControladorListaCompra" class="form-eliminar-lista d-inline">
                                                 <input type="hidden" name="accion" value="eliminarProducto">
                                                 <input type="hidden" name="idProducto" value="${producto.id}">
-                                                <button type="submit" class="btn btn-danger btn-sm">Eliminar</button>
+                                                <input type="hidden" name="pagina" value="${paginaActual}">
+                                                <button type="button"
+                                                        class="btn btn-danger btn-sm btn-eliminar-lista"
+                                                        data-nombre="${producto.nombre}">
+                                                    Eliminar
+                                                </button>
                                             </form>
+
                                         </td>
                                     </tr>
                                 </c:forEach>
@@ -82,14 +82,13 @@
 
                     <div class="row mt-4">
                         <div class="col-md-8">
-                            <form method="post" action="ControladorListaCompra"
-                                  onsubmit="return confirm('¿Estás seguro que quieres vaciar la lista de la compra completa?');">
+                            <form method="post" action="ControladorListaCompra" id="formVaciarLista">
                                 <input type="hidden" name="accion" value="eliminarLista">
-                                <button type="submit" class="btn btn-danger">Vaciar Lista de la Compra</button>
+                                <button type="button" class="btn btn-danger" id="btnVaciarLista">Vaciar Lista de la Compra</button>
                             </form>
                         </div>
                         <div class="col-md-4 text-end">
-                            <p><strong>Cantidad total:</strong> <span id="cantidadTotal">0</span> productos</p>
+                            <p><strong>Cantidad total:</strong> <span id="cantidadTotal">${totalProductosLista}</span> productos</p>
                         </div>
                     </div>
                 </c:when>
@@ -119,7 +118,6 @@
                 </nav>
             </c:if>
 
-
             <div class="text-center mt-4">
                 <a href="${pageContext.request.contextPath}/Controladores/ControladorInicio" class="btn btn-secondary">Volver a la tienda</a>
             </div>
@@ -128,12 +126,53 @@
         <jsp:include page="/includes/footer.jsp" />
 
         <script>
-            function actualizarResumen() {
-                const total = document.querySelectorAll("#tablaListaCompra tr").length;
-                document.getElementById("cantidadTotal").textContent = total;
-            }
+ 
+            document.addEventListener("DOMContentLoaded", function () {
 
-            document.addEventListener("DOMContentLoaded", actualizarResumen);
+                // Eliminar producto individual con SweetAlert2
+                document.querySelectorAll(".btn-eliminar-lista").forEach(btn => {
+                    btn.addEventListener("click", function () {
+                        const form = btn.closest("form");
+                        const nombre = btn.dataset.nombre;
+
+                        Swal.fire({
+                            title: '¿Eliminar producto?',
+                            html: `¿Estás seguro que quieres eliminar <strong>${nombre}</strong> de la lista?`,
+                            icon: 'warning',
+                            showCancelButton: true,
+                            confirmButtonColor: '#d33',
+                            cancelButtonText: 'No, cancelar',
+                            confirmButtonText: 'Sí, eliminar'
+                        }).then((result) => {
+                            if (result.isConfirmed) {
+                                form.submit();
+                            }
+                        });
+                    });
+                });
+
+                // Vaciar lista completa con SweetAlert2
+                const btnVaciar = document.getElementById("btnVaciarLista");
+                const formVaciar = document.getElementById("formVaciarLista");
+
+                if (btnVaciar) {
+                    btnVaciar.addEventListener("click", function () {
+                        Swal.fire({
+                            title: '¿Vaciar lista?',
+                            text: 'Se eliminarán todos los productos de tu lista. ¿Deseas continuar?',
+                            icon: 'warning',
+                            showCancelButton: true,
+                            confirmButtonColor: '#d33',
+                            cancelButtonText: 'No, volver',
+                            confirmButtonText: 'Sí, vaciar'
+                        }).then((result) => {
+                            if (result.isConfirmed) {
+                                formVaciar.submit();
+                            }
+                        });
+                    });
+                }
+            });
         </script>
     </body>
 </html>

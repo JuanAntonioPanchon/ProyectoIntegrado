@@ -50,6 +50,7 @@ public class ControladorListaCompra extends HttpServlet {
             request.setAttribute("productosLista", productosLista);
             request.setAttribute("paginaActual", pagina);
             request.setAttribute("totalPaginas", totalPaginas);
+            request.setAttribute("totalProductosLista", total);
 
         } else {
             request.setAttribute("error", "Usuario no autenticado.");
@@ -118,6 +119,11 @@ public class ControladorListaCompra extends HttpServlet {
         }
 
         emf.close();
-        response.sendRedirect(request.getContextPath() + "/Controladores.ListaCompra/ControladorListaCompra");
+        String pagina = request.getParameter("pagina");
+        if (pagina == null || !pagina.matches("\\d+")) {
+            pagina = "1";
+        }
+        response.sendRedirect(request.getContextPath() + "/Controladores.ListaCompra/ControladorListaCompra?pagina=" + pagina);
+
     }
 }

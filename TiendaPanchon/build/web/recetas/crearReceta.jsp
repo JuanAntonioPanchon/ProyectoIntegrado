@@ -27,6 +27,8 @@
                 <form method="post" action="${pageContext.request.contextPath}/Controladores/ControladorReceta" id="formReceta">
                     <input type="hidden" name="id" value="${id}">
                     <input type="hidden" name="idUsuario" value="${idUsuario}">
+                    <input type="hidden" name="pagina" value="${paginaActual}">
+
 
                     <div class="mb-3">
                         <label class="form-label fw-bold">TÍTULO</label>
@@ -86,7 +88,7 @@
                     let valido = true;
 
                     const regexTitulo = /^[A-ZÁÉÍÓÚÑ][\w\sÁÉÍÓÚÑáéíóúñü]{0,29}$/;
-                    const regexTexto = /^[^<>]{1,400}$/;
+                    const regexTextoMayuscula = /^[A-ZÁÉÍÓÚÑ][^<>]{0,399}$/;
 
                     if (!regexTitulo.test(titulo.value.trim())) {
                         errorTitulo.textContent = "Debe comenzar con mayúscula. Solo letras, números y espacios. Máx. 30 caracteres.";
@@ -95,15 +97,15 @@
                         errorTitulo.textContent = "";
                     }
 
-                    if (!regexTexto.test(ingredientes.value.trim())) {
-                        errorIngredientes.textContent = "Texto inválido o demasiado largo. No se permiten '<' ni '>'";
+                    if (!regexTextoMayuscula.test(ingredientes.value.trim())) {
+                        errorIngredientes.textContent = "Debe comenzar con mayúscula. No se permiten '<' ni '>'. Máx. 400 caracteres.";
                         valido = false;
                     } else {
                         errorIngredientes.textContent = "";
                     }
 
-                    if (!regexTexto.test(descripcion.value.trim())) {
-                        errorDescripcion.textContent = "Texto inválido o demasiado largo. No se permiten '<' ni '>'";
+                    if (!regexTextoMayuscula.test(descripcion.value.trim())) {
+                        errorDescripcion.textContent = "Debe comenzar con mayúscula. No se permiten '<' ni '>'. Máx. 400 caracteres.";
                         valido = false;
                     } else {
                         errorDescripcion.textContent = "";
@@ -127,10 +129,17 @@
                         cancelButtonText: 'No, revisar'
                     }).then((result) => {
                         if (result.isConfirmed) {
-                            const inputAccion = document.createElement('input');
-                            inputAccion.type = 'hidden';
-                            inputAccion.name = accion;
-                            form.appendChild(inputAccion);
+                            const inputEliminar = document.createElement('input');
+                            inputEliminar.type = 'hidden';
+                            inputEliminar.name = 'eliminar';
+                            form.appendChild(inputEliminar);
+
+                            const inputPagina = document.createElement('input');
+                            inputPagina.type = 'hidden';
+                            inputPagina.name = 'pagina';
+                            inputPagina.value = '${paginaActual}';
+                            form.appendChild(inputPagina);
+
                             form.submit();
                         }
                     });

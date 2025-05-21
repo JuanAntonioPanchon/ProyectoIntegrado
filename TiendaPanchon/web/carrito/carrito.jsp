@@ -10,8 +10,10 @@
         <link rel="stylesheet" href="../estilos/tablas.css">
         <link rel="stylesheet" href="../estilos/paginacion.css">
         <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
+        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     </head>
     <body class="colorFondo">
+
         <jsp:include page="/includes/headerUsuario.jsp" />
 
         <div class="container py-4">
@@ -62,21 +64,13 @@
                             <p><strong>Cantidad total:</strong> <span id="cantidadTotal">0</span> productos</p>
                             <p><strong>Total cesta:</strong> <span id="precioTotalCesta">0.00 €</span></p>
 
-                            <form method="post" action="${pageContext.request.contextPath}/Controladores.Pedidos/ControladorPedidosUsuario"
-                                  onsubmit="return confirm(
-                                                  '¿Deseas realizar el pedido con ' +
-                                                  document.getElementById('cantidadTotal').textContent.trim() +
-                                                  ' productos por un total de ' +
-                                                  document.getElementById('precioTotalCesta').textContent.trim() +
-                                                  '?'
-                                                  );">
+                            <form method="post" action="${pageContext.request.contextPath}/Controladores.Pedidos/ControladorPedidosUsuario" id="formTramitarPedido">
                                 <input type="hidden" name="accion" value="tramitar">
-                                <button type="submit" class="btn btn-success">Tramitar Pedido</button>
+                                <button type="button" class="btn btn-success" id="btnTramitarPedido">Tramitar Pedido</button>
                             </form>
                         </div>
                     </div>
 
-                    <!-- Paginación -->
                     <div class="d-flex justify-content-center mt-4">
                         <nav>
                             <ul class="pagination pagination-personalizada" id="paginacionCarrito"></ul>
@@ -105,19 +99,43 @@
             }
 
             function eliminarProducto(id) {
-                fetch("/TiendaPanchon/Controladores.Carrito/ControladorCarrito", {
-                    method: "POST",
-                    headers: {"Content-Type": "application/x-www-form-urlencoded"},
-                    body: new URLSearchParams({accion: "eliminar", idProducto: id})
-                }).then(res => res.ok && location.reload());
+                Swal.fire({
+                    title: '¿Eliminar producto?',
+                    text: '¿Seguro que deseas eliminar este producto del carrito?',
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#d33',
+                    cancelButtonText: 'No, volver',
+                    confirmButtonText: 'Sí, eliminar'
+                }).then(result => {
+                    if (result.isConfirmed) {
+                        fetch("/TiendaPanchon/Controladores.Carrito/ControladorCarrito", {
+                            method: "POST",
+                            headers: {"Content-Type": "application/x-www-form-urlencoded"},
+                            body: new URLSearchParams({accion: "eliminar", idProducto: id})
+                        }).then(res => res.ok && location.reload());
+                    }
+                });
             }
 
             function vaciarCarrito() {
-                fetch("/TiendaPanchon/Controladores.Carrito/ControladorCarrito", {
-                    method: "POST",
-                    headers: {"Content-Type": "application/x-www-form-urlencoded"},
-                    body: "accion=vaciar"
-                }).then(res => res.ok && location.reload());
+                Swal.fire({
+                    title: '¿Vaciar carrito?',
+                    text: 'Todos los productos serán eliminados de la cesta. ¿Desea continuar?',
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#d33',
+                    cancelButtonText: 'No, cancelar',
+                    confirmButtonText: 'Sí, vaciar'
+                }).then(result => {
+                    if (result.isConfirmed) {
+                        fetch("/TiendaPanchon/Controladores.Carrito/ControladorCarrito", {
+                            method: "POST",
+                            headers: {"Content-Type": "application/x-www-form-urlencoded"},
+                            body: "accion=vaciar"
+                        }).then(res => res.ok && location.reload());
+                    }
+                });
             }
 
             function actualizarResumen() {
@@ -145,20 +163,18 @@
                     fila.style.display = (Math.floor(i / porPagina) + 1 === n) ? "" : "none";
                 });
                 actualizarResumen();
-                currentPage = n; // Actualiza página actual
+                currentPage = n;
                 btnAnterior.classList.toggle("disabled", currentPage === 1);
                 btnSiguiente.classList.toggle("disabled", currentPage === totalPaginas);
             }
 
             paginacion.innerHTML = "";
 
-            // Botón Anterior
             const btnAnterior = document.createElement("li");
             btnAnterior.className = "page-item disabled";
             btnAnterior.innerHTML = `<a class="page-link" href="#"><i class="bi bi-chevron-left"></i></a>`;
             paginacion.appendChild(btnAnterior);
 
-            // Botones de página
             for (let i = 1; i <= totalPaginas; i++) {
                 const li = document.createElement("li");
                 li.className = "page-item" + (i === 1 ? " active" : "");
@@ -179,7 +195,6 @@
                 paginacion.appendChild(li);
             }
 
-            // Botón Siguiente
             const btnSiguiente = document.createElement("li");
             btnSiguiente.className = "page-item" + (totalPaginas <= 1 ? " disabled" : "");
             btnSiguiente.innerHTML = `<a class="page-link" href="#"><i class="bi bi-chevron-right"></i></a>`;
@@ -189,7 +204,6 @@
                 e.preventDefault();
                 if (currentPage > 1) {
                     mostrarPagina(currentPage - 1);
-                    // Actualiza clases
                     actualizarClasesPaginacion();
                 }
             });
@@ -198,7 +212,6 @@
                 e.preventDefault();
                 if (currentPage < totalPaginas) {
                     mostrarPagina(currentPage + 1);
-                    // Actualiza clases
                     actualizarClasesPaginacion();
                 }
             });
@@ -219,7 +232,42 @@
             function aplicarPaginacion() {
                 mostrarPagina(1);
             }
+
+            // SWEET ALERT2: Confirmar Tramitar Pedido
+            document.addEventListener("DOMContentLoaded", function () {
+                const btnTramitar = document.getElementById("btnTramitarPedido");
+                const form = document.getElementById("formTramitarPedido");
+
+                btnTramitar.addEventListener("click", function () {
+                    const cantidad = document.getElementById("cantidadTotal").textContent.trim();
+                    const precio = document.getElementById("precioTotalCesta").textContent.trim();
+
+                    if (cantidad === "0") {
+                        Swal.fire({
+                            icon: 'warning',
+                            title: 'Carrito vacío',
+                            text: 'No puedes tramitar un pedido sin productos.'
+                        });
+                        return;
+                    }
+
+                    Swal.fire({
+                        title: '¿Tramitar pedido?',
+                        html: `¿Deseas realizar el pedido?`,
+                        icon: 'question',
+                        showCancelButton: true,
+                        confirmButtonColor: '#198754',
+                        cancelButtonText: 'No, volver',
+                        confirmButtonText: 'Sí, confirmar'
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            form.submit();
+                        }
+                    });
+                });
+            });
         </script>
+
 
     </body>
 </html>
