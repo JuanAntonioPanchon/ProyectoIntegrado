@@ -54,7 +54,6 @@
                 </form>
             </div>
 
-
             <c:if test="${empty recetas}">
                 <p>No hay recetas registradas. ¡Anímate a compartir tus recetas!</p>
             </c:if>
@@ -78,7 +77,7 @@
                                 <div class="d-flex justify-content-between align-items-center mt-auto flex-wrap gap-2">
                                     <a href="ControladorReceta?id=${receta.id}&pagina=${paginaActual}" class="btn btn-editar">Editar</a>
 
-                                    <a href="../Controladores.Usuarios/ControladorSubirFichero?recetaId=${receta.id}" class="btn btn-crear">
+                                    <a href="../Controladores.Usuarios/ControladorSubirFichero?recetaId=${receta.id}&pagina=${paginaActual}" class="btn btn-crear">
                                         Añadir Imágenes
                                     </a>
 
@@ -105,7 +104,7 @@
                                     <div class="row">
                                         <c:forEach var="imagen" items="${receta.imagenes}">
                                             <div class="col-md-4 mb-2 d-flex justify-content-center align-items-center">
-                                                <img src="../${imagen}" alt="Imagen receta" class="img-fluid rounded h-100 object-fit-cover imagen-eliminar" onclick="eliminarImagen('${receta.id}', '${imagen}')">
+                                                <img src="../${imagen}" alt="Imagen receta" class="img-fluid rounded h-100 object-fit-cover imagen-eliminar" onclick="confirmarEliminarImagen('${receta.id}', '${imagen}')">
                                             </div>
                                         </c:forEach>
                                     </div>
@@ -155,7 +154,54 @@
         </main>
 
         <jsp:include page="/includes/footer.jsp" />
-        <script src="../js/eliminarImagenReceta.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+        <script>
+                                                    function confirmarEliminarImagen(idReceta, imagen) {
+                                                        Swal.fire({
+                                                            title: '¿Eliminar imagen?',
+                                                            text: 'Esta acción no se puede deshacer.',
+                                                            icon: 'warning',
+                                                            showCancelButton: true,
+                                                            confirmButtonColor: '#d33',
+                                                            cancelButtonColor: '#3085d6',
+                                                            confirmButtonText: 'Sí, eliminar',
+                                                            cancelButtonText: 'Cancelar'
+                                                        }).then((result) => {
+                                                            if (result.isConfirmed) {
+                                                                eliminarImagen(idReceta, imagen);
+                                                            }
+                                                        });
+                                                    }
+
+                                                    function eliminarImagen(idReceta, imagen) {
+                                                        const form = document.createElement("form");
+                                                        form.method = "POST";
+                                                        form.action = "../Controladores.Usuarios/ControladorEliminarImagen";
+
+                                                        const inputReceta = document.createElement("input");
+                                                        inputReceta.type = "hidden";
+                                                        inputReceta.name = "recetaId";
+                                                        inputReceta.value = idReceta;
+
+                                                        const inputImagen = document.createElement("input");
+                                                        inputImagen.type = "hidden";
+                                                        inputImagen.name = "imagen";
+                                                        inputImagen.value = imagen;
+
+                                                        const inputPagina = document.createElement("input");
+                                                        inputPagina.type = "hidden";
+                                                        inputPagina.name = "pagina";
+                                                        inputPagina.value = "${paginaActual}"; // Usa el valor JSTL
+
+                                                        form.appendChild(inputReceta);
+                                                        form.appendChild(inputImagen);
+                                                        form.appendChild(inputPagina);
+
+                                                        document.body.appendChild(form);
+                                                        form.submit();
+                                                    }
+
+        </script>
 
     </body>
 </html>

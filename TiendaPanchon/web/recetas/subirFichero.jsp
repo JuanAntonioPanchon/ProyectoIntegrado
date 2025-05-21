@@ -33,12 +33,14 @@
                 <form method="post" enctype="multipart/form-data" id="formSubirImagen">
                     <input type="file" name="fichero" id="ficheroInput" required multiple>
                     <input type="hidden" name="recetaId" value="${recetaId}">
+                    <input type="hidden" name="pagina" value="${pagina}">
                     <button type="button" class="boton" id="btnSubirFoto">Subir Foto</button>
                 </form>
 
-                <a href="/TiendaPanchon/Controladores/ControladorReceta">
+                <a href="${pageContext.request.contextPath}/Controladores/ControladorReceta?pagina=${pagina}">
                     <button class="boton">Volver a Recetas</button>
                 </a>
+
             </div>
         </main>
 
@@ -85,7 +87,7 @@
                     }
 
                     Swal.fire({
-                        title: '¿Subir Imagen/es?',
+                        title: '¿Subir Imagen?',
                         html: `Se van a añadir a la receta.<br>¿Deseas continuar?`,
                         icon: 'question',
                         showCancelButton: true,

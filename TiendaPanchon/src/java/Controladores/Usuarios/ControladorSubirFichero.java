@@ -28,8 +28,8 @@ public class ControladorSubirFichero extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        // Recoger los parámetros de la URL
         String recetaIdStr = request.getParameter("recetaId");
+        String pagina = request.getParameter("pagina"); // <-- AÑADIR
 
         if (recetaIdStr != null) {
             try {
@@ -42,39 +42,36 @@ public class ControladorSubirFichero extends HttpServlet {
             request.setAttribute("error", "Falta el parámetro recetaId.");
         }
 
-        // Redirigir a la vista de subida de archivos
-        String vista = "/recetas/subirFichero.jsp";
-        getServletContext().getRequestDispatcher(vista).forward(request, response);
+        // Añadir la página como atributo para el JSP
+        if (pagina != null) {
+            request.setAttribute("pagina", pagina);
+        }
+
+        getServletContext().getRequestDispatcher("/recetas/subirFichero.jsp").forward(request, response);
     }
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        String path = getServletContext().getRealPath("recetas/imagenes");
-        System.out.println("Path de subida: " + path);
 
+        String path = getServletContext().getRealPath("recetas/imagenes");
         Part fichero = request.getPart("fichero");
         String nombreOriginal = fichero.getSubmittedFileName();
-
-        // Obtener el id de la receta
         String recetaIdStr = request.getParameter("recetaId");
-        Long recetaId = Long.parseLong(recetaIdStr);
+        String pagina = request.getParameter("pagina");
 
-        // Crear un nombre de archivo único con ID de receta y nombre original
-        String extension = nombreOriginal.substring(nombreOriginal.lastIndexOf("."));
-        String nuevoNombreFichero = recetaId + "_" + nombreOriginal;  // Usar el nombre original
+        Long recetaId = Long.parseLong(recetaIdStr);
+        String nuevoNombreFichero = recetaId + "_" + nombreOriginal;
         String rutaCompleta = path + "/" + nuevoNombreFichero;
 
-        // Guardar el archivo en la carpeta
-        InputStream contenido = fichero.getInputStream();
-        FileOutputStream ficheroSalida = new FileOutputStream(rutaCompleta);
-        byte[] buffer = new byte[8192];
-        int bytesLeidos;
-        while ((bytesLeidos = contenido.read(buffer)) != -1) {
-            ficheroSalida.write(buffer, 0, bytesLeidos);
+        // Guardar fichero
+        try (InputStream contenido = fichero.getInputStream(); FileOutputStream ficheroSalida = new FileOutputStream(rutaCompleta)) {
+            byte[] buffer = new byte[8192];
+            int bytesLeidos;
+            while ((bytesLeidos = contenido.read(buffer)) != -1) {
+                ficheroSalida.write(buffer, 0, bytesLeidos);
+            }
         }
-        ficheroSalida.close();
-        contenido.close();
 
         // Guardar la imagen en la receta
         EntityManagerFactory emf = Persistence.createEntityManagerFactory("TiendaPanchonPU");
@@ -88,17 +85,21 @@ public class ControladorSubirFichero extends HttpServlet {
             }
             imagenes.add("recetas/imagenes/" + nuevoNombreFichero);
             receta.setImagenes(imagenes);
-
             try {
                 sr.edit(receta);
             } catch (Exception e) {
                 e.printStackTrace();
-                request.setAttribute("error", "Error al actualizar la receta con la imagen.");
+                request.getSession().setAttribute("error", "Error al actualizar la receta con la imagen.");
             }
         }
 
-        
-        response.sendRedirect(request.getContextPath() + "/Controladores/ControladorReceta");
+        // Mensaje de éxito y redirección a página original
+        request.getSession().setAttribute("imagenSubida", true);
+        String redireccion = request.getContextPath() + "/Controladores/ControladorReceta";
+        if (pagina != null && !pagina.isBlank()) {
+            redireccion += "?pagina=" + pagina;
+        }
+        response.sendRedirect(redireccion);
     }
 
 }

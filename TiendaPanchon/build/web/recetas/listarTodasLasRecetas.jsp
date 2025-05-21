@@ -69,10 +69,14 @@
                                     <div class="mt-auto">
                                         <div class="d-flex">
                                             <c:if test="${sessionScope.usuario.rol == 'admin'}">
-                                                <form action="ControladorReceta" method="POST" onsubmit="return confirm('¿Estás seguro de que deseas eliminar la receta ${receta.titulo} del usuario ${receta.usuario.nombre}?')">
+                                                <form action="${pageContext.request.contextPath}/Controladores/ControladorReceta" method="POST"
+                                                      onsubmit="return confirm('¿Estás seguro de que deseas eliminar la receta ${receta.titulo} del usuario ${receta.usuario.nombre}?')">
                                                     <input type="hidden" name="id" value="${receta.id}">
+                                                    <input type="hidden" name="pagina" value="${paginaActual}">
+                                                    <input type="hidden" name="origen" value="listadoPublico">
                                                     <input type="submit" name="eliminar" value="Eliminar" class="btn btn-eliminar">
                                                 </form>
+
                                             </c:if>
                                             <button type="button" class="btn btn-ver ms-auto" data-bs-toggle="modal" data-bs-target="#modalReceta${receta.id}">
                                                 Ver
@@ -147,3 +151,4 @@
         <jsp:include page="/includes/footer.jsp" />
     </body>
 </html>
+

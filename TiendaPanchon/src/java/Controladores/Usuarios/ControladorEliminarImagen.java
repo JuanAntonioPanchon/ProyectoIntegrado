@@ -21,31 +21,26 @@ import modelo.servicio.ServicioReceta;
  *
  * @author juan-antonio
  */
-
 @WebServlet(name = "ControladorEliminarImagen", urlPatterns = {"/Controladores.Usuarios/ControladorEliminarImagen"})
 public class ControladorEliminarImagen extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        // Obtener los parámetros
         String recetaIdStr = request.getParameter("recetaId");
         String imagen = request.getParameter("imagen");
+        String pagina = request.getParameter("pagina");
 
         if (recetaIdStr != null && imagen != null) {
             Long recetaId = Long.parseLong(recetaIdStr);
-
-            // Ruta completa de la imagen en el servidor
             String path = getServletContext().getRealPath("recetas/imagenes");
             String rutaImagen = path + "/" + imagen;
 
-            // Eliminar la imagen del sistema de archivos
             File archivoImagen = new File(rutaImagen);
             if (archivoImagen.exists()) {
-                archivoImagen.delete();  // Eliminar archivo físico
+                archivoImagen.delete();
             }
 
-            // Eliminar la imagen de la base de datos
             EntityManagerFactory emf = Persistence.createEntityManagerFactory("TiendaPanchonPU");
             ServicioReceta sr = new ServicioReceta(emf);
             Receta receta = sr.findReceta(recetaId);
@@ -53,24 +48,24 @@ public class ControladorEliminarImagen extends HttpServlet {
             if (receta != null) {
                 List<String> imagenes = receta.getImagenes();
                 if (imagenes != null && imagenes.contains(imagen)) {
-                    imagenes.remove(imagen);  // Eliminar la imagen de la lista
+                    imagenes.remove(imagen);
                     receta.setImagenes(imagenes);
-
                     try {
-                        sr.edit(receta);  // Guardar los cambios en la base de datos
+                        sr.edit(receta);
                     } catch (Exception e) {
                         e.printStackTrace();
                         request.setAttribute("error", "Error al eliminar la imagen de la receta.");
                     }
                 }
             }
-
-            
-            response.sendRedirect(request.getContextPath() + "/Controladores/ControladorReceta");
-        } else {
-            
-            response.sendRedirect(request.getContextPath() + "/Controladores/ControladorReceta");
         }
-    }
-}
 
+        // Redirigir con la página actual si está presente
+        String redirectURL = request.getContextPath() + "/Controladores/ControladorReceta";
+        if (pagina != null && !pagina.isBlank()) {
+            redirectURL += "?pagina=" + pagina;
+        }
+        response.sendRedirect(redirectURL);
+    }
+
+}

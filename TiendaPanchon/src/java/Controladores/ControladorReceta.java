@@ -109,7 +109,6 @@ public class ControladorReceta extends HttpServlet {
         String publicada = request.getParameter("publicada");
         String ingredientes = request.getParameter("ingredientes");
 
-        String vista = "";
         String error = "";
         EntityManagerFactory emf = Persistence.createEntityManagerFactory("TiendaPanchonPU");
         ServicioReceta srec = new ServicioReceta(emf);
@@ -127,7 +126,7 @@ public class ControladorReceta extends HttpServlet {
                     receta.setIngredientes(ingredientes);
                     receta.setImagenes(new ArrayList<>());
                     srec.create(receta);
-                } else if (request.getParameter("editar") != null) {
+                } else if (request.getParameter("editar") != null && idStr != null && !idStr.isBlank()) {
                     long id = Long.parseLong(idStr);
                     Receta receta = srec.findReceta(id);
                     receta.setTitulo(titulo);
@@ -136,7 +135,7 @@ public class ControladorReceta extends HttpServlet {
                     receta.setIngredientes(ingredientes);
                     receta.setImagenes(new ArrayList<>());
                     srec.edit(receta);
-                } else if (request.getParameter("eliminar") != null) {
+                } else if (request.getParameter("eliminar") != null && idStr != null && !idStr.isBlank()) {
                     long id = Long.parseLong(idStr);
                     srec.destroy(id);
                 }
@@ -144,21 +143,36 @@ public class ControladorReceta extends HttpServlet {
                 error = "La receta con ID " + idStr + " no existe.";
             } catch (Exception e) {
                 error = "Error al procesar la receta.";
+                e.printStackTrace();
             }
         } else {
             error = "Usuario no autenticado.";
         }
 
         emf.close();
+
         if (!error.isEmpty()) {
             sesion.setAttribute("error", error);
         }
+
         String pagina = request.getParameter("pagina");
-        if (pagina != null && !pagina.isEmpty()) {
-            response.sendRedirect("ControladorReceta?pagina=" + pagina);
+        String origen = request.getParameter("origen");
+        if ("listadoPublico".equals(origen)) {
+            // Vuelve al listado público
+            if (pagina != null && !pagina.isBlank()) {
+                response.sendRedirect("ControladorListadoReceta?pagina=" + pagina);
+            } else {
+                response.sendRedirect("ControladorListadoReceta");
+            }
         } else {
-            response.sendRedirect("ControladorReceta");
+            // Vuelve al listado de recetas propias
+            if (pagina != null && !pagina.isBlank()) {
+                response.sendRedirect("ControladorReceta?pagina=" + pagina);
+            } else {
+                response.sendRedirect("ControladorReceta");
+            }
         }
 
     }
+
 }

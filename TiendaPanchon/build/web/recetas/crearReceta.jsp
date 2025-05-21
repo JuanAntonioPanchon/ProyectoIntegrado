@@ -62,9 +62,11 @@
                         </c:if>
                     </div>
 
-                    <c:if test="${not empty error}">
-                        <div class="alert alert-danger mt-3">${error}</div>
+                    <c:if test="${not empty sessionScope.error}">
+                        <div class="alert alert-danger mt-3">${sessionScope.error}</div>
+                        <c:remove var="error" scope="session" />
                     </c:if>
+
                 </form>
             </div>
         </main>
@@ -118,28 +120,21 @@
                     if (!validarCampos())
                         return;
 
-                    const accion = '${empty id ? 'crear' : 'editar'}';
+                    const accion = '${empty id ? "crear" : "editar"}';
                     Swal.fire({
-                        title: '¿Confirmar?',
-                        text: accion === 'crear' ? '¿Deseas crear esta receta?' : '¿Deseas guardar los cambios?',
+                        title: accion === 'crear' ? '¿Crear receta?' : '¿Guardar cambios?',
+                        text: accion === 'crear' ? 'Se añadirá una nueva receta.' : 'Se actualizará la receta existente.',
                         icon: 'question',
                         showCancelButton: true,
                         confirmButtonColor: '#336b30',
-                        confirmButtonText: 'Sí, continuar',
-                        cancelButtonText: 'No, revisar'
+                        confirmButtonText: 'Sí, confirmar',
+                        cancelButtonText: 'Cancelar'
                     }).then((result) => {
                         if (result.isConfirmed) {
-                            const inputEliminar = document.createElement('input');
-                            inputEliminar.type = 'hidden';
-                            inputEliminar.name = 'eliminar';
-                            form.appendChild(inputEliminar);
-
-                            const inputPagina = document.createElement('input');
-                            inputPagina.type = 'hidden';
-                            inputPagina.name = 'pagina';
-                            inputPagina.value = '${paginaActual}';
-                            form.appendChild(inputPagina);
-
+                            const inputAccion = document.createElement('input');
+                            inputAccion.type = 'hidden';
+                            inputAccion.name = accion;
+                            form.appendChild(inputAccion);
                             form.submit();
                         }
                     });
@@ -148,9 +143,8 @@
                 document.getElementById('btnCancelar').addEventListener('click', function () {
                     Swal.fire({
                         title: '¿Cancelar cambios?',
-                        text: 'Perderás la información que no hayas guardado.',
+                        text: 'Perderás la información no guardada.',
                         icon: 'warning',
-                        confirmButtonColor: '#336b30',
                         showCancelButton: true,
                         confirmButtonText: 'Sí, cancelar',
                         cancelButtonText: 'No, volver'
@@ -166,7 +160,7 @@
                     btnEliminar.addEventListener('click', function () {
                         Swal.fire({
                             title: '¿Eliminar receta?',
-                            text: '¿Estás seguro de eliminar la receta "${titulo}"?',
+                            text: 'Esta acción no se puede deshacer.',
                             icon: 'warning',
                             showCancelButton: true,
                             confirmButtonColor: '#d33',
@@ -185,6 +179,7 @@
                 }
             });
         </script>
+
 
     </body>
 </html>
