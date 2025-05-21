@@ -14,9 +14,11 @@
         <link rel="stylesheet" type="text/css" href="../estilos/paginacion.css">
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
         <script src="../js/filtrarRecetas.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     </head>
     <body>
-        <!-- Cabecera segun rol -->
+
+        <!-- Cabecera según rol -->
         <c:choose>
             <c:when test="${sessionScope.usuario.rol == 'admin'}">
                 <jsp:include page="/includes/header.jsp" />
@@ -29,13 +31,13 @@
         <main class="container py-4">
             <div class="d-flex justify-content-between align-items-center mb-4">
                 <div>
-                    <a href="/TiendaPanchon/Controladores/ControladorReceta" 
+                    <a href="/TiendaPanchon/Controladores/ControladorReceta"
                        class="btn btn btn-ver ${pageContext.request.requestURI.contains('listarRecetas') ? 'active' : ''}">
                         Mis Recetas
                     </a>
                 </div>
                 <div>
-                    <a href="/TiendaPanchon/Controladores/ControladorListadoReceta" 
+                    <a href="/TiendaPanchon/Controladores/ControladorListadoReceta"
                        class="btn btn btn-ver ${pageContext.request.requestURI.contains('listarTodasLasRecetas') ? 'active' : ''}">
                         Ver Recetas de Otros Usuarios
                     </a>
@@ -69,14 +71,13 @@
                                     <div class="mt-auto">
                                         <div class="d-flex">
                                             <c:if test="${sessionScope.usuario.rol == 'admin'}">
-                                                <form action="${pageContext.request.contextPath}/Controladores/ControladorReceta" method="POST"
-                                                      onsubmit="return confirm('¿Estás seguro de que deseas eliminar la receta ${receta.titulo} del usuario ${receta.usuario.nombre}?')">
+                                                <form class="form-eliminar" method="POST" action="${pageContext.request.contextPath}/Controladores/ControladorReceta">
                                                     <input type="hidden" name="id" value="${receta.id}">
                                                     <input type="hidden" name="pagina" value="${paginaActual}">
                                                     <input type="hidden" name="origen" value="listadoPublico">
-                                                    <input type="submit" name="eliminar" value="Eliminar" class="btn btn-eliminar">
+                                                    <input type="hidden" name="eliminar" value="true">
+                                                    <button type="submit" class="btn btn-eliminar">Eliminar</button>
                                                 </form>
-
                                             </c:if>
                                             <button type="button" class="btn btn-ver ms-auto" data-bs-toggle="modal" data-bs-target="#modalReceta${receta.id}">
                                                 Ver
@@ -122,9 +123,7 @@
                         <nav aria-label="Paginación">
                             <ul class="pagination pagination-personalizada">
                                 <li class="page-item ${paginaActual == 1 ? 'disabled' : ''}">
-                                    <a class="page-link" href="${pageContext.request.contextPath}/Controladores/ControladorListadoReceta?pagina=${paginaActual - 1}">
-                                        &laquo;
-                                    </a>
+                                    <a class="page-link" href="${pageContext.request.contextPath}/Controladores/ControladorListadoReceta?pagina=${paginaActual - 1}">&laquo;</a>
                                 </li>
                                 <c:forEach begin="1" end="${totalPaginas}" var="i">
                                     <li class="page-item ${i == paginaActual ? 'active' : ''}">
@@ -132,15 +131,12 @@
                                     </li>
                                 </c:forEach>
                                 <li class="page-item ${paginaActual == totalPaginas ? 'disabled' : ''}">
-                                    <a class="page-link" href="${pageContext.request.contextPath}/Controladores/ControladorListadoReceta?pagina=${paginaActual + 1}">
-                                        &raquo;
-                                    </a>
+                                    <a class="page-link" href="${pageContext.request.contextPath}/Controladores/ControladorListadoReceta?pagina=${paginaActual + 1}">&raquo;</a>
                                 </li>
                             </ul>
                         </nav>
                     </div>
                 </c:if>
-
             </div>
 
             <div class="mt-4">
@@ -149,6 +145,32 @@
         </main>
 
         <jsp:include page="/includes/footer.jsp" />
+
+        <!-- SweetAlert2: Confirmar eliminación -->
+        <script>
+            document.addEventListener("DOMContentLoaded", () => {
+                document.querySelectorAll(".form-eliminar").forEach(form => {
+                    const btn = form.querySelector("button[type='submit']");
+                    btn.addEventListener("click", function (e) {
+                        e.preventDefault();
+                        Swal.fire({
+                            title: '¿Eliminar receta?',
+                            text: 'Esta acción no se puede deshacer.',
+                            icon: 'warning',
+                            showCancelButton: true,
+                            confirmButtonColor: '#d33',
+                            cancelButtonColor: '#3085d6',
+                            confirmButtonText: 'Sí, eliminar',
+                            cancelButtonText: 'Cancelar'
+                        }).then((result) => {
+                            if (result.isConfirmed) {
+                                form.submit();
+                            }
+                        });
+                    });
+                });
+            });
+        </script>
+
     </body>
 </html>
-
