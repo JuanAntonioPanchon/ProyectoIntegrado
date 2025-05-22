@@ -45,6 +45,7 @@
     </head>
     <body>
 
+
         <c:choose>
             <c:when test="${not empty sessionScope.usuario}">
                 <jsp:include page="/includes/headerUsuario.jsp" />
@@ -54,16 +55,15 @@
                     <nav class="navbar navbar-expand-md colorVerde text-black px-4">
                         <div class="container-fluid">
                             <div class="d-flex align-items-center">
-                                <img src="../imagenes/elRinconDeLaura.jpeg" alt="Logo El Rincón de Laura"
-                                     class="rounded-circle me-3" style="width: 60px;">
-                                <a class="navbar-brand fw-bold mb-0 text-black text-decoration-none" 
+                                <img src="../imagenes/elRinconDeLaura.jpeg" alt="Logo El Rincón de Laura" class="rounded-circle me-3" style="width: 60px;">
+                                <a class="navbar-brand fw-bold mb-0 text-black text-decoration-none"
                                    href="${pageContext.request.contextPath}/Controladores/ControladorInicio">
                                     EL RINCÓN DE LAURA
                                 </a>
                             </div>
                             <ul class="navbar-nav ms-auto">
                                 <li class="nav-item mx-1">
-                                    <a class="nav-link text-black fw-bold" 
+                                    <a class="nav-link text-black fw-bold"
                                        href="${pageContext.request.contextPath}/Controladores/ControladorLogin">
                                         <i class="bi bi-box-arrow-in-right me-1"></i>
                                         <span class="d-none d-md-inline">Iniciar Sesión</span>
@@ -76,17 +76,14 @@
             </c:otherwise>
         </c:choose>
 
-        <!-- CATEGORÍAS -->
         <div class="container mt-4">
             <h4 class="fw-bold">Categorías:</h4>
-
             <div class="d-flex justify-content-start align-items-center gap-3 mb-2">
                 <button class="btn btn-outline-dark d-md-none" type="button" data-bs-toggle="collapse" data-bs-target="#menuCategorias"
                         aria-expanded="false" aria-controls="menuCategorias">
                     <i class="bi bi-list"></i> Categorías
                 </button>
             </div>
-
             <div class="collapse d-md-block" id="menuCategorias">
                 <div class="d-flex flex-wrap gap-2">
                     <c:forEach var="categoria" items="${categorias}">
@@ -99,7 +96,6 @@
             </div>
         </div>
 
-        <!-- CARRUSEL + PRODUCTOS -->
         <div class="container mt-4">
             <!-- CARRUSEL -->
             <div id="carruselOfertas" class="carousel slide mb-4" data-bs-ride="carousel" data-bs-interval="15000">
@@ -123,8 +119,7 @@
                 </button>
             </div>
 
-
-            <!-- PRODUCTOS -->
+            <!-- TÍTULO -->
             <h3 class="mb-3">
                 <c:choose>
                     <c:when test="${param.oferta == 'true'}">Productos en oferta</c:when>
@@ -133,7 +128,7 @@
                 </c:choose>
             </h3>
 
-            <!-- Mensajes -->
+            <!-- MENSAJES -->
             <c:if test="${param.mensaje == 'existe'}">
                 <div class="alert alert-warning">El producto <strong>${param.nombreProducto}</strong> ya está en la lista de la compra.</div>
             </c:if>
@@ -141,6 +136,7 @@
                 <div class="alert alert-success">Producto <strong>${param.nombreProducto}</strong> añadido correctamente a la lista de la compra.</div>
             </c:if>
 
+            <!-- PRODUCTOS -->
             <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-4">
                 <c:forEach var="producto" items="${productos}">
                     <div class="col" id="producto_${producto.id}">
@@ -159,16 +155,13 @@
                                 <h5 class="card-title">${producto.nombre}</h5>
                                 <c:choose>
                                     <c:when test="${preciosOriginales[producto.id] != null and preciosOriginales[producto.id] > producto.precio}">
-
-                                        <div class="d-flex justify-content-between align-items-center mb-2">
-                                            <div>
-                                                <span class="text-muted text-decoration-line-through me-2">
-                                                    <fmt:formatNumber value="${preciosOriginales[producto.id]}" type="currency" currencySymbol="€"/>
-                                                </span>
-                                                <span class="text-success fw-bold">
-                                                    <fmt:formatNumber value="${producto.precio}" type="currency" currencySymbol="€"/>
-                                                </span>
-                                            </div>
+                                        <div class="d-flex justify-content-between align-items-center mb-2 px-2">
+                                            <span class="text-muted text-decoration-line-through">
+                                                <fmt:formatNumber value="${preciosOriginales[producto.id]}" type="currency" currencySymbol="€"/>
+                                            </span>
+                                            <span class="text-success fw-bold">
+                                                <fmt:formatNumber value="${producto.precio}" type="currency" currencySymbol="€"/>
+                                            </span>
                                             <span class="badge bg-danger">
                                                 -<fmt:formatNumber value="${(1 - (producto.precio / preciosOriginales[producto.id])) * 100}" maxFractionDigits="0"/>%
                                             </span>
@@ -176,7 +169,7 @@
                                     </c:when>
 
                                     <c:otherwise>
-                                        <p class="card-text text-success fw-bold">
+                                        <p class="card-text text-success fw-bold text-center">
                                             <fmt:formatNumber value="${producto.precio}" type="currency" currencySymbol="€"/>
                                         </p>
                                     </c:otherwise>
@@ -187,11 +180,13 @@
                                         <input type="hidden" name="accion" value="anadirProducto">
                                         <input type="hidden" name="idProducto" value="${producto.id}">
                                         <input type="hidden" name="idCategoria" value="${producto.categoria.id}">
-                                        <button type="submit" class="btn btn-outline-secondary">
-                                            <i class="bi bi-journal-plus"></i>
-                                        </button>
-                                    </form>
-                                    <input type="number" class="form-control w-25" min="1" max="${producto.stock}" value="1" id="cantidad_${producto.id}">
+                                        <c:if test="${param.oferta == 'true'}"><input type="hidden" name="oferta" value="true"/></c:if>
+                                        <c:if test="${param.novedades == 'true'}"><input type="hidden" name="novedades" value="true"/></c:if>
+                                            <button type="submit" class="btn btn-outline-secondary">
+                                                <i class="bi bi-journal-plus"></i>
+                                            </button>
+                                        </form>
+                                        <input type="number" class="form-control w-25" min="1" max="${producto.stock}" value="1" id="cantidad_${producto.id}">
                                     <button class="btn btn-outline-primary" onclick="agregarAlCarrito('${producto.id}', '${producto.nombre}', ${producto.precio}, ${producto.stock}, 'cantidad_${producto.id}')">
                                         <i class="bi bi-cart-plus"></i>
                                     </button>
@@ -202,27 +197,33 @@
                 </c:forEach>
             </div>
 
-            <!-- Paginación -->
+            <!-- PAGINACIÓN -->
+            <c:set var="baseUrl" value="${pageContext.request.contextPath}/Controladores.Productos/ControladorListarProductos"/>
+            <c:choose>
+                <c:when test="${param.oferta == 'true'}"><c:set var="paramExtra" value="oferta=true" /></c:when>
+                <c:when test="${param.novedades == 'true'}"><c:set var="paramExtra" value="novedades=true" /></c:when>
+                <c:otherwise><c:set var="paramExtra" value="id_categoria=${param.id_categoria}" /></c:otherwise>
+            </c:choose>
 
             <div class="d-flex justify-content-center mt-4">
                 <nav aria-label="Paginación de productos">
                     <ul class="pagination pagination-personalizada">
                         <li class="page-item ${paginaActual == 1 ? 'disabled' : ''}">
-                            <a class="page-link" href="${pageContext.request.contextPath}/Controladores.Productos/ControladorListarProductos?id_categoria=${param.id_categoria}&pagina=${paginaActual - 1}">&laquo;</a>
+                            <a class="page-link" href="${baseUrl}?${paramExtra}&pagina=${paginaActual - 1}">&laquo;</a>
                         </li>
                         <c:forEach begin="1" end="${totalPaginas}" var="i">
                             <li class="page-item ${i == paginaActual ? 'active' : ''}">
-                                <a class="page-link" href="${pageContext.request.contextPath}/Controladores.Productos/ControladorListarProductos?id_categoria=${param.id_categoria}&pagina=${i}">${i}</a>
+                                <a class="page-link" href="${baseUrl}?${paramExtra}&pagina=${i}">${i}</a>
                             </li>
                         </c:forEach>
                         <li class="page-item ${paginaActual == totalPaginas ? 'disabled' : ''}">
-                            <a class="page-link" href="${pageContext.request.contextPath}/Controladores.Productos/ControladorListarProductos?id_categoria=${param.id_categoria}&pagina=${paginaActual + 1}">&raquo;</a>
+                            <a class="page-link" href="${baseUrl}?${paramExtra}&pagina=${paginaActual + 1}">&raquo;</a>
                         </li>
                     </ul>
                 </nav>
             </div>
-
         </div>
+
 
         <jsp:include page="/includes/footer.jsp" />
 
