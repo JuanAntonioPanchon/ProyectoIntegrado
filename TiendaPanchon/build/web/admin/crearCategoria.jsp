@@ -52,6 +52,11 @@
                 const inputNombre = form.querySelector("input[name='nombre']");
                 const btnAceptar = document.getElementById("btnAceptar");
                 const btnEliminar = document.getElementById("btnEliminar");
+                form.addEventListener("keydown", function (event) {
+                    if (event.key === "Enter" && event.target.tagName !== "TEXTAREA") {
+                        event.preventDefault();
+                    }
+                });
 
                 const regex = /^[A-ZÁÉÍÓÚÑ][a-zA-ZáéíóúÁÉÍÓÚñÑ ]{0,14}$/;
                 const mensaje = "Debe comenzar con mayúscula, solo letras y espacios. Máx. 15 caracteres.";

@@ -70,6 +70,12 @@ public class ControladorProducto extends HttpServlet {
         // Crear
         if (request.getParameter("crear") != null) {
             request.setAttribute("categorias", sc.findCategoriaProductoEntities());
+
+            String idCategoriaStrCrear = request.getParameter("id_categoria");
+            if (idCategoriaStrCrear != null && !idCategoriaStrCrear.isEmpty()) {
+                request.setAttribute("id_categoria", Long.parseLong(idCategoriaStrCrear));
+            }
+
             vista = "/admin/crearProducto.jsp";
         }
 

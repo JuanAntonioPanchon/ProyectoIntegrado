@@ -57,10 +57,11 @@
                 <section>
                     <div class="d-flex justify-content-between align-items-center mb-3">
                         <h4 class="fw-bold">PRODUCTOS: ${nombreCategoria}</h4>
-                        <a href="/TiendaPanchon/Controladores.Admin/ControladorProducto?crear=true"
+                        <a href="/TiendaPanchon/Controladores.Admin/ControladorProducto?crear=true&id_categoria=${idCategoriaSeleccionada}"
                            class="btn btn-crear">
                             Añadir Producto Nuevo
                         </a>
+
                     </div>
 
                     <c:choose>
@@ -141,7 +142,7 @@
 
         <jsp:include page="/includes/footer.jsp" />
 
-        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
         <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
         <script>
                                                                         function confirmarEliminacion(boton) {
