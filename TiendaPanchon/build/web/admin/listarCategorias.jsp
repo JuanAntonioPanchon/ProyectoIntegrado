@@ -39,7 +39,7 @@
                     <div class="d-flex flex-wrap gap-2">
                         <c:forEach var="categoria" items="${categorias}">
                             <a href="/TiendaPanchon/Controladores.Admin/ControladorProducto?id_categoria=${categoria.id}"
-                               class="btn-categoria">
+                               class="btn-categoria ${categoria.id == param.id_categoria ? 'btn-categoria-activa' : ''}">
                                 ${categoria.nombre}
                             </a>
                         </c:forEach>

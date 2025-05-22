@@ -11,37 +11,6 @@
         <link rel="stylesheet" type="text/css" href="../estilos/tablas.css">
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
         <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-        <style>
-            .btn-categoria {
-                background-color: #e9ecef;
-                color: #212529;
-                border: 1px solid #ced4da;
-                padding: 6px 12px;
-                border-radius: 0.375rem;
-                text-decoration: none;
-                transition: all 0.2s ease-in-out;
-            }
-
-            .btn-categoria:hover {
-                background-color: #dee2e6;
-                color: #000;
-            }
-
-            .btn-categoria-activa {
-                background-color: #198754;
-                color: white !important;
-                font-weight: bold;
-            }
-            .carrusel-img {
-                width: 200px;      /* Más pequeño que antes */
-                height: 200px;
-                object-fit: cover;
-                border-radius: 8px;
-                box-shadow: 0 0 10px rgba(0, 0, 0, 0.15);
-            }
-
-
-        </style>
     </head>
     <body>
 
@@ -226,71 +195,128 @@
         </div>
 
         <jsp:include page="/includes/footer.jsp" />
+        <script src="https://cdn.jsdelivr.net/npm/fuse.js/dist/fuse.min.js"></script>
+        <script>
+                                        let todosLosProductos = [];
+                                        let fuse;
+                                        document.getElementById("buscador").addEventListener("input", function () {
+                                        const texto = this.value.trim();
+                                        const contenedor = document.getElementById("contenedorResultados");
+                                        const seccionResultados = document.getElementById("resultadosBusqueda");
+                                        if (texto.length === 0) {
+                                        contenedor.innerHTML = "";
+                                        seccionResultados.style.display = "none";
+                                        return;
+                                        }
+
+                                        if (todosLosProductos.length === 0) {
+                                        fetch("${pageContext.request.contextPath}/Controladores.Productos/ControladorBuscarProductoAJAX")
+                                                .then(res => res.json())
+                                                .then(data => {
+                                                todosLosProductos = data;
+                                                iniciarFuse();
+                                                mostrarResultados(texto);
+                                                });
+                                        } else {
+                                        mostrarResultados(texto);
+                                        }
+                                        });
+                                        function iniciarFuse() {
+                                        fuse = new Fuse(todosLosProductos, {
+                                        keys: ['nombre', 'categoria'],
+                                                threshold: 0.4
+                                        });
+                                        }
+
+                                        function mostrarResultados(texto) {
+                                        const resultados = fuse.search(texto).map(r => r.item);
+                                        const contenedor = document.getElementById("contenedorResultados");
+                                        const seccionResultados = document.getElementById("resultadosBusqueda");
+                                        contenedor.innerHTML = "";
+                                        resultados.forEach(p => {
+                                        const imagenHTML = p.imagen
+                                                ? `<img src="../${p.imagen}" class="card-img-top" alt="${p.nombre}" style="height: 200px; object-fit: cover;">`
+                                                : `<div class="card-img-top d-flex align-items-center justify-content-center bg-light" style="height: 200px;"><span class="text-muted">Sin imagen</span></div>`;
+                                        const tarjeta = `
+                        <div class="col">
+                            <div class="card h-100">
+            ${imagenHTML}
+                                <div class="card-body d-flex flex-column justify-content-between">
+                                    <h5 class="card-title">${p.nombre}</h5>
+                                    <p class="card-text text-success fw-bold">${p.precio.toFixed(2)} €</p>
+                                    <span class="badge bg-secondary">${p.categoria}</span>
+                                </div>
+                            </div>
+                        </div>`;
+                                        contenedor.innerHTML += tarjeta;
+                                        });
+                                        seccionResultados.style.display = resultados.length > 0 ? "block" : "none";
+                                        }
+        </script>
+
+
         <script>
             document.addEventListener("DOMContentLoaded", function () {
-                document.querySelectorAll("input[type='number'][id^='cantidad_']").forEach(function (input) {
-                    input.addEventListener("input", function () {
-                        const max = parseInt(this.getAttribute("max"));
-                        const value = parseInt(this.value);
-                        if (value > max) {
-                            this.value = max;
-                        } else if (value < 1 || isNaN(value)) {
-                            this.value = 1;
-                        }
-                    });
-                });
+            document.querySelectorAll("input[type='number'][id^='cantidad_']").forEach(function (input) {
+            input.addEventListener("input", function () {
+            const max = parseInt(this.getAttribute("max"));
+            const value = parseInt(this.value);
+            if (value > max) {
+            this.value = max;
+            } else if (value < 1 || isNaN(value)) {
+            this.value = 1;
+            }
             });
-
+            });
+            });
             function agregarAlCarrito(idProducto, nombre, precio, stock, idCantidad) {
-                const cantidad = parseInt(document.getElementById(idCantidad).value);
+            const cantidad = parseInt(document.getElementById(idCantidad).value);
+            if (cantidad > stock) {
+            Swal.fire({
+            icon: 'warning',
+                    title: 'Cantidad excedida',
+                    text: 'La cantidad solicitada excede el stock disponible.',
+                    confirmButtonText: 'Aceptar'
+            });
+            return;
+            }
 
-                if (cantidad > stock) {
-                    Swal.fire({
-                        icon: 'warning',
-                        title: 'Cantidad excedida',
-                        text: 'La cantidad solicitada excede el stock disponible.',
-                        confirmButtonText: 'Aceptar'
-                    });
-                    return;
-                }
-
-                const totalPrecio = (cantidad * precio).toFixed(2);
-
-                fetch("/TiendaPanchon/Controladores.Carrito/ControladorCarrito", {
-                    method: "POST",
+            const totalPrecio = (cantidad * precio).toFixed(2);
+            fetch("/TiendaPanchon/Controladores.Carrito/ControladorCarrito", {
+            method: "POST",
                     headers: {"Content-Type": "application/x-www-form-urlencoded"},
                     body: "idProducto=" + encodeURIComponent(idProducto) +
-                            "&cantidad=" + encodeURIComponent(cantidad) +
-                            "&totalPrecio=" + encodeURIComponent(totalPrecio)
-                })
-                        .then(response => {
-                            if (response.ok) {
-                                Swal.fire({
-                                    icon: 'success',
-                                    title: '¡Producto añadido!',
-                                    html: `Producto añadido a la cesta correctamente`,
-                                    timer: 2000,
-                                    showConfirmButton: false
-                                });
-                            } else {
-                                return response.text().then(text => {
-                                    console.error("Error del servidor:", text);
-                                    Swal.fire({
-                                        icon: 'error',
-                                        title: 'Error del servidor',
-                                        text: 'No se pudo agregar el producto al carrito.'
-                                    });
-                                });
-                            }
-                        })
-                        .catch(error => {
-                            console.error("Error de red:", error);
-                            Swal.fire({
-                                icon: 'error',
-                                title: 'Error de conexión',
-                                text: 'No se pudo conectar con el servidor.'
-                            });
-                        });
+                    "&cantidad=" + encodeURIComponent(cantidad) +
+                    "&totalPrecio=" + encodeURIComponent(totalPrecio)
+            })
+                    .then(response => {
+                    if (response.ok) {
+                    Swal.fire({
+                    icon: 'success',
+                            title: '¡Producto añadido!',
+                            html: `Producto añadido a la cesta correctamente`,
+                            timer: 2000,
+                            showConfirmButton: false
+                    });
+                    } else {
+                    return response.text().then(text => {
+                    console.error("Error del servidor:", text);
+                    Swal.fire({
+                    icon: 'error',
+                            title: 'Error del servidor',
+                            text: 'No se pudo agregar el producto al carrito.'
+                    });
+                    });
+                    }
+                    })
+                    .catch(error => {
+                    console.error("Error de red:", error);
+                    Swal.fire({
+                    icon: 'error',
+                            title: 'Error de conexión',
+                            text: 'No se pudo conectar con el servidor.'
+                    });
+                    });
             }
 
         </script>
