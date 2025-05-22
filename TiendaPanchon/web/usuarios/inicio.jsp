@@ -157,7 +157,31 @@
                             </c:choose>
                             <div class="card-body d-flex flex-column justify-content-between">
                                 <h5 class="card-title">${producto.nombre}</h5>
-                                <p class="card-text text-success fw-bold">${producto.precio} €</p>
+                                <c:choose>
+                                    <c:when test="${preciosOriginales[producto.id] != null and preciosOriginales[producto.id] > producto.precio}">
+
+                                        <div class="d-flex justify-content-between align-items-center mb-2">
+                                            <div>
+                                                <span class="text-muted text-decoration-line-through me-2">
+                                                    <fmt:formatNumber value="${preciosOriginales[producto.id]}" type="currency" currencySymbol="€"/>
+                                                </span>
+                                                <span class="text-success fw-bold">
+                                                    <fmt:formatNumber value="${producto.precio}" type="currency" currencySymbol="€"/>
+                                                </span>
+                                            </div>
+                                            <span class="badge bg-danger">
+                                                -<fmt:formatNumber value="${(1 - (producto.precio / preciosOriginales[producto.id])) * 100}" maxFractionDigits="0"/>%
+                                            </span>
+                                        </div>
+                                    </c:when>
+
+                                    <c:otherwise>
+                                        <p class="card-text text-success fw-bold">
+                                            <fmt:formatNumber value="${producto.precio}" type="currency" currencySymbol="€"/>
+                                        </p>
+                                    </c:otherwise>
+                                </c:choose>
+
                                 <div class="d-flex justify-content-between align-items-center">
                                     <form action="${pageContext.request.contextPath}/Controladores.ListaCompra/ControladorListaCompra" method="post">
                                         <input type="hidden" name="accion" value="anadirProducto">
