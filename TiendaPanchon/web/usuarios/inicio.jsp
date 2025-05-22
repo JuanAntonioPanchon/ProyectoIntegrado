@@ -315,7 +315,7 @@
                             if (response.ok) {
                                 Swal.fire({
                                     icon: 'success',
-                                    title: '¡Producto añadido!',
+                                    title: '¡Añadido Correctamente!',
                                     html: `Producto añadido a la cesta correctamente`,
                                     timer: 2000,
                                     showConfirmButton: false

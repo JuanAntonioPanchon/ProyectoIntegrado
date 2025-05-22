@@ -36,15 +36,7 @@ th {
     background-color: #6c8c4c !important;
     color: white !important;
     border: none !important;
-    padding: 4px 8px !important;
-    font-size: 14px !important;
-    line-height: 1.1 !important;
-    height: 28px !important;
-    display: inline-block;
-    vertical-align: middle;
-    text-align: center;
-    white-space: nowrap;
-    border-radius: 4px;
+    transition: background-color 0.3s ease;
 }
 
 
