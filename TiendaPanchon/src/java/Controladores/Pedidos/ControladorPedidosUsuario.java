@@ -58,7 +58,7 @@ public class ControladorPedidosUsuario extends HttpServlet {
         }
 
         // Obtener pedidos paginados
-        List<Pedido> pedidosUsuario = servicioPedido.findPedidosPorUsuarioPaginado(usuario.getId(), pagina, tamanio);
+        List<Pedido> pedidosUsuario = servicioPedido.findPedidosPorUsuarioOrdenadosDesc(usuario.getId(), pagina, tamanio);
 
         // Total pedidos para calcular páginas
         long total = servicioPedido.contarPedidosPorUsuario(usuario.getId());

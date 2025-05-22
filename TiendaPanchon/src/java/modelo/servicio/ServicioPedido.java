@@ -212,5 +212,20 @@ public class ServicioPedido implements Serializable {
             em.close();
         }
     }
+    // Devuelve pedidos paginados por usuario, ordenados por fecha descendente
+
+    public List<Pedido> findPedidosPorUsuarioOrdenadosDesc(Long idUsuario, int pagina, int tamanio) {
+        EntityManager em = getEntityManager();
+        try {
+            return em.createQuery(
+                    "SELECT p FROM Pedido p WHERE p.usuario.id = :id ORDER BY p.fechaPedido DESC, p.id DESC", Pedido.class)
+                    .setParameter("id", idUsuario)
+                    .setFirstResult((pagina - 1) * tamanio)
+                    .setMaxResults(tamanio)
+                    .getResultList();
+        } finally {
+            em.close();
+        }
+    }
 
 }
