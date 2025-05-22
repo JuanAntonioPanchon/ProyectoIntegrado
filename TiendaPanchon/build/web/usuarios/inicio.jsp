@@ -304,14 +304,29 @@
                 }
 
                 const totalPrecio = (cantidad * precio).toFixed(2);
-                fetch("/TiendaPanchon/Controladores.Carrito/ControladorCarrito", {
+                fetch("${pageContext.request.contextPath}/Controladores.Carrito/ControladorCarrito", {
                     method: "POST",
-                    headers: {"Content-Type": "application/x-www-form-urlencoded"},
+                    headers: {
+                        "Content-Type": "application/x-www-form-urlencoded",
+                        "X-Requested-With": "XMLHttpRequest" // 💡 Esto activa el control AJAX del filtro
+                    },
                     body: "idProducto=" + encodeURIComponent(idProducto) +
                             "&cantidad=" + encodeURIComponent(cantidad) +
                             "&totalPrecio=" + encodeURIComponent(totalPrecio)
                 })
                         .then(response => {
+                            if (response.status === 401) {
+                                Swal.fire({
+                                    icon: 'info',
+                                    title: 'Necesitas iniciar sesión',
+                                    text: 'Por favor, inicia sesión para añadir productos al carrito.',
+                                    confirmButtonText: 'Ir al login'
+                                }).then(() => {
+                                    window.location.href = "${pageContext.request.contextPath}/Controladores/ControladorLogin";
+                                });
+                                return;
+                            }
+
                             if (response.ok) {
                                 Swal.fire({
                                     icon: 'success',

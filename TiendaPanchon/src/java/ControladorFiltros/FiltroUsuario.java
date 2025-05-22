@@ -18,7 +18,6 @@ import modelo.entidades.Usuario;
  * @author Panchon
  *
  */
-
 @WebFilter(
         filterName = "FiltroUsuario",
         urlPatterns = {"/*"},
@@ -71,6 +70,17 @@ public class FiltroUsuario implements Filter {
             return;
         }
 
-        res.sendRedirect(contexto + "/Controladores/ControladorLogin");
+// Detectar si es petición AJAX
+        boolean esAjax = "XMLHttpRequest".equals(req.getHeader("X-Requested-With"));
+
+        if (esAjax) {
+            System.out.println("[FILTRO] Petición AJAX sin sesión. Devolviendo 401.");
+            res.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+            res.getWriter().write("No autorizado");
+        } else {
+            System.out.println("[FILTRO] Petición normal sin sesión. Redirigiendo a login.");
+            res.sendRedirect(contexto + "/Controladores/ControladorLogin");
+        }
+
     }
 }

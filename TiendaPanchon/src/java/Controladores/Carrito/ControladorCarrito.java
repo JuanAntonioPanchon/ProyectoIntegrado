@@ -23,8 +23,16 @@ public class ControladorCarrito extends HttpServlet {
         String cantidadStr = request.getParameter("cantidad");
         String totalPrecioStr = request.getParameter("totalPrecio");
 
+        System.out.println("[GET] idProducto=" + idProducto + ", cantidad=" + cantidadStr + ", totalPrecio=" + totalPrecioStr);
+
         if (idProducto == null && cantidadStr == null && totalPrecioStr == null) {
-            HttpSession session = request.getSession();
+            HttpSession session = request.getSession(false);
+            if (session == null || session.getAttribute("usuario") == null) {
+                System.out.println("[GET] Usuario no autenticado. Redirigiendo a login.");
+                response.sendRedirect(request.getContextPath() + "/Controladores/ControladorLogin");
+                return;
+            }
+
             List<Map<String, String>> carrito = (List<Map<String, String>>) session.getAttribute("carrito");
             request.setAttribute("carrito", carrito);
             request.getRequestDispatcher("/carrito/carrito.jsp").forward(request, response);
@@ -32,11 +40,18 @@ public class ControladorCarrito extends HttpServlet {
         }
 
         if (idProducto.isEmpty() || cantidadStr.isEmpty() || totalPrecioStr.isEmpty()) {
+            System.out.println("[GET] Parámetros incompletos");
             response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
             return;
         }
 
-        agregarOActualizarProductoEnCarrito(request, idProducto, cantidadStr, totalPrecioStr);
+        boolean exito = agregarOActualizarProductoEnCarrito(request, idProducto, cantidadStr, totalPrecioStr);
+        if (!exito) {
+            System.out.println("[GET] Usuario no autenticado en intento de agregar al carrito.");
+            response.sendRedirect(request.getContextPath() + "/Controladores/ControladorLogin");
+            return;
+        }
+
         response.sendRedirect(request.getContextPath() + "/Controladores.Carrito/ControladorCarrito");
     }
 
@@ -45,10 +60,19 @@ public class ControladorCarrito extends HttpServlet {
             throws ServletException, IOException {
 
         String accion = request.getParameter("accion");
-        HttpSession session = request.getSession();
+        HttpSession session = request.getSession(false);
+        if (session == null || session.getAttribute("usuario") == null) {
+            System.out.println("[POST] Usuario no autenticado");
+            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+            response.getWriter().write("No autorizado");
+            return;
+        }
+
+        System.out.println("[POST] Acción recibida: " + accion);
 
         if ("vaciar".equals(accion)) {
             session.removeAttribute("carrito");
+            System.out.println("[POST] Carrito vaciado");
             response.setStatus(HttpServletResponse.SC_OK);
             return;
         }
@@ -58,6 +82,7 @@ public class ControladorCarrito extends HttpServlet {
             List<Map<String, String>> carrito = (List<Map<String, String>>) session.getAttribute("carrito");
             if (carrito != null && idProducto != null) {
                 carrito.removeIf(p -> p.get("idProducto").equals(idProducto));
+                System.out.println("[POST] Producto eliminado del carrito: " + idProducto);
             }
             response.setStatus(HttpServletResponse.SC_OK);
             return;
@@ -68,6 +93,7 @@ public class ControladorCarrito extends HttpServlet {
             String deltaStr = request.getParameter("delta");
 
             if (idProducto == null || deltaStr == null || idProducto.isEmpty() || deltaStr.isEmpty()) {
+                System.out.println("[POST] Parámetros inválidos para modificar");
                 response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
                 return;
             }
@@ -76,6 +102,7 @@ public class ControladorCarrito extends HttpServlet {
             try {
                 delta = Integer.parseInt(deltaStr);
             } catch (NumberFormatException e) {
+                System.out.println("[POST] Delta no es número válido: " + deltaStr);
                 response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
                 return;
             }
@@ -89,10 +116,12 @@ public class ControladorCarrito extends HttpServlet {
                         int cantidad = Integer.parseInt(item.get("cantidad")) + delta;
                         if (cantidad <= 0) {
                             it.remove();
+                            System.out.println("[POST] Producto eliminado por cantidad <= 0: " + idProducto);
                         } else {
                             double precio = Double.parseDouble(item.get("totalPrecio")) / Integer.parseInt(item.get("cantidad"));
                             item.put("cantidad", String.valueOf(cantidad));
                             item.put("totalPrecio", String.format("%.2f", cantidad * precio).replace(",", "."));
+                            System.out.println("[POST] Producto modificado: " + idProducto + ", nueva cantidad=" + cantidad);
                         }
                         break;
                     }
@@ -110,18 +139,31 @@ public class ControladorCarrito extends HttpServlet {
 
         if (idProducto == null || cantidadStr == null || totalPrecioStr == null
                 || idProducto.isEmpty() || cantidadStr.isEmpty() || totalPrecioStr.isEmpty()) {
+            System.out.println("[POST] Parámetros incompletos para añadir producto");
             response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
             return;
         }
 
-        agregarOActualizarProductoEnCarrito(request, idProducto, cantidadStr, totalPrecioStr);
+        boolean exito = agregarOActualizarProductoEnCarrito(request, idProducto, cantidadStr, totalPrecioStr);
+        if (!exito) {
+            System.out.println("[POST] Fallo al agregar producto. Usuario no autenticado.");
+            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+            response.getWriter().write("No autorizado");
+            return;
+        }
 
+        System.out.println("[POST] Producto añadido correctamente al carrito: " + idProducto);
         response.setContentType("application/json");
         response.getWriter().write("{\"status\":\"success\", \"message\":\"Producto actualizado en el carrito\"}");
     }
 
-    private void agregarOActualizarProductoEnCarrito(HttpServletRequest request, String idProducto, String cantidadStr, String totalPrecioStr) {
-        HttpSession session = request.getSession();
+    private boolean agregarOActualizarProductoEnCarrito(HttpServletRequest request, String idProducto, String cantidadStr, String totalPrecioStr) {
+        HttpSession session = request.getSession(false);
+        if (session == null || session.getAttribute("usuario") == null) {
+            System.out.println("[AGREGAR] Usuario no autenticado");
+            return false;
+        }
+
         List<Map<String, String>> carrito = (List<Map<String, String>>) session.getAttribute("carrito");
         if (carrito == null) {
             carrito = new ArrayList<>();
@@ -143,6 +185,7 @@ public class ControladorCarrito extends HttpServlet {
                 int nuevaCantidad = cantidadActual + cantidadNueva;
                 item.put("cantidad", String.valueOf(nuevaCantidad));
                 item.put("totalPrecio", String.format("%.2f", nuevaCantidad * precioUnidad).replace(",", "."));
+                System.out.println("[AGREGAR] Actualizando cantidad de producto existente: " + idProducto);
                 encontrado = true;
                 break;
             }
@@ -156,13 +199,10 @@ public class ControladorCarrito extends HttpServlet {
             producto.put("cantidad", cantidadStr);
             producto.put("totalPrecio", totalPrecioStr);
             carrito.add(producto);
+            System.out.println("[AGREGAR] Producto nuevo añadido al carrito: " + idProducto);
         }
 
         emf.close();
-    }
-
-    @Override
-    public String getServletInfo() {
-        return "Servlet para manejar el carrito de compras";
+        return true;
     }
 }
