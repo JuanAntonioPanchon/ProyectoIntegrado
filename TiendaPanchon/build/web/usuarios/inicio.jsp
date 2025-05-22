@@ -155,19 +155,20 @@
                                 <h5 class="card-title">${producto.nombre}</h5>
                                 <c:choose>
                                     <c:when test="${preciosOriginales[producto.id] != null and preciosOriginales[producto.id] > producto.precio}">
-                                        <div class="d-flex justify-content-between align-items-center mb-2 px-2">
-                                            <span class="text-muted text-decoration-line-through">
-                                                <fmt:formatNumber value="${preciosOriginales[producto.id]}" type="currency" currencySymbol="€"/>
-                                            </span>
-                                            <span class="text-success fw-bold">
-                                                <fmt:formatNumber value="${producto.precio}" type="currency" currencySymbol="€"/>
-                                            </span>
-                                            <span class="badge bg-danger">
+                                        <div class="position-relative mb-2">
+                                            <div class="text-center">
+                                                <span class="text-muted text-decoration-line-through me-2">
+                                                    <fmt:formatNumber value="${preciosOriginales[producto.id]}" type="currency" currencySymbol="€"/>
+                                                </span>
+                                                <span class="text-success fw-bold">
+                                                    <fmt:formatNumber value="${producto.precio}" type="currency" currencySymbol="€"/>
+                                                </span>
+                                            </div>
+                                            <span class="badge bg-danger position-absolute top-0 end-0">
                                                 -<fmt:formatNumber value="${(1 - (producto.precio / preciosOriginales[producto.id])) * 100}" maxFractionDigits="0"/>%
                                             </span>
                                         </div>
                                     </c:when>
-
                                     <c:otherwise>
                                         <p class="card-text text-success fw-bold text-center">
                                             <fmt:formatNumber value="${producto.precio}" type="currency" currencySymbol="€"/>
@@ -224,9 +225,7 @@
             </div>
         </div>
 
-
         <jsp:include page="/includes/footer.jsp" />
-
         <script>
             document.addEventListener("DOMContentLoaded", function () {
                 document.querySelectorAll("input[type='number'][id^='cantidad_']").forEach(function (input) {
