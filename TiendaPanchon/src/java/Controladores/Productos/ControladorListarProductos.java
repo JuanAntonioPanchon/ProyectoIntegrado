@@ -28,7 +28,7 @@ public class ControladorListarProductos extends HttpServlet {
         String vista = "/usuarios/inicio.jsp";
 
         try {
-            // Obtener todas las categorías
+          
             List<CategoriaProducto> todasCategorias = sc.findCategoriaProductoEntities();
 
             // Filtrar categorías que tienen productos con stock > 0
@@ -48,9 +48,9 @@ public class ControladorListarProductos extends HttpServlet {
             Map<Long, Double> preciosOriginales = new HashMap<>();
 
             int pagina = 1;
-            int tamanio = 6; // productos por página
+            int tamanio = 6;
 
-            // Obtener página solicitada, con control de errores
+           
             String paginaStr = request.getParameter("pagina");
             if (paginaStr != null) {
                 try {
@@ -70,7 +70,7 @@ public class ControladorListarProductos extends HttpServlet {
             Long idCategoriaLong = null;
             boolean redireccionar = false;
 
-            // Validar id_categoria
+            
             if (idCategoriaStr != null) {
                 try {
                     idCategoriaLong = Long.parseLong(idCategoriaStr);
@@ -87,7 +87,7 @@ public class ControladorListarProductos extends HttpServlet {
                     idCategoriaLong = categoriasConProductos.get(0).getId();
                 }
             } else if (idCategoriaLong != null) {
-                // Comprobar si la categoría existe y tiene productos con stock sin lambda
+                
                 boolean categoriaValida = false;
                 for (CategoriaProducto c : categoriasConProductos) {
                     if (c.getId().equals(idCategoriaLong)) {
@@ -101,7 +101,7 @@ public class ControladorListarProductos extends HttpServlet {
                         redireccionar = true;
                         idCategoriaLong = categoriasConProductos.get(0).getId();
                     } else {
-                        // No hay categorías con productos disponibles
+                        
                         idCategoriaLong = null;
                     }
                 }
@@ -110,7 +110,7 @@ public class ControladorListarProductos extends HttpServlet {
             if (redireccionar) {
                 String url = request.getContextPath() + "/Controladores.Productos/ControladorListarProductos?id_categoria=" + idCategoriaLong;
                 response.sendRedirect(url);
-                // NO cerrar emf aquí, porque la siguiente petición abrirá otro EntityManagerFactory
+               
                 return;
             }
 

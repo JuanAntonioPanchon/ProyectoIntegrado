@@ -168,7 +168,7 @@
                     return;
                 }
 
-                // Cambia el texto según si es "crear" o "editar"
+                // Cambio de texto según si es "crear" o "editar"
                 const esCrear = accion === 'crear';
                 const titulo = esCrear ? '¿Deseas darte de alta?' : '¿Confirmar envío?';
                 const texto = esCrear ? 'Se registrará un nuevo usuario con los datos proporcionados.' :
@@ -204,7 +204,7 @@
                 const form = document.querySelector("form[action$='ControladorUsuarios']");
                 const campos = {
                     nombre: {
-                        regex: /^[A-ZÁÉÍÓÚÑ][A-Za-zÁÉÍÓÚÑáéíóúñü ]{0,19}$/, // ✅ varias mayúsculas permitidas
+                        regex: /^[A-ZÁÉÍÓÚÑ][A-Za-zÁÉÍÓÚÑáéíóúñü ]{0,19}$/,
                         mensaje: "Debe empezar con mayúscula. Puede contener letras, tildes y espacios. Máx. 20 caracteres."
                     },
                     apellidos: {
@@ -212,7 +212,7 @@
                         mensaje: "Debe empezar con mayúscula. Puede contener letras, tildes y espacios. Máx. 20 caracteres."
                     },
                     direccion: {
-                        regex: /^(?=.*\d)[A-Za-z0-9ÁÉÍÓÚÑáéíóúñü ,\/]{1,100}$/, // al menos un número
+                        regex: /^(?=.*\d)[A-Za-z0-9ÁÉÍÓÚÑáéíóúñü ,\/]{1,100}$/,
                         mensaje: "Solo letras, números, / y , hasta 100 caracteres, y al menos un número."
                     },
                     telefono: {
@@ -253,7 +253,7 @@
 
                 Object.keys(campos).forEach(campo => {
                     const input = form[campo];
-                    validarCampo(campo); // Mostrar mensaje de inicio
+                    validarCampo(campo);
                     input.addEventListener("input", () => validarCampo(campo));
                 });
 

@@ -45,9 +45,9 @@ public class ControladorPedidosUsuario extends HttpServlet {
             }
         }
 
-        // Paginación
+       
         int pagina = 1;
-        int tamanio = 8; // 8 pedidos por página
+        int tamanio = 8;
 
         if (request.getParameter("pagina") != null) {
             try {
@@ -57,14 +57,14 @@ public class ControladorPedidosUsuario extends HttpServlet {
             }
         }
 
-        // Obtener pedidos paginados
+        
         List<Pedido> pedidosUsuario = servicioPedido.findPedidosPorUsuarioOrdenadosDesc(usuario.getId(), pagina, tamanio);
 
-        // Total pedidos para calcular páginas
+        
         long total = servicioPedido.contarPedidosPorUsuario(usuario.getId());
         int totalPaginas = (int) Math.ceil((double) total / tamanio);
 
-        // Enviar atributos a JSP
+        
         request.setAttribute("pedidos", pedidosUsuario);
         request.setAttribute("paginaActual", pagina);
         request.setAttribute("totalPaginas", totalPaginas);
@@ -76,7 +76,7 @@ public class ControladorPedidosUsuario extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
-        request.setCharacterEncoding("UTF-8"); // ✅ evita errores con caracteres
+        request.setCharacterEncoding("UTF-8");
 
         Usuario usuario = (Usuario) request.getSession().getAttribute("usuario");
         if (usuario == null) {
@@ -138,7 +138,7 @@ public class ControladorPedidosUsuario extends HttpServlet {
                 return;
             }
 
-            // Crear pedido
+            
             Pedido pedido = new Pedido();
             pedido.setUsuario(usuario);
             pedido.setFechaPedido(LocalDate.now());

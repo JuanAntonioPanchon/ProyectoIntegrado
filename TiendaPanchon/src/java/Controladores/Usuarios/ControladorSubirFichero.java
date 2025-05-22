@@ -29,7 +29,7 @@ public class ControladorSubirFichero extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         String recetaIdStr = request.getParameter("recetaId");
-        String pagina = request.getParameter("pagina"); // <-- AÑADIR
+        String pagina = request.getParameter("pagina");
 
         if (recetaIdStr != null) {
             try {
@@ -42,7 +42,7 @@ public class ControladorSubirFichero extends HttpServlet {
             request.setAttribute("error", "Falta el parámetro recetaId.");
         }
 
-        // Añadir la página como atributo para el JSP
+        
         if (pagina != null) {
             request.setAttribute("pagina", pagina);
         }
@@ -64,7 +64,7 @@ public class ControladorSubirFichero extends HttpServlet {
         String nuevoNombreFichero = recetaId + "_" + nombreOriginal;
         String rutaCompleta = path + "/" + nuevoNombreFichero;
 
-        // Guardar fichero
+        
         try (InputStream contenido = fichero.getInputStream(); FileOutputStream ficheroSalida = new FileOutputStream(rutaCompleta)) {
             byte[] buffer = new byte[8192];
             int bytesLeidos;
@@ -73,7 +73,7 @@ public class ControladorSubirFichero extends HttpServlet {
             }
         }
 
-        // Guardar la imagen en la receta
+        
         EntityManagerFactory emf = Persistence.createEntityManagerFactory("TiendaPanchonPU");
         ServicioReceta sr = new ServicioReceta(emf);
         Receta receta = sr.findReceta(recetaId);
@@ -93,7 +93,7 @@ public class ControladorSubirFichero extends HttpServlet {
             }
         }
 
-        // Mensaje de éxito y redirección a página original
+        
         request.getSession().setAttribute("imagenSubida", true);
         String redireccion = request.getContextPath() + "/Controladores/ControladorReceta";
         if (pagina != null && !pagina.isBlank()) {

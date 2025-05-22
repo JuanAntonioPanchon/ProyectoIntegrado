@@ -154,7 +154,7 @@ public class ServicioReceta implements Serializable {
             Root<Receta> root = cq.from(Receta.class);
             cq.select(root);
             cq.where(cb.equal(root.get("usuario").get("id"), idUsuario));
-            cq.orderBy(cb.desc(root.get("id"))); // Opcional: ordenar por ID descendente
+            cq.orderBy(cb.desc(root.get("id")));
 
             return em.createQuery(cq)
                     .setFirstResult((pagina - 1) * tamanio)

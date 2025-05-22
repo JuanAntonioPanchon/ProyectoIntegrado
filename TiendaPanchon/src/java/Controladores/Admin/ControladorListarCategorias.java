@@ -42,7 +42,7 @@ public class ControladorListarCategorias extends HttpServlet {
             throws ServletException, IOException {
         EntityManagerFactory emf = Persistence.createEntityManagerFactory("TiendaPanchonPU");
         ServicioCategoriaProducto scp = new ServicioCategoriaProducto(emf);
-        String vista = "/admin/crearCategoria.jsp"; // Establece la vista por defecto como la de creación de categoría
+        String vista = "/admin/crearCategoria.jsp"; 
 
         HttpSession sesion = request.getSession();
         Usuario usuario = (Usuario) sesion.getAttribute("usuario");
@@ -91,8 +91,8 @@ public class ControladorListarCategorias extends HttpServlet {
             // Limpiar el error de la sesión después de pasarlo a la vista
             String error = (String) sesion.getAttribute("error");
             if (error != null) {
-                request.setAttribute("error", error); // Pasar el error a la vista
-                sesion.removeAttribute("error"); // Limpiar el error después de pasarlo
+                request.setAttribute("error", error);
+                sesion.removeAttribute("error"); 
             }
         }
 
@@ -136,7 +136,7 @@ public class ControladorListarCategorias extends HttpServlet {
                         scp.create(categoria);
                         CategoriaProducto creada = scp.findCategoriaProductoByName(nombre);
                         emf.close();
-                        // REDIRECCIÓN PERSONALIZADA tras crear
+                        
                         response.sendRedirect("ControladorProducto?id_categoria=" + creada.getId());
                         return;
                     }
@@ -159,7 +159,7 @@ public class ControladorListarCategorias extends HttpServlet {
                     categoria.setNombre(nombre);
                     scp.edit(categoria);
                     emf.close();
-                    // REDIRECCIÓN PERSONALIZADA tras editar
+                    
                     response.sendRedirect("ControladorProducto?id_categoria=" + id);
                     return;
                 } // ELIMINAR
@@ -187,7 +187,7 @@ public class ControladorListarCategorias extends HttpServlet {
             return;
         }
 
-        // Fallback en caso de eliminación u otros
+        
         response.sendRedirect("ControladorListarCategorias");
     }
 

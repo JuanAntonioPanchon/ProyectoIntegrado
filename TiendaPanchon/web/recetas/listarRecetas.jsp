@@ -191,7 +191,7 @@
                                                         const inputPagina = document.createElement("input");
                                                         inputPagina.type = "hidden";
                                                         inputPagina.name = "pagina";
-                                                        inputPagina.value = "${paginaActual}"; // Usa el valor JSTL
+                                                        inputPagina.value = "${paginaActual}";
 
                                                         form.appendChild(inputReceta);
                                                         form.appendChild(inputImagen);

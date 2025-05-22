@@ -39,7 +39,7 @@ public class ControladorLogin extends HttpServlet {
         String accion = request.getParameter("accion");
 
         if ("logout".equals(accion)) {
-            HttpSession sesion = request.getSession(false); // Obtener la sesi�n actual sin crear una nueva
+            HttpSession sesion = request.getSession(false);
             if (sesion != null) {
                 sesion.invalidate();
             }
@@ -97,7 +97,7 @@ public class ControladorLogin extends HttpServlet {
                 }
             }
 
-// Si falla todo lo anterior, mostrar mensaje genérico
+
             error = "Usuario o contraseña incorrectos";
 
             emf.close();
@@ -107,7 +107,7 @@ public class ControladorLogin extends HttpServlet {
         getServletContext().getRequestDispatcher("/login.jsp").forward(request, response);
     }
 
-    //Mejor aqui ya que no hay ningun servicio que se adapte del todo para meterlo
+    //Dejo esto aqui ya que no tengo un servicio especifico para este.
     private void iniciarSesion(Usuario usu, HttpServletRequest request, HttpServletResponse response) throws IOException {
         HttpSession sesion = request.getSession();
         sesion.setAttribute("usuario", usu);

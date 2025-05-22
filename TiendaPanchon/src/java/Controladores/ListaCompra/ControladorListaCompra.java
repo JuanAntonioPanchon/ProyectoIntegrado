@@ -27,7 +27,7 @@ public class ControladorListaCompra extends HttpServlet {
 
         if (usuario != null) {
             int pagina = 1;
-            int tamanio = 10; // 10 productos por página
+            int tamanio = 10;
 
             if (request.getParameter("pagina") != null) {
                 try {
@@ -40,10 +40,10 @@ public class ControladorListaCompra extends HttpServlet {
                 }
             }
 
-            // Obtenemos productos paginados
+            
             List<Producto> productosLista = servicioLista.obtenerListaPorUsuarioPaginado(usuario.getId(), pagina, tamanio);
 
-            // Contamos total para calcular páginas
+           
             long total = servicioLista.contarProductosPorUsuario(usuario.getId());
             int totalPaginas = (int) Math.ceil((double) total / tamanio);
 
@@ -85,21 +85,21 @@ public class ControladorListaCompra extends HttpServlet {
                     Long idProducto = Long.parseLong(idProductoStr);
                     String idCategoria = request.getParameter("idCategoria");
 
-                    // Obtener nombre del producto
+                    
                     String nombreProducto = servicioLista.obtenerNombreProducto(idProducto);
 
-                    // Comprobar si ya está en la lista
+                    
                     boolean yaExiste = servicioLista.productoYaEnLista(usuario.getId(), idProducto);
 
-                    // Si no está, lo añadimos
+                    
                     if (!yaExiste) {
                         servicioLista.agregarProductoALista(usuario.getId(), idProducto);
                     }
 
-                    // Construimos mensaje
+                    
                     String mensaje = yaExiste ? "existe" : "ok";
 
-                    // Redirigir con mensaje y nombre del producto
+                    
                     response.sendRedirect(request.getContextPath()
                             + "/Controladores.Productos/ControladorListarProductos?id_categoria=" + idCategoria
                             + "&mensaje=" + mensaje

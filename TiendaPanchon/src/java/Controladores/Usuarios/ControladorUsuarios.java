@@ -134,7 +134,7 @@ public class ControladorUsuarios extends HttpServlet {
 
                 if (password.equals(password2)) {
                     String hash = BCrypt.hashpw(password, BCrypt.gensalt());
-                    usuario.setPassword(hash); // ✅ encriptado correctamente
+                    usuario.setPassword(hash);
                 } else {
                     error = "Las contraseñas no coinciden.";
                 }

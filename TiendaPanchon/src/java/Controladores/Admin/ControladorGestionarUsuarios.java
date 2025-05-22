@@ -58,7 +58,7 @@ public class ControladorGestionarUsuarios extends HttpServlet {
             }
         }
 
-        // 🔽 Paginación
+        
         int pagina = 1;
         int tamanio = 10;
 

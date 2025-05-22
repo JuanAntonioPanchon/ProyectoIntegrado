@@ -198,7 +198,7 @@ public class ServicioProducto implements Serializable {
     public List<Object[]> findProductosMasVendidos(LocalDate fechaInicio, LocalDate fechaFin, Long categoriaId) {
         EntityManager em = emf.createEntityManager();
         try {
-            // Consulta SQL
+            
             String sql = "SELECT p.nombre, SUM(pp.cantidad) "
                     + "FROM PRODUCTO p "
                     + "JOIN PEDIDOPRODUCTO pp ON pp.id_producto = p.id "
@@ -208,13 +208,13 @@ public class ServicioProducto implements Serializable {
                     + "GROUP BY p.id "
                     + "ORDER BY SUM(pp.cantidad) DESC";
 
-            // Preparar consulta
+            
             Query query = em.createNativeQuery(sql);
             query.setParameter(1, java.sql.Date.valueOf(fechaInicio));
             query.setParameter(2, java.sql.Date.valueOf(fechaFin));
             query.setParameter(3, categoriaId);
 
-            // Ejecutar consulta
+            
             List<Object[]> productos = query.getResultList();
 
             return productos;

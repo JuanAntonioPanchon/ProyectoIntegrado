@@ -36,7 +36,7 @@ public class ControladorEliminarFoto extends HttpServlet {
             // Eliminar la imagen del sistema de archivos
             File archivoImagen = new File(rutaImagen);
             if (archivoImagen.exists()) {
-                archivoImagen.delete();  // Eliminar archivo físico
+                archivoImagen.delete();
             }
 
             // Eliminar la imagen de la base de datos
@@ -51,7 +51,7 @@ public class ControladorEliminarFoto extends HttpServlet {
                     producto.setImagenes(imagenes);
 
                     try {
-                        sr.edit(producto);  // Guardar los cambios en la base de datos
+                        sr.edit(producto);
                     } catch (Exception e) {
                         e.printStackTrace();
                         request.setAttribute("error", "Error al eliminar la imagen del producto.");

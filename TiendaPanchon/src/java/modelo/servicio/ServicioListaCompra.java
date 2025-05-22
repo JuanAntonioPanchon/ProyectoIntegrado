@@ -155,16 +155,16 @@ public class ServicioListaCompra implements Serializable {
         try {
             em.getTransaction().begin();
 
-            // Buscar la lista del usuario
+            
             ListaCompra lista = em.createQuery(
                     "SELECT l FROM ListaCompra l WHERE l.usuario.id = :idUsuario", ListaCompra.class)
                     .setParameter("idUsuario", idUsuario)
                     .getSingleResult();
 
-            // Buscar el producto
+            
             Producto producto = em.find(Producto.class, idProducto);
 
-            // Eliminar la relación
+            
             if (lista != null && producto != null) {
                 lista.getProductos().remove(producto);
                 em.merge(lista);

@@ -28,11 +28,11 @@ public class ControladorInicio extends HttpServlet {
         emf.close();
 
         if (categorias != null && !categorias.isEmpty()) {
-            // Redirigir al controlador de productos con id_categoria de la primera categoría
+
             Long idPrimeraCategoria = categorias.get(0).getId();
             response.sendRedirect(request.getContextPath() + "/Controladores.Productos/ControladorListarProductos?id_categoria=" + idPrimeraCategoria);
         } else {
-            // Si no hay categorías, redirige sin parámetro (o a una página de error)
+            
             response.sendRedirect(request.getContextPath() + "/Controladores.Productos/ControladorListarProductos");
         }
     }

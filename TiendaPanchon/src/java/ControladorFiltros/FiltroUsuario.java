@@ -50,10 +50,8 @@ public class FiltroUsuario implements Filter {
                 || uri.equals(contexto + "/index.jsp")
                 || uri.equals(contexto + "/index.html")
                 || uri.equals(contexto + "/login.jsp")
-                || // login
-                uri.equals(contexto + "/registro.jsp")
-                || // registro
-                uri.equals(contexto + "/usuarios/inicio.jsp")
+                || uri.equals(contexto + "/registro.jsp")
+                || uri.equals(contexto + "/usuarios/inicio.jsp")
                 || // vista tras login o registro
                 uri.equals(contexto + "/Controladores/ControladorLogin")
                 || uri.equals(contexto + "/Controladores/ControladorInicio")

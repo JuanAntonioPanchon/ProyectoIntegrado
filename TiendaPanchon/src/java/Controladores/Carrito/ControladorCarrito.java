@@ -1,4 +1,3 @@
-// ControladorCarrito.java
 package Controladores.Carrito;
 
 import java.io.IOException;

@@ -60,7 +60,7 @@ public class ControladorEliminarImagen extends HttpServlet {
             }
         }
 
-        // Redirigir con la página actual si está presente
+        
         String redirectURL = request.getContextPath() + "/Controladores/ControladorReceta";
         if (pagina != null && !pagina.isBlank()) {
             redirectURL += "?pagina=" + pagina;

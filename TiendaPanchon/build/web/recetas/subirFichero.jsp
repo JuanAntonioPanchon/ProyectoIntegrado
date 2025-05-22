@@ -12,7 +12,7 @@
     </head>
     <body>
 
-        <!-- Cabecera según rol -->
+        <!-- Cabecera según el rol -->
         <c:choose>
             <c:when test="${sessionScope.usuario.rol == 'admin'}">
                 <jsp:include page="/includes/header.jsp" />

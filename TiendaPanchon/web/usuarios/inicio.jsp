@@ -308,7 +308,7 @@
                     method: "POST",
                     headers: {
                         "Content-Type": "application/x-www-form-urlencoded",
-                        "X-Requested-With": "XMLHttpRequest" // 💡 Esto activa el control AJAX del filtro
+                        "X-Requested-With": "XMLHttpRequest" // 💡 Esto activa el control AJAX del filtro para que me mande al login si le da al carrito
                     },
                     body: "idProducto=" + encodeURIComponent(idProducto) +
                             "&cantidad=" + encodeURIComponent(cantidad) +

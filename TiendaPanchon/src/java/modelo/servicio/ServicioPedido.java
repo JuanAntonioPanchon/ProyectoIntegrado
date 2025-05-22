@@ -166,11 +166,11 @@ public class ServicioPedido implements Serializable {
                 Producto producto = pp.getProducto();
                 int nuevaCantidad = producto.getStock() + pp.getCantidad();
                 producto.setStock(nuevaCantidad);
-                servicioProducto.edit(producto); // Usa merge dentro del método edit()
+                servicioProducto.edit(producto);
             }
 
-            // Eliminar el pedido
-            pedido = em.merge(pedido); // Asegurar que está gestionado
+            
+            pedido = em.merge(pedido);
             em.remove(pedido);
 
             em.getTransaction().commit();
@@ -212,8 +212,8 @@ public class ServicioPedido implements Serializable {
             em.close();
         }
     }
+    
     // Devuelve pedidos paginados por usuario, ordenados por fecha descendente
-
     public List<Pedido> findPedidosPorUsuarioOrdenadosDesc(Long idUsuario, int pagina, int tamanio) {
         EntityManager em = getEntityManager();
         try {

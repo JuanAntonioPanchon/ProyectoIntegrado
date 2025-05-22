@@ -45,9 +45,9 @@ public class ControladorListarPedidos extends HttpServlet {
             }
         }
 
-        // Paginación
+        
         int pagina = 1;
-        int tamanio = 8; // 8 pedidos por página
+        int tamanio = 8;
 
         if (request.getParameter("pagina") != null) {
             try {
@@ -57,10 +57,10 @@ public class ControladorListarPedidos extends HttpServlet {
             }
         }
 
-        // Obtener pedidos paginados
+        
         List<Pedido> pedidos = servicioPedido.findPedidoEntities(tamanio, (pagina - 1) * tamanio);
 
-        // Contar total para calcular número de páginas
+        
         int total = servicioPedido.getPedidoCount();
         int totalPaginas = (int) Math.ceil((double) total / tamanio);
 

@@ -21,7 +21,7 @@
         
         <main class="container my-4">
             <div class="row">
-                <!-- Tabla a la izquierda -->
+                <!-- Tabla -->
                 <div class="col-lg-7 mb-4">
                     <h2 class="text-danger fw-bold text-center mb-3">STOCK A REPONER URGENTE!!!</h2>
                     <div class="table-responsive">

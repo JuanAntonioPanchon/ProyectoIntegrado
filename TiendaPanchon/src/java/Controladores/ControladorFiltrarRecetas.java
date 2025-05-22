@@ -53,7 +53,7 @@ public class ControladorFiltrarRecetas extends HttpServlet {
                 filtradas.add(receta);
             }
         }
-        recetas = filtradas; // Asignar las recetas filtradas
+        recetas = filtradas;
 
         request.setAttribute("recetas", filtradas);
         getServletContext().getRequestDispatcher("/recetas/filtrarReceta.jsp").forward(request, response);

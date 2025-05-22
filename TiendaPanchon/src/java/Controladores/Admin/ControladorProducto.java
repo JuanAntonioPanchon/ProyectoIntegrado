@@ -106,7 +106,7 @@ public class ControladorProducto extends HttpServlet {
             String eliminarProductoStr = request.getParameter("eliminar");
             if (eliminarProductoStr != null && eliminarProductoStr.equals("Eliminar")) {
                 String idProductoStr = request.getParameter("id");
-                String idCategoriaStr = request.getParameter("id_categoria"); // 🔁 capturamos id de categoría
+                String idCategoriaStr = request.getParameter("id_categoria");
 
                 if (idProductoStr != null) {
                     try {
@@ -120,7 +120,7 @@ public class ControladorProducto extends HttpServlet {
                     }
                 }
 
-                // 🔁 Redirigir manteniendo la categoría seleccionada
+                
                 if (idCategoriaStr != null && !idCategoriaStr.isEmpty()) {
                     response.sendRedirect("ControladorProducto?id_categoria=" + idCategoriaStr);
                 } else {
@@ -186,7 +186,7 @@ public class ControladorProducto extends HttpServlet {
             String precioVentaStr = request.getParameter("precioVenta");
             request.setAttribute("precioVenta", precioVentaStr);
 
-            // Lógica de novedad
+            // Novedad
             if (!esEditar) {
                 List<Producto> novedades = sp.findProductosNovedades();
 
@@ -210,7 +210,7 @@ public class ControladorProducto extends HttpServlet {
                 sp.create(producto);
             }
 
-            // Redirigir a la categoría
+           
             if (categoriaIdStr != null && !categoriaIdStr.isEmpty()) {
                 response.sendRedirect("ControladorProducto?id_categoria=" + categoriaIdStr);
             } else {

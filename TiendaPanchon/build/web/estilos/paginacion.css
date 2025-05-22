@@ -58,7 +58,7 @@ body, .colorFondo {
     border: none !important;
 }
 #tablaCarrito {
-    min-height: 320px; /* ajusta según la altura esperada de 3 filas */
+    min-height: 320px;
     transition: all 0.2s ease-in-out;
 }
 

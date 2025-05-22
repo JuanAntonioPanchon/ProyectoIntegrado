@@ -32,7 +32,7 @@ import modelo.entidades.Usuario;
             "/Controladores/ControladorReceta"
         },
         dispatcherTypes = {
-            DispatcherType.REQUEST // Solo REQUEST para evitar bucles
+            DispatcherType.REQUEST // Lo uso porque si no entro en bucle
         }
 )
 public class FiltroReceta implements Filter {
@@ -54,7 +54,7 @@ public class FiltroReceta implements Filter {
             return;
         }
 
-        // 🚫 Si no, redirigir al login
+        
         res.sendRedirect(req.getContextPath() + "/Controladores/ControladorLogin");
     }
 }

@@ -57,7 +57,6 @@
                         return;
                     }
 
-                    // Validación tipo MIME
                     if (!extensionesPermitidas.includes(nuevo.type)) {
                         Swal.fire({
                             icon: 'error',
@@ -67,7 +66,6 @@
                         return;
                     }
 
-                    // Validación tamaño (opcional)
                     const maxSizeMB = 2;
                     if (nuevo.size > maxSizeMB * 1024 * 1024) {
                         Swal.fire({

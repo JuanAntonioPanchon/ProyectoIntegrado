@@ -159,7 +159,7 @@
                                                                                 confirmButtonText: 'Sí, eliminar'
                                                                             }).then((result) => {
                                                                                 if (result.isConfirmed) {
-                                                                                    // 🔁 Insertamos el campo que se pierde al usar .submit()
+                                                                                    // 🔁 Se inserta el campo que se pierde al usar .submit()
                                                                                     const inputEliminar = document.createElement('input');
                                                                                     inputEliminar.type = 'hidden';
                                                                                     inputEliminar.name = 'eliminar';

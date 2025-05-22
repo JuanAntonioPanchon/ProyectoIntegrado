@@ -19,7 +19,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
                 const fuse = new Fuse(usuarios, {
                     keys: ['nombre', 'apellidos', 'email', 'rol'],
-                    threshold: 0.2,
+                    threshold: 0.2
                 });
 
                 buscador.addEventListener("input", () => {

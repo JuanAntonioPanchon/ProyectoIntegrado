@@ -134,16 +134,6 @@ public class ServicioUsuario implements Serializable {
         }
     }
 
-//    //Metodo para validar usuario por email y password
-//    public Usuario validarUsuario(String email, String password) {
-//        List<Usuario> usuarios = findUsuarioEntities();
-//        for (Usuario u : usuarios) {
-//            if (u.getEmail().equals(email) && u.getPassword().equals(password)) {
-//                return u;
-//            }
-//        }
-//        return null;
-//    }
     public Usuario findUsuarioByEmail(String email) {
         EntityManager em = getEntityManager();
         try {

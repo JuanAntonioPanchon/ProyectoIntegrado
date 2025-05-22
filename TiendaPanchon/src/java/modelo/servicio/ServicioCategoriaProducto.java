@@ -139,7 +139,7 @@ public class ServicioCategoriaProducto implements Serializable {
     public CategoriaProducto findCategoriaProductoByName(String nombre) {
         EntityManager em = getEntityManager();
         try {
-            // Buscar categoria por nombre
+            
             return em.createQuery("SELECT c FROM CategoriaProducto c WHERE c.nombre = :nombre", CategoriaProducto.class)
                     .setParameter("nombre", nombre)
                     .getSingleResult();
