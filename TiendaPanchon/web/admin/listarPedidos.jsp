@@ -11,6 +11,7 @@
         <link rel="stylesheet" href="../estilos/coloresPersonalizados.css">
         <link rel="stylesheet" href="../estilos/tablas.css">
         <link rel="stylesheet" type="text/css" href="../estilos/paginacion.css">
+        <link href="https://fonts.googleapis.com/css2?family=Dancing+Script&display=swap" rel="stylesheet">
         <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     </head>
     <body class="colorFondo">

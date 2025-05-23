@@ -1,4 +1,6 @@
-
+* {
+ font-family: 'Dancing Script';
+}
 .active {
     background-color: #f5e8d0 !important;
     color: #000 !important; 

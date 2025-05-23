@@ -10,6 +10,7 @@
         <link rel="stylesheet" href="../estilos/tablas.css">
         <link rel="stylesheet" href="../estilos/paginacion.css">
         <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/css2?family=Dancing+Script&display=swap" rel="stylesheet">
         <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     </head>
     <body class="colorFondo">

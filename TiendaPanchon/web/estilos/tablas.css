@@ -1,3 +1,6 @@
+* {
+    font-family: 'Dancing Script';
+}
 /* Encabezado de tabla */
 th {
     background-color: #9dad6f !important;

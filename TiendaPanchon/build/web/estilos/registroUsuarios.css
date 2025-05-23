@@ -1,3 +1,7 @@
+* {
+ font-family: 'Dancing Script';
+}
+
 .form-container {
     max-width: 450px;
 }
