@@ -36,7 +36,7 @@
                             </thead>
                             <tbody>
                                 <c:forEach var="producto" items="${productosStockBajo}">
-                                    <tr class="fila-clicable" data-href="/TiendaPanchon/Controladores.Admin/ControladorProducto?id_producto=${producto.id}">
+                                    <tr class="fila-clicable" data-href="${pageContext.request.contextPath}/Controladores.Admin/ControladorProducto?id_producto=${producto.id}">
                                         <td>${producto.categoria.nombre}</td>
                                         <td>${producto.nombre}</td>
                                         <td>${producto.stock}</td>

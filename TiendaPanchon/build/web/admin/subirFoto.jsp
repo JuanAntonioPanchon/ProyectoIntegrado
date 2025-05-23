@@ -28,7 +28,7 @@
                     <button type="button" class="boton" id="btnSubirFoto">Subir Foto</button>
                 </form>
 
-                <a href="/TiendaPanchon/Controladores.Admin/ControladorProducto?id_categoria=${producto.categoria.id}">
+                <a href="${pageContext.request.contextPath}/Controladores.Admin/ControladorProducto?id_categoria=${producto.categoria.id}">
                     <button class="boton">Volver a Productos</button>
                 </a>
             </div>

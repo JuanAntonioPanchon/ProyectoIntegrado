@@ -31,13 +31,13 @@
         <main class="container py-4">
             <div class="d-flex justify-content-between align-items-center mb-4">
                 <div>
-                    <a href="/TiendaPanchon/Controladores/ControladorReceta"
+                    <a href="${pageContext.request.contextPath}/Controladores/ControladorReceta"
                        class="btn btn btn-ver ${pageContext.request.requestURI.contains('listarRecetas') ? 'active' : ''}">
                         Mis Recetas
                     </a>
                 </div>
                 <div>
-                    <a href="/TiendaPanchon/Controladores/ControladorListadoReceta"
+                    <a href="${pageContext.request.contextPath}/Controladores/ControladorListadoReceta"
                        class="btn btn btn-ver ${pageContext.request.requestURI.contains('listarTodasLasRecetas') ? 'active' : ''}">
                         Ver Recetas de Otros Usuarios
                     </a>

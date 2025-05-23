@@ -25,7 +25,7 @@
                     <div class="alert alert-danger mt-3 text-center fw-bold">${error}</div>
                 </c:if>
 
-                <form method="post" action="/TiendaPanchon/Controladores.Admin/ControladorGestionarUsuarios" id="formAdminUsuario">
+                <form method="post" action="${pageContext.request.contextPath}/Controladores.Admin/ControladorGestionarUsuarios" id="formAdminUsuario">
                     <c:if test="${usuario != null}">
                         <input type="hidden" name="idUsuario" value="${usuario.id}">
                     </c:if>
@@ -84,7 +84,7 @@
                     </div>
 
                     <div class="d-flex justify-content-between mt-4">
-                        <a href="/TiendaPanchon/Controladores.Admin/ControladorGestionarUsuarios" class="btn btn-volver px-4">Cancelar</a>
+                        <a href="${pageContext.request.contextPath}/Controladores.Admin/ControladorGestionarUsuarios" class="btn btn-volver px-4">Cancelar</a>
                         <button type="button" class="btn btn-crear px-4" id="btnAceptar">Aceptar</button>
                     </div>
                 </form>

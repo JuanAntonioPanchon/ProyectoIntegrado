@@ -38,7 +38,7 @@
                                 <p><strong>Estado:</strong> ${pedido.estado}</p>
                             </div>
                             <div class="card-footer bg-transparent border-0 d-flex justify-content-between">
-                                <form action="/TiendaPanchon/Controladores.Admin/ControladorListarPedidos"
+                                <form action="${pageContext.request.contextPath}/Controladores.Admin/ControladorListarPedidos"
                                       method="post" class="form-cancelar-pedido me-2">
                                     <input type="hidden" name="accion" value="eliminar">
                                     <input type="hidden" name="idPedido" value="${pedido.id}">
@@ -49,7 +49,7 @@
                                         Cancelar Pedido
                                     </button>
                                 </form>
-                                <a href="/TiendaPanchon/Controladores.Admin/ControladorListarPedidos?accion=editar&idPedido=${pedido.id}"
+                                <a href="${pageContext.request.contextPath}/Controladores.Admin/ControladorListarPedidos?accion=editar&idPedido=${pedido.id}"
                                    class="btn btn-editar btn-sm">Ver Pedido</a>
                             </div>
                         </div>

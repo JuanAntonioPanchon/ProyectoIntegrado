@@ -19,19 +19,19 @@ document.querySelectorAll('.tarjeta-admin').forEach(card => {
 
         switch (true) {
             case titulo.includes('PRODUCTOS Y CATEGORÍAS'):
-                window.location.href = '/TiendaPanchon/Controladores.Admin/ControladorListarCategorias';
+                window.location.href = '${pageContext.request.contextPath}/Controladores.Admin/ControladorListarCategorias';
                 break;
             case titulo.includes('RECETAS'):
-                window.location.href = '/TiendaPanchon/Controladores/ControladorReceta';
+                window.location.href = '${pageContext.request.contextPath}/Controladores/ControladorReceta';
                 break;
             case titulo.includes('USUARIOS'):
-                window.location.href = '/TiendaPanchon/Controladores.Admin/ControladorGestionarUsuarios';
+                window.location.href = '${pageContext.request.contextPath}/Controladores.Admin/ControladorGestionarUsuarios';
                 break;
             case titulo.includes('PEDIDOS'):
-                window.location.href = '/TiendaPanchon/Controladores.Admin/ControladorListarPedidos';
+                window.location.href = '${pageContext.request.contextPath}/Controladores.Admin/ControladorListarPedidos';
                 break;
             case titulo.includes('GRÁFICA VENTAS'):
-                window.location.href = '/TiendaPanchon/Controladores.Admin/ControladorGrafica';
+                window.location.href = '${pageContext.request.contextPath}/Controladores.Admin/ControladorGrafica';
                 break;
             default:
                 console.warn('Ruta no definida para:', titulo);

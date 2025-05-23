@@ -18,7 +18,7 @@
             <div class="p-4 mx-auto border rounded shadow-lg form-container" style="max-width: 500px;">
                 <h2 class="text-center fw-bold text-uppercase">${empty id ? "CREAR" : "EDITAR"} CATEGORÍA</h2>
 
-                <form method="post" action="/TiendaPanchon/Controladores.Admin/ControladorListarCategorias">
+                <form method="post" action="${pageContext.request.contextPath}/Controladores.Admin/ControladorListarCategorias">
                     <input type="hidden" name="referer" value="${header.referer}">
                     <input type="hidden" name="id" value="${id}">
 

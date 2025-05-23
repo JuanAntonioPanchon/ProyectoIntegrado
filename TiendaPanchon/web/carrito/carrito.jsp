@@ -84,7 +84,7 @@
             </c:choose>
 
             <div class="text-center mt-4">
-                <a href="/TiendaPanchon/Controladores/ControladorInicio" class="btn btn-secondary">Volver a la tienda</a>
+                <a href="${pageContext.request.contextPath}/Controladores/ControladorInicio" class="btn btn-secondary">Volver a la tienda</a>
             </div>
         </div>
 
@@ -94,7 +94,7 @@
 
         <script>
             function modificarCantidad(id, delta) {
-                fetch("/TiendaPanchon/Controladores.Carrito/ControladorCarrito", {
+                fetch("${pageContext.request.contextPath}/Controladores.Carrito/ControladorCarrito", {
                     method: "POST",
                     headers: {"Content-Type": "application/x-www-form-urlencoded"},
                     body: new URLSearchParams({accion: "modificar", idProducto: id, delta: delta})
@@ -112,7 +112,7 @@
                     confirmButtonText: 'Sí, eliminar'
                 }).then(result => {
                     if (result.isConfirmed) {
-                        fetch("/TiendaPanchon/Controladores.Carrito/ControladorCarrito", {
+                        fetch("${pageContext.request.contextPath}/Controladores.Carrito/ControladorCarrito", {
                             method: "POST",
                             headers: {"Content-Type": "application/x-www-form-urlencoded"},
                             body: new URLSearchParams({accion: "eliminar", idProducto: id})
@@ -132,7 +132,7 @@
                     confirmButtonText: 'Sí, vaciar'
                 }).then(result => {
                     if (result.isConfirmed) {
-                        fetch("/TiendaPanchon/Controladores.Carrito/ControladorCarrito", {
+                        fetch("${pageContext.request.contextPath}/Controladores.Carrito/ControladorCarrito", {
                             method: "POST",
                             headers: {"Content-Type": "application/x-www-form-urlencoded"},
                             body: "accion=vaciar"

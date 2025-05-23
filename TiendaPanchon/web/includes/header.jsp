@@ -6,7 +6,7 @@
             <!-- Logo y título -->
             <div class="d-flex align-items-center">
                 <img src="../imagenes/elRinconDeLaura.jpeg" alt="Logo El Rincón de Laura" class="rounded-circle me-3" style="width: 60px;">
-                <a class="navbar-brand fw-bold mb-0 text-black text-decoration-none" href="/TiendaPanchon/Controladores.Admin/ControladorAdmin">
+                <a class="navbar-brand fw-bold mb-0 text-black text-decoration-none" href="${pageContext.request.contextPath}/Controladores.Admin/ControladorAdmin">
                     EL RINCÓN DE LAURA
                 </a>
             </div>
@@ -20,32 +20,32 @@
             <div class="collapse navbar-collapse" id="menuNav">
                 <ul class="navbar-nav ms-auto ">
                     <li class="nav-item mx-1">
-                        <a class="nav-link text-black" href="/TiendaPanchon/Controladores.Admin/ControladorListarCategorias">
+                        <a class="nav-link text-black" href="${pageContext.request.contextPath}/Controladores.Admin/ControladorListarCategorias">
                             <i class="bi bi-box-seam me-1"></i> Productos y Categorías
                         </a>
                     </li>
                     <li class="nav-item mx-1">
-                        <a class="nav-link text-black" href="/TiendaPanchon/Controladores.Admin/ControladorGestionarUsuarios">
+                        <a class="nav-link text-black" href="${pageContext.request.contextPath}/Controladores.Admin/ControladorGestionarUsuarios">
                             <i class="bi bi-people-fill me-1"></i> Usuarios
                         </a>
                     </li>
                     <li class="nav-item mx-1">
-                        <a class="nav-link text-black" href="/TiendaPanchon/Controladores/ControladorReceta">
+                        <a class="nav-link text-black" href="${pageContext.request.contextPath}/Controladores/ControladorReceta">
                             <i class="bi bi-book me-1"></i> Recetas
                         </a>
                     </li>
                     <li class="nav-item mx-1">
-                        <a class="nav-link text-black" href="/TiendaPanchon/Controladores.Admin/ControladorListarPedidos">
+                        <a class="nav-link text-black" href="${pageContext.request.contextPath}/Controladores.Admin/ControladorListarPedidos">
                             <i class="bi bi-basket me-1"></i> Pedidos
                         </a>
                     </li>
                     <li class="nav-item mx-1">
-                        <a class="nav-link text-black" href="/TiendaPanchon/Controladores.Admin/ControladorGrafica">
+                        <a class="nav-link text-black" href="${pageContext.request.contextPath}/Controladores.Admin/ControladorGrafica">
                             <i class="bi bi-bar-chart-line me-1"></i> Gráfica
                         </a>
                     </li>
                     <li class="nav-item mx-1">
-                        <a class="nav-link text-black fw-bold" href="/TiendaPanchon/Controladores/ControladorLogin?accion=logout">
+                        <a class="nav-link text-black fw-bold" href="${pageContext.request.contextPath}/Controladores/ControladorLogin?accion=logout">
                             <i class="bi bi-box-arrow-right me-1"></i> Cerrar Sesión
                         </a>
                     </li>

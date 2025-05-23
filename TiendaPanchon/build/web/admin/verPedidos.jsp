@@ -49,7 +49,7 @@
             </div>
 
             <h4 class="fw-semibold mt-5">Estado del Pedido</h4>
-            <form action="/TiendaPanchon/Controladores.Admin/ControladorActualizarEstado" method="post" class="row g-3 mt-2" id="formActualizarEstado">
+            <form action="${pageContext.request.contextPath}/Controladores.Admin/ControladorActualizarEstado" method="post" class="row g-3 mt-2" id="formActualizarEstado">
                 <input type="hidden" name="accion" value="actualizarEstado">
                 <input type="hidden" name="idPedido" value="${pedido.id}">
 

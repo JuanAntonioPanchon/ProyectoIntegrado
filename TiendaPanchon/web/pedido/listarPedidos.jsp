@@ -46,7 +46,7 @@
                                 <p><strong>Estado:</strong> ${pedido.estado}</p>
                             </div>
                             <div class="card-footer bg-transparent border-0 d-flex justify-content-between">
-                                <form action="/TiendaPanchon/Controladores.Pedidos/ControladorPedidosUsuario" method="post" class="form-cancelar-pedido me-2">
+                                <form action="${pageContext.request.contextPath}/Controladores.Pedidos/ControladorPedidosUsuario" method="post" class="form-cancelar-pedido me-2">
                                     <input type="hidden" name="accion" value="eliminar">
                                     <input type="hidden" name="idPedido" value="${pedido.id}">
                                     <button type="button"
@@ -55,7 +55,7 @@
                                         Cancelar Pedido
                                     </button>
                                 </form>
-                                <a href="/TiendaPanchon/Controladores.Pedidos/ControladorPedidosUsuario?accion=editar&idPedido=${pedido.id}" class="btn btn-editar btn-sm">Ver Pedido</a>
+                                <a href="${pageContext.request.contextPath}/Controladores.Pedidos/ControladorPedidosUsuario?accion=editar&idPedido=${pedido.id}" class="btn btn-editar btn-sm">Ver Pedido</a>
                             </div>
                         </div>
                     </div>
@@ -84,7 +84,7 @@
             </c:if>
 
             <div class="text-center mt-5">
-                <a href="/TiendaPanchon/Controladores/ControladorInicio" class="btn btn-secondary">Volver</a>
+                <a href="${pageContext.request.contextPath}/Controladores/ControladorInicio" class="btn btn-secondary">Volver</a>
             </div>
         </div>
 

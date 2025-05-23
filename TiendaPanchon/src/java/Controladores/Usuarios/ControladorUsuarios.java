@@ -142,7 +142,7 @@ public class ControladorUsuarios extends HttpServlet {
                 if (error.isEmpty()) {
                     su.edit(usuario);
                     sesion.setAttribute("usuario", usuario);
-                    response.sendRedirect("/TiendaPanchon/Controladores/ControladorInicio");
+                    response.sendRedirect("${pageContext.request.contextPath}/Controladores/ControladorInicio");
                     return;
                 }
             } catch (Exception ex) {
@@ -163,10 +163,10 @@ public class ControladorUsuarios extends HttpServlet {
 
             if (!error.isEmpty()) {
                 sesion.setAttribute("error", error);
-                response.sendRedirect("/TiendaPanchon/Controladores/ControladorLogin");
+                response.sendRedirect("${pageContext.request.contextPath}/Controladores/ControladorLogin");
                 return;
             } else {
-                response.sendRedirect("/TiendaPanchon/Controladores/ControladorLogin");
+                response.sendRedirect("${pageContext.request.contextPath}/Controladores/ControladorLogin");
                 return;
             }
         }

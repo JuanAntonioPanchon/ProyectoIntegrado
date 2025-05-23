@@ -53,7 +53,7 @@
             </div>
 
             <div class="text-center mt-5">
-                <a href="/TiendaPanchon/Controladores.Pedidos/ControladorPedidosUsuario" class="btn btn-secondary">Volver</a>
+                <a href="${pageContext.request.contextPath}/Controladores.Pedidos/ControladorPedidosUsuario" class="btn btn-secondary">Volver</a>
             </div>
         </div>
 

@@ -29,7 +29,7 @@
                     </button>
 
                     <c:if test="${not empty idCategoriaSeleccionada}">
-                        <a href="/TiendaPanchon/Controladores.Admin/ControladorListarCategorias?id=${idCategoriaSeleccionada}"
+                        <a href="${pageContext.request.contextPath}/Controladores.Admin/ControladorListarCategorias?id=${idCategoriaSeleccionada}"
                            class="btn btn-editar">
                             Editar Categoría
                         </a>
@@ -39,14 +39,14 @@
                 <div class="collapse d-md-block mt-3" id="menuCategorias">
                     <div class="d-flex flex-wrap gap-2">
                         <c:forEach var="categoria" items="${categorias}">
-                            <a href="/TiendaPanchon/Controladores.Admin/ControladorProducto?id_categoria=${categoria.id}"
+                            <a href="${pageContext.request.contextPath}/Controladores.Admin/ControladorProducto?id_categoria=${categoria.id}"
                                class="btn-categoria ${categoria.id == param.id_categoria ? 'btn-categoria-activa' : ''}">
                                 ${categoria.nombre}
                             </a>
                         </c:forEach>
                     </div>
 
-                    <a href="/TiendaPanchon/Controladores.Admin/ControladorListarCategorias?crear"
+                    <a href="${pageContext.request.contextPath}/Controladores.Admin/ControladorListarCategorias?crear"
                        class="btn btn-crear mt-3">
                         Crear Categoría Nueva
                     </a>
@@ -58,7 +58,7 @@
                 <section>
                     <div class="d-flex justify-content-between align-items-center mb-3">
                         <h4 class="fw-bold">PRODUCTOS: ${nombreCategoria}</h4>
-                        <a href="/TiendaPanchon/Controladores.Admin/ControladorProducto?crear=true&id_categoria=${idCategoriaSeleccionada}"
+                        <a href="${pageContext.request.contextPath}/Controladores.Admin/ControladorProducto?crear=true&id_categoria=${idCategoriaSeleccionada}"
                            class="btn btn-crear">
                             Añadir Producto Nuevo
                         </a>
@@ -106,10 +106,10 @@
                                                 </td>
                                                 <td>
                                                     <div class="d-grid gap-1 d-md-flex justify-content-md-center">
-                                                        <a href="/TiendaPanchon/Controladores.Admin/ControladorProducto?editar=true&id_producto=${producto.id}"
+                                                        <a href="${pageContext.request.contextPath}/Controladores.Admin/ControladorProducto?editar=true&id_producto=${producto.id}"
                                                            class="btn btn-editar btn-sm mb-1">Editar</a>
 
-                                                        <form action="/TiendaPanchon/Controladores.Admin/ControladorProducto"
+                                                        <form action="${pageContext.request.contextPath}/Controladores.Admin/ControladorProducto"
                                                               method="POST"
                                                               class="d-inline">
                                                             <input type="hidden" name="id" value="${producto.id}">
