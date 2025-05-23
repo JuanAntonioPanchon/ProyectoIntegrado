@@ -3,8 +3,6 @@
     Este es el index.html. Redirige a la pantalla de inicio de la app que sera el menu inicial.
     Este menu mostrara las categorias y los productos en la pantalla.
 -->
-<html>
-    <head>
-        <meta http-equiv="refresh" content="0; url=/TiendaPanchon/Controladores/ControladorInicio">
-    </head>
-</html>
+<%
+    response.sendRedirect(request.getContextPath() + "/Controladores/ControladorInicio");
+%>
