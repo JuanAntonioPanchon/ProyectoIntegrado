@@ -71,7 +71,7 @@
                 <div class="carousel-inner text-center">
                     <div class="carousel-item active">
                         <a href="${pageContext.request.contextPath}/Controladores.Productos/ControladorListarProductos?oferta=true">
-                            <img src="../imagenes/oferta.jpg" class="carrusel-img mx-auto d-block" alt="Ofertas">
+                            <img src="../imagenes/oferta.jpeg" class="carrusel-img mx-auto d-block" alt="Ofertas">
                         </a>
                     </div>
                     <div class="carousel-item">
