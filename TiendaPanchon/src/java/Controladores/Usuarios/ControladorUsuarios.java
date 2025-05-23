@@ -45,7 +45,6 @@ public class ControladorUsuarios extends HttpServlet {
                 request.setAttribute("nombre", usuario.getNombre());
                 request.setAttribute("apellidos", usuario.getApellidos());
                 request.setAttribute("email", usuario.getEmail());
-                request.setAttribute("password", usuario.getPassword());
                 request.setAttribute("direccion", usuario.getDireccion());
                 request.setAttribute("telefono", usuario.getTelefono());
 
@@ -109,7 +108,7 @@ public class ControladorUsuarios extends HttpServlet {
 
                 if (password.equals(password2)) {
                     String hash = BCrypt.hashpw(password, BCrypt.gensalt());
-                    nuevoUsuario.setPassword(hash); // ✅ Encriptado
+                    nuevoUsuario.setPassword(hash); // ✅ corregido aquí
                 } else {
                     error = "Las contraseñas no coinciden.";
                 }
@@ -120,10 +119,12 @@ public class ControladorUsuarios extends HttpServlet {
                     response.sendRedirect(request.getContextPath() + "/Controladores/ControladorLogin");
                     return;
                 }
+                System.out.println("usuario creado");
             } catch (Exception e) {
                 error = "Error al crear el usuario " + nombre;
             }
-        } else if (request.getParameter("editar") != null && usuario != null) {
+        } else if (request.getParameter(
+                "editar") != null && usuario != null) {
             try {
                 usuario.setNombre(nombre);
                 usuario.setApellidos(apellidos);
@@ -149,7 +150,8 @@ public class ControladorUsuarios extends HttpServlet {
                 error = "Error al editar el usuario.";
                 Logger.getLogger(ControladorUsuarios.class.getName()).log(Level.SEVERE, null, ex);
             }
-        } else if (request.getParameter("eliminar") != null) {
+        } else if (request.getParameter(
+                "eliminar") != null) {
             Long id = Long.parseLong(request.getParameter("idUsuario"));
             try {
                 su.destroy(id);
@@ -172,7 +174,10 @@ public class ControladorUsuarios extends HttpServlet {
         }
 
         emf.close();
-        request.setAttribute("error", error);
-        getServletContext().getRequestDispatcher(vista).forward(request, response);
+
+        request.setAttribute(
+                "error", error);
+        getServletContext()
+                .getRequestDispatcher(vista).forward(request, response);
     }
 }

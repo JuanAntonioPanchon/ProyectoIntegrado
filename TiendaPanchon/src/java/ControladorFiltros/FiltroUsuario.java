@@ -55,7 +55,7 @@ public class FiltroUsuario implements Filter {
                 || // vista tras login o registro
                 uri.equals(contexto + "/Controladores/ControladorLogin")
                 || uri.equals(contexto + "/Controladores/ControladorInicio")
-                || (uri.equals(contexto + "/Controladores.Usuarios/ControladorUsuarios") && "true".equals(req.getParameter("crear")))
+                || (uri.equals(contexto + "/Controladores.Usuarios/ControladorUsuarios") && req.getParameter("crear") != null)
                 || uri.startsWith(contexto + "/Controladores.Productos/ControladorListarProductos"));
 
         if (accesoPermitido) {

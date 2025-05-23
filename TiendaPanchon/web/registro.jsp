@@ -65,7 +65,8 @@
 
                         <div class="mb-2">
                             <label for="password" class="form-label">Contraseña</label>
-                            <input type="password" class="form-control form-control-sm" name="password" value="${password}" maxlength="30" required>
+                            <input type="password" class="form-control form-control-sm" name="password" value="" maxlength="30" required>
+
                         </div>
 
                         <ul id="requisitosPassword" class="small mb-2">
@@ -77,7 +78,7 @@
 
                         <div class="mb-2">
                             <label for="password2" class="form-label">Repetir Contraseña</label>
-                            <input type="password" class="form-control form-control-sm" name="password2" value="${password}" maxlength="30" required>
+                            <input type="password" class="form-control form-control-sm" name="password2" value="" maxlength="30" required>
                             <div id="feedbackPassword2" class="small mt-1"></div>
                         </div>
 

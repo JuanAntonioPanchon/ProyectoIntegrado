@@ -4,6 +4,55 @@
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
             <file>file:/home/juan-antonio/Escritorio/TFGBUENO/ProyectoIntegrado/TiendaPanchon/web/usuarios/inicio.jsp</file>
+            <file>file:/home/juan-antonio/Escritorio/TFGBUENO/ProyectoIntegrado/TiendaPanchon/web/pedido/verPedido.jsp</file>
+            <file>file:/home/juan-antonio/Escritorio/TFGBUENO/ProyectoIntegrado/TiendaPanchon/web/admin/verPedidos.jsp</file>
+            <file>file:/home/juan-antonio/Escritorio/TFGBUENO/ProyectoIntegrado/TiendaPanchon/src/java/ControladorFiltros/FiltroUsuario.java</file>
+            <file>file:/home/juan-antonio/Escritorio/TFGBUENO/ProyectoIntegrado/TiendaPanchon/web/estilos/paginacion.css</file>
+            <file>file:/home/juan-antonio/Escritorio/TFGBUENO/ProyectoIntegrado/TiendaPanchon/web/estilos/registroUsuarios.css</file>
+            <file>file:/home/juan-antonio/Escritorio/TFGBUENO/ProyectoIntegrado/TiendaPanchon/src/java/Controladores/ControladorFiltrarRecetas.java</file>
+            <file>file:/home/juan-antonio/Escritorio/TFGBUENO/ProyectoIntegrado/TiendaPanchon/web/estilos/coloresPersonalizados.css</file>
+            <file>file:/home/juan-antonio/Escritorio/TFGBUENO/ProyectoIntegrado/TiendaPanchon/web/pedido/listarPedidos.jsp</file>
+            <file>file:/home/juan-antonio/Escritorio/TFGBUENO/ProyectoIntegrado/TiendaPanchon/web/admin/listarUsuarios.jsp</file>
+            <file>file:/home/juan-antonio/Escritorio/TFGBUENO/ProyectoIntegrado/TiendaPanchon/src/java/Controladores/ControladorLogin.java</file>
+            <file>file:/home/juan-antonio/Escritorio/TFGBUENO/ProyectoIntegrado/TiendaPanchon/src/java/Controladores/Admin/ControladorActualizarEstado.java</file>
+            <file>file:/home/juan-antonio/Escritorio/TFGBUENO/ProyectoIntegrado/TiendaPanchon/src/java/Controladores/ListaCompra/ControladorListaCompra.java</file>
+            <file>file:/home/juan-antonio/Escritorio/TFGBUENO/ProyectoIntegrado/TiendaPanchon/src/java/Controladores/Admin/ControladorGrafica.java</file>
+            <file>file:/home/juan-antonio/Escritorio/TFGBUENO/ProyectoIntegrado/TiendaPanchon/web/admin/grafica.jsp</file>
+            <file>file:/home/juan-antonio/Escritorio/TFGBUENO/ProyectoIntegrado/TiendaPanchon/src/java/Controladores/Admin/ControladorEliminarFoto.java</file>
+            <file>file:/home/juan-antonio/Escritorio/TFGBUENO/ProyectoIntegrado/TiendaPanchon/web/estilos/tablas.css</file>
+            <file>file:/home/juan-antonio/Escritorio/TFGBUENO/ProyectoIntegrado/TiendaPanchon/web/carrito/carrito.jsp</file>
+            <file>file:/home/juan-antonio/Escritorio/TFGBUENO/ProyectoIntegrado/TiendaPanchon/web/admin/listarCategorias.jsp</file>
+            <file>file:/home/juan-antonio/Escritorio/TFGBUENO/ProyectoIntegrado/TiendaPanchon/web/admin/subirFoto.jsp</file>
+            <file>file:/home/juan-antonio/Escritorio/TFGBUENO/ProyectoIntegrado/TiendaPanchon/web/estilos/footer_abajo.css</file>
+            <file>file:/home/juan-antonio/Escritorio/TFGBUENO/ProyectoIntegrado/TiendaPanchon/src/java/Controladores/ControladorInicio.java</file>
+            <file>file:/home/juan-antonio/Escritorio/TFGBUENO/ProyectoIntegrado/TiendaPanchon/web/registro.jsp</file>
+            <file>file:/home/juan-antonio/Escritorio/TFGBUENO/ProyectoIntegrado/TiendaPanchon/web/index.jsp</file>
+            <file>file:/home/juan-antonio/Escritorio/TFGBUENO/ProyectoIntegrado/TiendaPanchon/src/java/Controladores/Admin/ControladorGestionarUsuarios.java</file>
+            <file>file:/home/juan-antonio/Escritorio/TFGBUENO/ProyectoIntegrado/TiendaPanchon/web/includes/footer.jsp</file>
+            <file>file:/home/juan-antonio/Escritorio/TFGBUENO/ProyectoIntegrado/TiendaPanchon/src/java/Controladores/Admin/ControladorListarCategorias.java</file>
+            <file>file:/home/juan-antonio/Escritorio/TFGBUENO/ProyectoIntegrado/TiendaPanchon/web/admin/crearUsuario.jsp</file>
+            <file>file:/home/juan-antonio/Escritorio/TFGBUENO/ProyectoIntegrado/TiendaPanchon/src/java/Controladores/ControladorListadoReceta.java</file>
+            <file>file:/home/juan-antonio/Escritorio/TFGBUENO/ProyectoIntegrado/TiendaPanchon/src/java/Controladores/Admin/ControladorListarPedidos.java</file>
+            <file>file:/home/juan-antonio/Escritorio/TFGBUENO/ProyectoIntegrado/TiendaPanchon/src/java/Controladores/Carrito/ControladorCarrito.java</file>
+            <file>file:/home/juan-antonio/Escritorio/TFGBUENO/ProyectoIntegrado/TiendaPanchon/web/estilos/subirFichero.css</file>
+            <file>file:/home/juan-antonio/Escritorio/TFGBUENO/ProyectoIntegrado/TiendaPanchon/web/admin/listarPedidos.jsp</file>
+            <file>file:/home/juan-antonio/Escritorio/TFGBUENO/ProyectoIntegrado/TiendaPanchon/web/estilos/login.css</file>
+            <file>file:/home/juan-antonio/Escritorio/TFGBUENO/ProyectoIntegrado/TiendaPanchon/web/admin/inicioAdmin.jsp</file>
+            <file>file:/home/juan-antonio/Escritorio/TFGBUENO/ProyectoIntegrado/TiendaPanchon/src/java/Controladores/ControladorReceta.java</file>
+            <file>file:/home/juan-antonio/Escritorio/TFGBUENO/ProyectoIntegrado/TiendaPanchon/web/estilos/recetas.css</file>
+            <file>file:/home/juan-antonio/Escritorio/TFGBUENO/ProyectoIntegrado/TiendaPanchon/src/java/Controladores/Admin/ControladorAdmin.java</file>
+            <file>file:/home/juan-antonio/Escritorio/TFGBUENO/ProyectoIntegrado/TiendaPanchon/src/java/Controladores/Admin/ControladorSubirFoto.java</file>
+            <file>file:/home/juan-antonio/Escritorio/TFGBUENO/ProyectoIntegrado/TiendaPanchon/src/java/Controladores/Pedidos/ControladorPedidosUsuario.java</file>
+            <file>file:/home/juan-antonio/Escritorio/TFGBUENO/ProyectoIntegrado/TiendaPanchon/web/js/inicioAdmin.js</file>
+            <file>file:/home/juan-antonio/Escritorio/TFGBUENO/ProyectoIntegrado/TiendaPanchon/src/java/CrearDatos.java</file>
+            <file>file:/home/juan-antonio/Escritorio/TFGBUENO/ProyectoIntegrado/TiendaPanchon/web/recetas/listarRecetas.jsp</file>
+            <file>file:/home/juan-antonio/Escritorio/TFGBUENO/ProyectoIntegrado/TiendaPanchon/web/admin/crearCategoria.jsp</file>
+            <file>file:/home/juan-antonio/Escritorio/TFGBUENO/ProyectoIntegrado/TiendaPanchon/src/java/Controladores/Usuarios/ControladorUsuarios.java</file>
+            <file>file:/home/juan-antonio/Escritorio/TFGBUENO/ProyectoIntegrado/TiendaPanchon/web/recetas/listarTodasLasRecetas.jsp</file>
+            <file>file:/home/juan-antonio/Escritorio/TFGBUENO/ProyectoIntegrado/TiendaPanchon/web/admin/crearProducto.jsp</file>
+            <file>file:/home/juan-antonio/Escritorio/TFGBUENO/ProyectoIntegrado/TiendaPanchon/web/includes/headerUsuario.jsp</file>
+            <file>file:/home/juan-antonio/Escritorio/TFGBUENO/ProyectoIntegrado/TiendaPanchon/src/java/Controladores/Admin/ControladorProducto.java</file>
+            <file>file:/home/juan-antonio/Escritorio/TFGBUENO/ProyectoIntegrado/TiendaPanchon/web/login.jsp</file>
         </group>
     </open-files>
 </project-private>
