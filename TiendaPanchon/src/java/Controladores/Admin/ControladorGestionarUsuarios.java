@@ -155,7 +155,13 @@ public class ControladorGestionarUsuarios extends HttpServlet {
         usuario.setApellidos(apellidos);
         usuario.setDireccion(direccion);
         usuario.setTelefono(telefono);
-        usuario.setEmail(email);
+        if (idUsuario != null) { // Editando
+            Usuario existente = servicioUsuario.findUsuarioByEmail(email);
+            if (existente != null && !existente.getId().equals(usuario.getId())) {
+                error = "El email ya está registrado por otro usuario.";
+                request.setAttribute("error", error);
+            }
+        }
 
         if (error.isEmpty()) {
             try {
