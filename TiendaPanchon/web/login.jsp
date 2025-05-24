@@ -15,6 +15,12 @@
         <link rel="stylesheet" href="../estilos/login.css">
         <link rel="stylesheet" href="../estilos/coloresPersonalizados.css">
         <link href="https://fonts.googleapis.com/css2?family=Dancing+Script&display=swap" rel="stylesheet">
+        <style>
+            * {
+                font-family: 'Dancing Script';
+            }
+
+        </style>
     </head>
     <body>
 

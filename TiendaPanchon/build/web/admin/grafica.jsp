@@ -7,7 +7,7 @@
         <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
         <title>Gráfica de Productos Más Vendidos</title>
 
-        
+
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
         <link href="https://fonts.googleapis.com/css2?family=Dancing+Script&display=swap" rel="stylesheet">
 
@@ -19,6 +19,12 @@
         <script src="https://code.highcharts.com/modules/exporting.js"></script>
         <script src="https://code.highcharts.com/modules/export-data.js"></script>
         <script src="https://code.highcharts.com/modules/accessibility.js"></script>
+        <style>
+            * {
+                font-family: 'Dancing Script';
+            }
+
+        </style>
     </head>
     <body class="color">
         <jsp:include page="/includes/header.jsp"/>
@@ -115,6 +121,6 @@
                 crearGraficaProductos(productos);
             </script>
         </c:if>
-        
+
     </body>
 </html>
