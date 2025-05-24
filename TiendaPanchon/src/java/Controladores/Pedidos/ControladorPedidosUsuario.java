@@ -24,6 +24,7 @@ public class ControladorPedidosUsuario extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
+        request.setCharacterEncoding("UTF-8");
         Usuario usuario = (Usuario) request.getSession().getAttribute("usuario");
         if (usuario == null) {
             response.sendRedirect(request.getContextPath() + "/login.jsp");

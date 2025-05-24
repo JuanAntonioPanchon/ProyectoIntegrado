@@ -26,6 +26,7 @@ public class ControladorAdmin extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
+        request.setCharacterEncoding("UTF-8");
         EntityManagerFactory emf = Persistence.createEntityManagerFactory("TiendaPanchonPU");
         ServicioProducto servicioProducto = new ServicioProducto(emf);
         List<Producto> productosStockBajo = servicioProducto.findProductosConStockBajo();

@@ -1,9 +1,9 @@
-<%@page contentType="text/html" pageEncoding="ISO-8859-1"%>
+<%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <!DOCTYPE html>
 <html>
     <head>
-        <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>Subir Foto Imagen</title>
         <link rel="stylesheet" type="text/css" href="../estilos/subirFichero.css">
         <link rel="stylesheet" type="text/css" href="../estilos/coloresPersonalizados.css">
@@ -12,7 +12,7 @@
     </head>
     <body>
 
-        <!-- Cabecera según el rol -->
+        <!-- Cabecera segÃºn el rol -->
         <c:choose>
             <c:when test="${sessionScope.usuario.rol == 'admin'}">
                 <jsp:include page="/includes/header.jsp" />
@@ -87,13 +87,13 @@
                     }
 
                     Swal.fire({
-                        title: '¿Subir Imagen?',
-                        html: `Se van a añadir a la receta.<br>¿Deseas continuar?`,
+                        title: 'Â¿Subir Imagen?',
+                        html: `Se van a aÃ±adir a la receta.<br>Â¿Deseas continuar?`,
                         icon: 'question',
                         showCancelButton: true,
                         confirmButtonColor: '#336b30',
                         cancelButtonText: 'No, volver',
-                        confirmButtonText: 'Sí, subir'
+                        confirmButtonText: 'SÃ­, subir'
                     }).then((result) => {
                         if (result.isConfirmed) {
                             form.submit();

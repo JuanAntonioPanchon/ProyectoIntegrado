@@ -32,7 +32,7 @@
                         </c:if>
                     </div>
 
-                    <form method="post" action="${pageContext.request.contextPath}/Controladores.Usuarios/ControladorUsuarios">
+                    <form method="post" action="${pageContext.request.contextPath}/Controladores.Usuarios/ControladorUsuarios" accept-charset="UTF-8">
                         <c:if test="${not empty idUsuario}">
                             <input type="hidden" name="idUsuario" value="${idUsuario}">
                         </c:if>

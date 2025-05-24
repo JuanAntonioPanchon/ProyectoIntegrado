@@ -23,6 +23,7 @@ public class ControladorEliminarFoto extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
     
+        request.setCharacterEncoding("UTF-8");
         String productoIdStr = request.getParameter("productoId");
         String imagen = request.getParameter("imagen");
 

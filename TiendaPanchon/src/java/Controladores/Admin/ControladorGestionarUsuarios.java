@@ -29,6 +29,7 @@ public class ControladorGestionarUsuarios extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
+        request.setCharacterEncoding("UTF-8");
         String vista = "/admin/listarUsuarios.jsp";
         String accion = request.getParameter("accion");
         String error = "";
@@ -58,7 +59,6 @@ public class ControladorGestionarUsuarios extends HttpServlet {
             }
         }
 
-        
         int pagina = 1;
         int tamanio = 10;
 
@@ -84,6 +84,7 @@ public class ControladorGestionarUsuarios extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        request.setCharacterEncoding("UTF-8");
         String vista = "/admin/crearUsuario.jsp";
         String error = "";
         String accion = request.getParameter("accion");

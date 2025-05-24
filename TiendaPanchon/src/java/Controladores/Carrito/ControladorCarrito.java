@@ -18,6 +18,7 @@ public class ControladorCarrito extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
+        request.setCharacterEncoding("UTF-8");
         String idProducto = request.getParameter("idProducto");
         String cantidadStr = request.getParameter("cantidad");
         String totalPrecioStr = request.getParameter("totalPrecio");
@@ -58,6 +59,7 @@ public class ControladorCarrito extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
+        request.setCharacterEncoding("UTF-8");
         String accion = request.getParameter("accion");
         HttpSession session = request.getSession(false);
         if (session == null || session.getAttribute("usuario") == null) {

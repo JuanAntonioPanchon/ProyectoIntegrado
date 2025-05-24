@@ -30,6 +30,7 @@ public class ControladorListarPedidos extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
+        request.setCharacterEncoding("UTF-8");
         String vista = "/admin/listarPedidos.jsp";
         String accion = request.getParameter("accion");
 
@@ -74,6 +75,7 @@ public class ControladorListarPedidos extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        request.setCharacterEncoding("UTF-8");
         String accion = request.getParameter("accion");
 
         if ("eliminar".equals(accion)) {

@@ -3,12 +3,12 @@
     Created on : 18 mar 2025, 13:05:43
     Author     : juan-antonio
 --%>
-<%@page contentType="text/html" pageEncoding="ISO-8859-1"%>
+<%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html lang="es">
     <head>
         <meta charset="UTF-8">
-        <title>Inicio de Sesión</title>
+        <title>Inicio de SesiÃ³n</title>
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <!-- Bootstrap CSS -->
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -26,7 +26,7 @@
 
 
         <div class="text-center py-4">
-            <h1 class="fw-bold">Bienvenido al Rincón de Laura</h1>
+            <h1 class="fw-bold">Bienvenido al RincÃ³n de Laura</h1>
         </div>
 
         <div class="container-fluid">
@@ -34,7 +34,7 @@
                 <!-- Login Form -->
                 <div class="col-md-6 d-flex justify-content-center">
                     <div class="form-container p-5 rounded-3 shadow-lg text-center mt-4">
-                        <h2 class="mb-3 fw-bold">Inicio de Sesión</h2>
+                        <h2 class="mb-3 fw-bold">Inicio de SesiÃ³n</h2>
                         <form method="POST" action="${pageContext.request.contextPath}/Controladores/ControladorLogin">
                             <div class="mb-3">
                                 <label for="email" class="fw-bold">
@@ -44,7 +44,7 @@
                             </div>
                             <div class="mb-3">
                                 <label for="password" class="fw-bold">
-                                    CONTRASEÑA
+                                    CONTRASEÃ‘A
                                 </label>
                                 <input type="password" class="form-control text-center" id="password" name="password" required>
                             </div>
@@ -56,7 +56,7 @@
                             </c:if>
 
                             <div class="mt-3">
-                                <a href="${pageContext.request.contextPath}/Controladores.Usuarios/ControladorUsuarios?crear=true" class="text-dark text-decoration-none">¿Aun no tienes cuenta? Regístrate</a>
+                                <a href="${pageContext.request.contextPath}/Controladores.Usuarios/ControladorUsuarios?crear=true" class="text-dark text-decoration-none">Â¿Aun no tienes cuenta? RegÃ­strate</a>
                             </div>
                         </form>
                     </div>

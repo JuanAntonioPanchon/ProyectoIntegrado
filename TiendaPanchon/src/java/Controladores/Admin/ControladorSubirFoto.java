@@ -28,6 +28,7 @@ public class ControladorSubirFoto extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        request.setCharacterEncoding("UTF-8");
         String productoIdStr = request.getParameter("productoId");
 
         if (productoIdStr != null) {
@@ -55,6 +56,7 @@ public class ControladorSubirFoto extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        request.setCharacterEncoding("UTF-8");
         String path = getServletContext().getRealPath("/imagenesProductos");
         System.out.println("Path de subida: " + path);
 

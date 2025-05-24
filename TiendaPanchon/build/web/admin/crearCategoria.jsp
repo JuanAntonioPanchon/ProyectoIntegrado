@@ -1,10 +1,10 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<%@ page contentType="text/html" pageEncoding="ISO-8859-1" %>
+<%@ page contentType="text/html" pageEncoding="UTF-8" %>
 <!DOCTYPE html>
 <html>
     <head>
-        <meta charset="ISO-8859-1">
-        <title>${empty id ? "Crear" : "Editar"} Categoría</title>
+        <meta charset="UTF-8">
+        <title>${empty id ? "Crear" : "Editar"} CategorÃ­a</title>
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
         <link rel="stylesheet" type="text/css" href="../estilos/coloresPersonalizados.css">
         <link rel="stylesheet" type="text/css" href="../estilos/tablas.css">
@@ -16,14 +16,14 @@
 
         <main class="container my-5">
             <div class="p-4 mx-auto border rounded shadow-lg form-container" style="max-width: 500px;">
-                <h2 class="text-center fw-bold text-uppercase">${empty id ? "CREAR" : "EDITAR"} CATEGORÍA</h2>
+                <h2 class="text-center fw-bold text-uppercase">${empty id ? "CREAR" : "EDITAR"} CATEGORÃA</h2>
 
                 <form method="post" action="${pageContext.request.contextPath}/Controladores.Admin/ControladorListarCategorias">
                     <input type="hidden" name="referer" value="${header.referer}">
                     <input type="hidden" name="id" value="${id}">
 
                     <div class="mb-3">
-                        <label class="form-label fw-bold">NOMBRE DE LA CATEGORÍA</label>
+                        <label class="form-label fw-bold">NOMBRE DE LA CATEGORÃA</label>
                         <input type="text" class="form-control" name="nombre" value="${nombre}" maxlength="50" required>
                     </div>
 
@@ -59,8 +59,8 @@
                     }
                 });
 
-                const regex = /^[A-ZÁÉÍÓÚÑ][a-zA-ZáéíóúÁÉÍÓÚñÑ ]{0,14}$/;
-                const mensaje = "Debe comenzar con mayúscula, solo letras y espacios. Máx. 15 caracteres.";
+                const regex = /^[A-ZÃÃ‰ÃÃ“ÃšÃ‘][a-zA-ZÃ¡Ã©Ã­Ã³ÃºÃÃ‰ÃÃ“ÃšÃ±Ã‘ ]{0,14}$/;
+                const mensaje = "Debe comenzar con mayÃºscula, solo letras y espacios. MÃ¡x. 15 caracteres.";
 
                 function mostrarError(input, mensaje) {
                     eliminarError(input);
@@ -98,14 +98,14 @@
 
                     const accion = '${empty id ? "crear" : "editar"}';
                     Swal.fire({
-                        title: accion === 'crear' ? '¿Crear categoría?' : '¿Guardar cambios?',
+                        title: accion === 'crear' ? 'Â¿Crear categorÃ­a?' : 'Â¿Guardar cambios?',
                         text: accion === 'crear'
-                                ? 'Se añadirá una nueva categoría con este nombre.'
-                                : 'Se modificarán los datos de la categoría.',
+                                ? 'Se aÃ±adirÃ¡ una nueva categorÃ­a con este nombre.'
+                                : 'Se modificarÃ¡n los datos de la categorÃ­a.',
                         icon: 'question',
                         showCancelButton: true,
                         confirmButtonColor: '#336b30',
-                        confirmButtonText: 'Sí, continuar',
+                        confirmButtonText: 'SÃ­, continuar',
                         cancelButtonText: 'No, volver'
                     }).then((result) => {
                         if (result.isConfirmed) {
@@ -123,12 +123,12 @@
                     btnEliminar.addEventListener("click", function (e) {
                         e.preventDefault();
                         Swal.fire({
-                            title: '¿Eliminar categoría?',
-                            text: '¿Estás seguro de eliminar la categoría "${nombre}"?\nSe eliminarán todos los productos asociados.',
+                            title: 'Â¿Eliminar categorÃ­a?',
+                            text: 'Â¿EstÃ¡s seguro de eliminar la categorÃ­a "${nombre}"?\nSe eliminarÃ¡n todos los productos asociados.',
                             icon: 'warning',
                             showCancelButton: true,
                             confirmButtonColor: '#d33',
-                            confirmButtonText: 'Sí, eliminar',
+                            confirmButtonText: 'SÃ­, eliminar',
                             cancelButtonText: 'Cancelar'
                         }).then((result) => {
                             if (result.isConfirmed) {

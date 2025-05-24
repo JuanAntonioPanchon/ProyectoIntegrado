@@ -1,11 +1,11 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
-<%@ page contentType="text/html; charset=ISO-8859-1" pageEncoding="ISO-8859-1" %>
+<%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <!DOCTYPE html>
 <html>
     <head>
-        <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-        <title>Gráfica de Productos Más Vendidos</title>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <title>GrÃ¡fica de Productos MÃ¡s Vendidos</title>
 
 
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -30,7 +30,7 @@
         <jsp:include page="/includes/header.jsp"/>
 
         <div class="container text-center py-4">
-            <h1 class="fw-bold mb-4">Gráfica Productos más vendidos entre 2 fechas</h1>
+            <h1 class="fw-bold mb-4">GrÃ¡fica Productos mÃ¡s vendidos entre 2 fechas</h1>
 
             <form method="get" action="${pageContext.request.contextPath}/Controladores.Admin/ControladorGrafica" class="row align-items-end gx-5 gy-3 mb-4">
 
@@ -47,7 +47,7 @@
                 </div>
 
                 <div class="col-md-3">
-                    <label for="categoria_grafica" class="form-label fw-bold">Categoría</label>
+                    <label for="categoria_grafica" class="form-label fw-bold">CategorÃ­a</label>
                     <select id="categoria_grafica" name="categoriaId" class="form-select colorVerde text-center" required>
                         <c:forEach var="categoria" items="${categorias}">
                             <option value="${categoria.id}" ${param.categoriaId == categoria.id ? 'selected' : ''}>
@@ -58,7 +58,7 @@
                 </div>
 
                 <div class="col-md-2">
-                    <button type="submit" class="btn colorVerde w-100">Generar Gráfica</button>
+                    <button type="submit" class="btn colorVerde w-100">Generar GrÃ¡fica</button>
                 </div>
 
                 <div class="col-md-1">
@@ -82,7 +82,7 @@
             <c:choose>
                 <c:when test="${empty param.fechaInicio || empty param.fechaFin || empty param.categoriaId}">
                     <div class="alert alert-warning">
-                        Por favor, inserte <strong>dos fechas</strong> y una <strong>categoría</strong> para ver la cantidad de productos vendidos.
+                        Por favor, inserte <strong>dos fechas</strong> y una <strong>categorÃ­a</strong> para ver la cantidad de productos vendidos.
                     </div>
                 </c:when>
 
@@ -95,12 +95,12 @@
                         </c:if>
                     </c:forEach>
                     <div class="alert alert-info">
-                        No hay productos de la categoría <strong>${nombreCategoria}</strong> que se hayan vendido entre las fechas <strong>${param.fechaInicio}</strong> y <strong>${param.fechaFin}</strong>.
+                        No hay productos de la categorÃ­a <strong>${nombreCategoria}</strong> que se hayan vendido entre las fechas <strong>${param.fechaInicio}</strong> y <strong>${param.fechaFin}</strong>.
                     </div>
                 </c:when>
             </c:choose>
 
-            <!-- Gráfica -->
+            <!-- GrÃ¡fica -->
             <figure class="highcharts-figure mx-auto" style="max-width: 1000px;">
                 <div id="container" style="height: 400px;"></div>
             </figure>
@@ -109,7 +109,7 @@
 
         <jsp:include page="/includes/footer.jsp" />
 
-        <!-- Script para cargar la gráfica -->
+        <!-- Script para cargar la grÃ¡fica -->
         <script src="${pageContext.request.contextPath}/js/grafica.js"></script>
         <c:if test="${not empty productos}">
             <script>

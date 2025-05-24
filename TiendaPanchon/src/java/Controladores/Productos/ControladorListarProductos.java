@@ -22,6 +22,7 @@ public class ControladorListarProductos extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
+        request.setCharacterEncoding("UTF-8");
         EntityManagerFactory emf = Persistence.createEntityManagerFactory("TiendaPanchonPU");
         ServicioProducto sp = new ServicioProducto(emf);
         ServicioCategoriaProducto sc = new ServicioCategoriaProducto(emf);

@@ -27,6 +27,7 @@ public class ControladorEliminarImagen extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        request.setCharacterEncoding("UTF-8");
         String recetaIdStr = request.getParameter("recetaId");
         String imagen = request.getParameter("imagen");
         String pagina = request.getParameter("pagina");

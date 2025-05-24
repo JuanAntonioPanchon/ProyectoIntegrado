@@ -40,6 +40,7 @@ public class ControladorListarCategorias extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        request.setCharacterEncoding("UTF-8");
         EntityManagerFactory emf = Persistence.createEntityManagerFactory("TiendaPanchonPU");
         ServicioCategoriaProducto scp = new ServicioCategoriaProducto(emf);
         String vista = "/admin/crearCategoria.jsp"; 
@@ -111,6 +112,7 @@ public class ControladorListarCategorias extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        request.setCharacterEncoding("UTF-8");
         String idStr = request.getParameter("id");
         String nombre = request.getParameter("nombre");
         String error = "";

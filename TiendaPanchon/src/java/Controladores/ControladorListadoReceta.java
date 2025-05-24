@@ -16,6 +16,7 @@ public class ControladorListadoReceta extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        request.setCharacterEncoding("UTF-8");
 
         int pagina = 1;
         int tamanio = 6;
