@@ -12,6 +12,18 @@
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
         <link href="https://fonts.googleapis.com/css2?family=Dancing+Script&display=swap" rel="stylesheet">
         <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+        <style>
+            .img-producto {
+                width: 100%;
+                height: auto;
+                max-height: 200px;
+                object-fit: contain;
+                display: block;
+                margin: 0 auto;
+            }
+        </style>
+
     </head>
     <body>
 
@@ -114,7 +126,7 @@
                             <c:choose>
                                 <c:when test="${not empty producto.imagenes}">
                                     <div class="imagen-container" id="imagen_${producto.id}" onclick="toggleDescripcion(${producto.id})" style="cursor: pointer;">
-                                        <img src="../${producto.imagenes[0]}" class="card-img-top" alt="Imagen producto" style="height: 200px; object-fit: cover;">
+                                        <img src="../${producto.imagenes[0]}" class="card-img-top img-producto" alt="Imagen producto">
                                     </div>
                                     <div class="descripcion-container d-none bg-white p-2" id="descripcion_${producto.id}" style="height: 200px; overflow-y: auto; cursor: pointer;" onclick="toggleDescripcion(${producto.id})">
                                         <p class="m-0 text-muted">${producto.descripcion}</p>
