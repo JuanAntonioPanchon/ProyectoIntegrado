@@ -95,7 +95,7 @@ public class ControladorUsuarios extends HttpServlet {
         if (request.getParameter("crear") != null) {
             try {
                 if (su.findUsuarioByEmail(email) != null) {
-                    error = "El email ya está registrado.";
+                    error = "El email ya está registrado, prueba con otro";
                 }
 
                 if (error.isEmpty() && !password.equals(password2)) {

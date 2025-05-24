@@ -127,7 +127,7 @@ public class ControladorGestionarUsuarios extends HttpServlet {
 
         // Comprobación del email solo si estamos creando un nuevo usuario
         if (idUsuario == null && servicioUsuario.findUsuarioByEmail(email) != null) {
-            error = "El email ya está registrado.";
+            error = "El email ya está registrado por otro usuario";
             request.setAttribute("error", error);
         }
 
