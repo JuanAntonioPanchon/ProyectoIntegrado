@@ -133,6 +133,22 @@
 
         <jsp:include page="/includes/footer.jsp" />
 
+        <script>
+            document.addEventListener("DOMContentLoaded", function () {
+                const filas = document.querySelectorAll(".fila-clicable");
+                filas.forEach(fila => {
+                    fila.style.cursor = "pointer";
+                    fila.addEventListener("click", function () {
+                        const url = this.getAttribute("data-href");
+                        if (url) {
+                            window.location.href = url;
+                        }
+                    });
+                });
+            });
+        </script>
+
+
     </body>
 </html>
 

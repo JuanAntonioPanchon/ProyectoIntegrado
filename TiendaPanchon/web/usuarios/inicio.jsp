@@ -141,7 +141,7 @@
                                                 </span>
                                             </div>
                                             <span class="badge bg-danger position-absolute top-0 end-0">
-                                                -<fmt:formatNumber value="${(1 - (producto.precio / preciosOriginales[producto.id])) * 100}" maxFractionDigits="0"/>%
+                                                <fmt:formatNumber value="${(1 - (producto.precio / preciosOriginales[producto.id])) * 100}" maxFractionDigits="0"/>%
                                             </span>
                                         </div>
                                     </c:when>
@@ -163,7 +163,7 @@
                                                 <i class="bi bi-journal-plus"></i>
                                             </button>
                                         </form>
-                                        <input type="number" class="form-control w-25" min="1" max="${producto.stock}" value="1" id="cantidad_${producto.id}">
+                                        <input type="number" class="form-control w-50" min="1" max="${producto.stock}" value="1" id="cantidad_${producto.id}">
                                     <button class="btn btn-outline-primary" onclick="agregarAlCarrito('${producto.id}', '${producto.nombre}', ${producto.precio}, ${producto.stock}, 'cantidad_${producto.id}')">
                                         <i class="bi bi-cart-plus"></i>
                                     </button>

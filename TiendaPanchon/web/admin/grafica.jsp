@@ -13,7 +13,7 @@
 
         
         <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/estilos/grafica.css">
-        <link rel="stylesheet" type="text/css" href="../estilos/coloresPersonalizados.css">
+        <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/estilos/coloresPersonalizados.css">
 
         <!-- Highcharts -->
         <script src="https://code.highcharts.com/highcharts.js"></script>

@@ -133,17 +133,19 @@ public class ControladorUsuarios extends HttpServlet {
                 usuario.setTelefono(telefono);
                 usuario.setRol(rol);
 
-                if (password.equals(password2)) {
-                    String hash = BCrypt.hashpw(password, BCrypt.gensalt());
-                    usuario.setPassword(hash);
-                } else {
-                    error = "Las contraseñas no coinciden.";
+                if (!password.isBlank() || !password2.isBlank()) {
+                    if (password.equals(password2)) {
+                        String hash = BCrypt.hashpw(password, BCrypt.gensalt());
+                        usuario.setPassword(hash);
+                    } else {
+                        error = "Las contraseñas no coinciden.";
+                    }
                 }
 
                 if (error.isEmpty()) {
                     su.edit(usuario);
                     sesion.setAttribute("usuario", usuario);
-                    response.sendRedirect("${pageContext.request.contextPath}/Controladores/ControladorInicio");
+                    response.sendRedirect(request.getContextPath() + "/Controladores/ControladorInicio");
                     return;
                 }
             } catch (Exception ex) {
@@ -165,10 +167,10 @@ public class ControladorUsuarios extends HttpServlet {
 
             if (!error.isEmpty()) {
                 sesion.setAttribute("error", error);
-                response.sendRedirect("${pageContext.request.contextPath}/Controladores/ControladorLogin");
+                response.sendRedirect(request.getContextPath() + "/Controladores/ControladorLogin");
                 return;
             } else {
-                response.sendRedirect("${pageContext.request.contextPath}/Controladores/ControladorLogin");
+                response.sendRedirect(request.getContextPath() + "/Controladores/ControladorLogin");
                 return;
             }
         }

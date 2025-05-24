@@ -65,11 +65,16 @@
 
                         <div class="mb-2">
                             <label for="password" class="form-label">Contraseña</label>
-                            <input type="password" class="form-control form-control-sm" name="password" value="" maxlength="30" required>
-
+                            <input type="password" class="form-control form-control-sm" name="password" value=""
+                                   maxlength="30"
+                                   <c:if test="${empty idUsuario}">required</c:if>>
+                            <c:if test="${not empty idUsuario}">
+                                <div class="form-text">Si no deseas cambiar la contraseña, deja este campo vacío.</div>
+                            </c:if>
                         </div>
 
-                        <ul id="requisitosPassword" class="small mb-2">
+
+                        <ul id="requisitosPassword" class="small mb-2 d-none">
                             <li class="text-danger">Al menos una letra mayúscula</li>
                             <li class="text-danger">Al menos un número</li>
                             <li class="text-danger">Al menos un símbolo</li>
@@ -78,9 +83,15 @@
 
                         <div class="mb-2">
                             <label for="password2" class="form-label">Repetir Contraseña</label>
-                            <input type="password" class="form-control form-control-sm" name="password2" value="" maxlength="30" required>
-                            <div id="feedbackPassword2" class="small mt-1"></div>
+                            <input type="password" class="form-control form-control-sm" name="password2" value=""
+                                   maxlength="30"
+                                   <c:if test="${empty idUsuario}">required</c:if>>
+                                   <div id="feedbackPassword2" class="small mt-1"></div>
+                            <c:if test="${not empty idUsuario}">
+                                <div class="form-text">Solo si cambias la contraseña, repítela aquí.</div>
+                            </c:if>
                         </div>
+
 
                         <input type="hidden" name="rol" value="normal">
 
@@ -295,6 +306,12 @@
                 }
 
                 passInput.addEventListener("input", () => {
+                    const requisitos = document.getElementById("requisitosPassword");
+                    if (passInput.value.trim() !== "") {
+                        requisitos.classList.remove("d-none");
+                    } else {
+                        requisitos.classList.add("d-none");
+                    }
                     actualizarFeedbackPassword();
                     validarCoincidenciaPasswords();
                 });
@@ -306,13 +323,24 @@
                         if (!validarCampo(campo))
                             valido = false;
                     });
+
                     actualizarFeedbackPassword();
                     validarCoincidenciaPasswords();
 
-                    const passOk = keys.every(k => criterios[k].test(passInput.value));
-                    const iguales = passInput.value === pass2Input.value;
+                    const esNuevo = document.querySelector('input[name="idUsuario"]') === null;
+                    const passVacio = passInput.value.trim() === "" && pass2Input.value.trim() === "";
 
-                    if (!valido || !passOk || !iguales) {
+                    if (esNuevo || !passVacio) {
+                        const passOk = keys.every(k => criterios[k].test(passInput.value));
+                        const iguales = passInput.value === pass2Input.value;
+
+                        if (!passOk || !iguales) {
+                            e.preventDefault();
+                            return;
+                        }
+                    }
+
+                    if (!valido) {
                         e.preventDefault();
                     }
                 });
@@ -321,6 +349,7 @@
                 validarCoincidenciaPasswords();
             });
         </script>
+
 
     </body>
 </html>
