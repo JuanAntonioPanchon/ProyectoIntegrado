@@ -87,7 +87,7 @@
                                             <th>Oferta</th>
                                             <th>Descuento</th>
                                             <th>Novedad</th>
-                                            <th>Imágenes</th>
+                                            <th>Imágen</th>
                                             <th>Acciones</th>
                                         </tr>
                                     </thead>

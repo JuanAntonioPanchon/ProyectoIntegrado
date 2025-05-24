@@ -145,8 +145,8 @@
                         mensaje: "Debe empezar con mayúscula. Solo letras y espacios. Máx. 100 caracteres."
                     },
                     descripcion: {
-                        regex: /^[A-ZÁÉÍÓÚÑ][a-zA-ZÁÉÍÓÚÑáéíóúñü0-9 ,\.\-()!?¡¿%$\"]{0,199}$/,
-                        mensaje: "Debe empezar con mayúscula. Puede contener letras, números y símbolos comunes. Máx. 200 caracteres."
+                        regex: /^[A-ZÁÉÍÓÚÑ][a-zA-ZÁÉÍÓÚÑáéíóúñü0-9 ,\.\-()!?¡¿%$\"]{0,999}$/,
+                        mensaje: "Debe empezar con mayúscula. Puede contener letras, números y símbolos comunes. Máx. 1000 caracteres."
                     },
                     precio: {
                         regex: /^\d+([.,]\d{1,2})?$/,
