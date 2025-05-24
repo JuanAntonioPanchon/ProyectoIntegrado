@@ -155,6 +155,7 @@ public class ControladorGestionarUsuarios extends HttpServlet {
         usuario.setApellidos(apellidos);
         usuario.setDireccion(direccion);
         usuario.setTelefono(telefono);
+        usuario.setEmail(email);
         if (idUsuario != null) { // Editando
             Usuario existente = servicioUsuario.findUsuarioByEmail(email);
             if (existente != null && !existente.getId().equals(usuario.getId())) {

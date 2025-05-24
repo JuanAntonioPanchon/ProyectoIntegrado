@@ -194,6 +194,9 @@ public class ControladorUsuarios extends HttpServlet {
         request.setAttribute("telefono", telefono);
         request.setAttribute("rol", rol != null ? rol.name() : "normal");
 
+        if (usuario != null && usuario.getId() != null) {
+            request.setAttribute("idUsuario", usuario.getId());
+        }
         emf.close();
         getServletContext().getRequestDispatcher(vista).forward(request, response);
     }
