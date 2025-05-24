@@ -133,7 +133,6 @@ public class ControladorReceta extends HttpServlet {
                     receta.setDescripcion(descripcion);
                     receta.setPublicada("1".equals(publicada));
                     receta.setIngredientes(ingredientes);
-                    receta.setImagenes(new ArrayList<>());
                     srec.edit(receta);
                 } else if (request.getParameter("eliminar") != null && idStr != null && !idStr.isBlank()) {
                     long id = Long.parseLong(idStr);
