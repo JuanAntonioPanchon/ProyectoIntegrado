@@ -75,9 +75,11 @@ public class ControladorProducto extends HttpServlet {
             String idCategoriaStrCrear = request.getParameter("id_categoria");
             if (idCategoriaStrCrear != null && !idCategoriaStrCrear.isEmpty()) {
                 request.setAttribute("id_categoria", Long.parseLong(idCategoriaStrCrear));
+                vista = "/admin/crearProducto.jsp";
+            } else {
+                request.setAttribute("error", "Debes seleccionar o crear una categoría antes de añadir un producto.");
+                vista = "/admin/listarCategorias.jsp";
             }
-
-            vista = "/admin/crearProducto.jsp";
         }
 
         // Eliminar
@@ -122,7 +124,6 @@ public class ControladorProducto extends HttpServlet {
                     }
                 }
 
-                
                 if (idCategoriaStr != null && !idCategoriaStr.isEmpty()) {
                     response.sendRedirect("ControladorProducto?id_categoria=" + idCategoriaStr);
                 } else {
@@ -212,7 +213,6 @@ public class ControladorProducto extends HttpServlet {
                 sp.create(producto);
             }
 
-           
             if (categoriaIdStr != null && !categoriaIdStr.isEmpty()) {
                 response.sendRedirect("ControladorProducto?id_categoria=" + categoriaIdStr);
             } else {

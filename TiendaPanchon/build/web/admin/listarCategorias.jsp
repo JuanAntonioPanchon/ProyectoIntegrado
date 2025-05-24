@@ -58,10 +58,19 @@
                 <section>
                     <div class="d-flex justify-content-between align-items-center mb-3">
                         <h4 class="fw-bold">PRODUCTOS: ${nombreCategoria}</h4>
-                        <a href="${pageContext.request.contextPath}/Controladores.Admin/ControladorProducto?crear=true&id_categoria=${idCategoriaSeleccionada}"
-                           class="btn btn-crear">
-                            Añadir Producto Nuevo
-                        </a>
+                        <c:choose>
+                            <c:when test="${not empty idCategoriaSeleccionada}">
+                                <a href="${pageContext.request.contextPath}/Controladores.Admin/ControladorProducto?crear=true&id_categoria=${idCategoriaSeleccionada}"
+                                   class="btn btn-crear">
+                                    Añadir Producto Nuevo
+                                </a>
+                            </c:when>
+                            <c:otherwise>
+                                <button type="button" class="btn btn-crear" onclick="alertarSinCategoria()">
+                                    Añadir Producto Nuevo
+                                </button>
+                            </c:otherwise>
+                        </c:choose>
 
                     </div>
 
@@ -169,6 +178,14 @@
 
                                                                                     form.submit();
                                                                                 }
+                                                                            });
+                                                                        }
+                                                                        function alertarSinCategoria() {
+                                                                            Swal.fire({
+                                                                                icon: 'warning',
+                                                                                title: 'Categoría no seleccionada',
+                                                                                text: 'Debes crear o seleccionar una categoría antes de poder añadir productos.',
+                                                                                confirmButtonColor: '#336b30'
                                                                             });
                                                                         }
         </script>
